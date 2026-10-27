@@ -31,6 +31,7 @@
       "styles.css",
       "api.js",
       "i18n.js",
+      "dates.js",
       "themes.js",
       "app.js",
       "*.svg",
