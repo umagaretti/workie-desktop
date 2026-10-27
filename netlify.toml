@@ -1,0 +1,21 @@
+[build]
+  publish = "."
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Promemoria giornalieri: ogni giorno alle 06:00 UTC (≈ 08:00 in Italia)
+[functions."push-reminders"]
+  schedule = "0 6 * * *"
+
+# Cache: la pagina non deve essere messa in cache (aggiornamenti immediati)
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-store"

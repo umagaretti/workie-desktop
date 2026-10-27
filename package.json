@@ -1,0 +1,15 @@
+{
+  "name": "workie-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Workie — desktop app (Electron shell around the Workie web app)",
+  "author": "Umberto",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^45.1.0"
+  }
+}
