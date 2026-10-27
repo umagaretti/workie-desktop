@@ -8,11 +8,19 @@
   "scripts": {
     "start": "electron .",
     "dev": "electron .",
-    "dist": "electron-builder --mac dmg"
+    "dist": "electron-builder --mac dmg",
+    "release": "electron-builder --mac dmg --publish always"
   },
   "build": {
     "appId": "app.workie.desktop",
     "productName": "Workie",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "umagaretti",
+        "repo": "workie-desktop"
+      }
+    ],
     "directories": {
       "output": "dist",
       "buildResources": "build"
@@ -38,5 +46,8 @@
   "devDependencies": {
     "electron": "^45.1.0",
     "electron-builder": "^26.18.0"
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.11"
   }
 }

@@ -5,12 +5,45 @@
  * the user's browser, not inside the app window.
  */
 
-const { app, BrowserWindow, shell } = require('electron')
+const { app, BrowserWindow, shell, dialog } = require('electron')
+const { autoUpdater } = require('electron-updater')
 const path = require('path')
 
 // App name (menu bar, "About", notifications). The packaged build also gets this
 // from package.json "productName"; setting it here fixes the name in dev too.
 app.setName('Workie')
+
+/**
+ * Auto-update (electron-updater → GitHub Releases).
+ * NOTE: on macOS this only applies updates when the app is SIGNED (Apple
+ * requirement). Unsigned/dev builds just log and do nothing. Runs only in the
+ * packaged app, never during `npm start`.
+ */
+function initAutoUpdate() {
+  autoUpdater.autoDownload = true
+  autoUpdater.autoInstallOnAppQuit = true
+
+  autoUpdater.on('error', (err) => console.error('[auto-update] error:', err))
+  autoUpdater.on('checking-for-update', () => console.log('[auto-update] checking…'))
+  autoUpdater.on('update-available', (info) => console.log('[auto-update] available:', info.version))
+  autoUpdater.on('update-not-available', () => console.log('[auto-update] up to date'))
+  autoUpdater.on('update-downloaded', (info) => {
+    dialog
+      .showMessageBox({
+        type: 'info',
+        buttons: ['Riavvia ora', 'Più tardi'],
+        defaultId: 0,
+        cancelId: 1,
+        message: 'Aggiornamento pronto',
+        detail: `Workie ${info.version} è stato scaricato. Riavvia per applicarlo.`,
+      })
+      .then((res) => {
+        if (res.response === 0) autoUpdater.quitAndInstall()
+      })
+  })
+
+  autoUpdater.checkForUpdatesAndNotify().catch((e) => console.error('[auto-update]', e))
+}
 
 /** @type {BrowserWindow | null} */
 let mainWindow = null
@@ -50,6 +83,9 @@ function createWindow() {
 
 app.whenReady().then(() => {
   createWindow()
+
+  // Check for updates only in the packaged app (never during `npm start`).
+  if (app.isPackaged) initAutoUpdate()
 
   // macOS: re-create a window when the dock icon is clicked and none are open.
   app.on('activate', () => {
