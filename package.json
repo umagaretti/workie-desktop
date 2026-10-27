@@ -33,6 +33,7 @@
       "i18n.js",
       "dates.js",
       "themes.js",
+      "storage.js",
       "app.js",
       "*.svg",
       "*.png",

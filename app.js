@@ -501,13 +501,7 @@ Object.assign(STR.ko,{nav_home:`홈`,nav_desktop:`Daily`,nav_tasks:`작업`,nav_
 
 let LANG=(function(){try{return localStorage.getItem('workie_lang')||'en';}catch(e){return 'en';}})();
 function tr(k){const o=STR[LANG];if(o&&o[k]!=null)return o[k];if(STR.en&&STR.en[k]!=null)return STR.en[k];if(STR.it&&STR.it[k]!=null)return STR.it[k];return k;}
-// ----- Dati per-account (isolati per email; account/session/lang restano globali) -----
-// DEV: in locale (localhost) usa una sessione "dev-local" così l'app gira senza login. Online resta normale.
-const DEV_LOCAL=(function(){try{if(window.__TAURI__)return false;/* nell'app desktop Tauri usa il login vero, non la modalità dev */return location.hostname==='localhost'||location.hostname==='127.0.0.1'||location.hostname==='';}catch(e){return false;}})();
-let CUR_ACC=(function(){try{let s=localStorage.getItem('workie_session');if(!s&&DEV_LOCAL){s='dev-local';localStorage.setItem('workie_session',s);}return s||null;}catch(e){return null;}})();
-function ukey(base){return CUR_ACC?base+'::'+CUR_ACC.toLowerCase():base+'::_guest';}
-// migrazione una-tantum: i vecchi dati globali vanno all'account corrente, poi si rimuovono (così i nuovi account partono puliti)
-(function migrateGlobalToAccount(){if(!CUR_ACC)return;['workie_user','workie_desktops','workie_projects','workie_connections'].forEach(base=>{try{const old=localStorage.getItem(base);if(old!=null){const nk=base+'::'+CUR_ACC.toLowerCase();if(localStorage.getItem(nk)==null)localStorage.setItem(nk,old);localStorage.removeItem(base);}}catch(e){}});})();
+// --- livello account/storage (DEV_LOCAL / CUR_ACC / ukey / migrazione) spostato in storage.js, caricato prima di app.js ---
 // ===== SYNC dati cross-device (tabella app_data jsonb su Supabase) — "cloud localStorage" =====
 const SYNC_KEYS=['workie_tasks','workie_projects','workie_desktops','workie_rituals','workie_profiles','workie_active_profile','workie_habits','workie_teams','workie_connections','workie_social','workie_groups','workie_groups_shown','workie_dw_widget','workie_theme','workie_theme_custom','workie_saved_themes','workie_theme_saved'];
 let syncApplying=false,syncTimer=null,syncMe=null;
