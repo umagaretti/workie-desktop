@@ -135,6 +135,11 @@ html.settings-open .ai-side-btn{display:none!important;}
   .wc-lights{display:none!important;}
   .side-nav-arrows{display:none!important;}
 }
+/* App desktop Electron: pallini nativi macOS (hiddenInset). Riuso lo stile is-tauri
+   (pallini finti nascosti + chrome accanto a quelli veri) e aggiungo una striscia
+   superiore trascinabile con -webkit-app-region (Electron non ha startDragging). */
+html.is-electron .wco-drag{display:block;position:fixed;top:0;left:0;right:0;height:30px;-webkit-app-region:drag;z-index:350;}
+html.is-electron button,html.is-electron a,html.is-electron input,html.is-electron textarea,html.is-electron select,html.is-electron [role="button"],html.is-electron [contenteditable],html.is-electron [draggable="true"],html.is-electron .wc-dot,html.is-electron .app-chrome,html.is-electron .ai-side-btn{-webkit-app-region:no-drag;}
 .sidebar{
   width:276px;flex:none;
   background:color-mix(in srgb, var(--sidebar) 78%, transparent);
@@ -13120,6 +13125,10 @@ document.getElementById('navToggle').addEventListener('click',toggleNav);
  // Puntini finestra: in Tauri comandano la finestra nativa; sul web il verde fa schermo intero
  function tauriWin(){try{return (window.__TAURI__&&window.__TAURI__.window&&window.__TAURI__.window.getCurrentWindow)?window.__TAURI__.window.getCurrentWindow():null;}catch(e){return null;}}
  const isTauri=!!(window.__TAURI__);
+ const isElectron=!!(window.workieDesktop);
+ // Electron: riuso la modalità app-desktop (pallini finti nascosti, chrome accanto ai
+ // pallini nativi macOS) e aggiungo la striscia-drag via CSS -webkit-app-region.
+ if(isElectron){document.documentElement.classList.add('is-tauri','is-electron');}
  if(isTauri){document.documentElement.classList.add('is-tauri');document.querySelectorAll('.wc-red,.wc-yellow').forEach(d=>d.style.cursor='pointer');const wd=document.querySelector('.wco-drag');if(wd)wd.setAttribute('data-tauri-drag-region','');const ch=document.getElementById('appChrome');if(ch)ch.setAttribute('data-tauri-drag-region','');
    // Trascinamento manuale: su pagina remota il gestore automatico di data-tauri-drag-region può non
    // essere iniettato, quindi chiamo io startDragging() al mousedown sulla striscia superiore.
@@ -13148,7 +13157,7 @@ document.getElementById('navToggle').addEventListener('click',toggleNav);
  const wg=document.getElementById('wcGreen');if(wg)wg.addEventListener('click',toggleFullscreen);
  // Doppio clic sulla fascia superiore (la zona di trascinamento della finestra) → schermo intero,
  // come il doppio clic sulla barra del titolo del Mac. In Tauri lo gestisce la drag-region nativa.
- if(!isTauri){
+ if(!isTauri&&!isElectron){
    const FS_DBL_H=48;
    document.addEventListener('dblclick',function(e){
      if((e.clientY||0)>FS_DBL_H)return;

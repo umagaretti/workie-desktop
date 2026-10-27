@@ -1,12 +1,15 @@
 /**
  * preload.js — secure bridge between the web app and the desktop shell.
- * Runs before the page loads, with contextIsolation on. We expose nothing yet;
- * when the UI needs native powers (notifications, file save, auto-update…) we
- * add narrow, explicit APIs here via contextBridge — never the whole of Node.
+ * Runs before the page loads, with contextIsolation on. For now it only exposes
+ * a flag so the web app knows it's running inside the Electron desktop shell
+ * (to switch on native-window chrome: hide the fake traffic lights, enable the
+ * drag strip, use macOS zoom instead of the web Fullscreen API).
+ * Later, narrow native powers (notifications, file save, auto-update…) go here.
  */
 
-// Intentionally empty for now. Example for later:
-// const { contextBridge, ipcRenderer } = require('electron')
-// contextBridge.exposeInMainWorld('workie', {
-//   notify: (title, body) => ipcRenderer.send('notify', { title, body }),
-// })
+const { contextBridge } = require('electron')
+
+contextBridge.exposeInMainWorld('workieDesktop', {
+  platform: process.platform,
+  version: '0.1.0',
+})

@@ -8,6 +8,10 @@
 const { app, BrowserWindow, shell } = require('electron')
 const path = require('path')
 
+// App name (menu bar, "About", notifications). The packaged build also gets this
+// from package.json "productName"; setting it here fixes the name in dev too.
+app.setName('Workie')
+
 /** @type {BrowserWindow | null} */
 let mainWindow = null
 
