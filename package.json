@@ -28,6 +28,8 @@
     "files": [
       "electron/**/*",
       "index.html",
+      "styles.css",
+      "app.js",
       "*.svg",
       "*.png",
       "manifest.webmanifest",
