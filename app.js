@@ -502,57 +502,9 @@ Object.assign(STR.ko,{nav_home:`홈`,nav_desktop:`Daily`,nav_tasks:`작업`,nav_
 let LANG=(function(){try{return localStorage.getItem('workie_lang')||'en';}catch(e){return 'en';}})();
 function tr(k){const o=STR[LANG];if(o&&o[k]!=null)return o[k];if(STR.en&&STR.en[k]!=null)return STR.en[k];if(STR.it&&STR.it[k]!=null)return STR.it[k];return k;}
 // --- livello account/storage (DEV_LOCAL / CUR_ACC / ukey / migrazione) spostato in storage.js, caricato prima di app.js ---
-// ===== SYNC dati cross-device (tabella app_data jsonb su Supabase) — "cloud localStorage" =====
-const SYNC_KEYS=['workie_tasks','workie_projects','workie_desktops','workie_rituals','workie_profiles','workie_active_profile','workie_habits','workie_teams','workie_connections','workie_social','workie_groups','workie_groups_shown','workie_dw_widget','workie_theme','workie_theme_custom','workie_saved_themes','workie_theme_saved'];
-let syncApplying=false,syncTimer=null,syncMe=null;
-async function syncUid(){if(syncMe)return syncMe;if(!sb)return null;try{const{data:{user}}=await sb.auth.getUser();syncMe=user?user.id:null;}catch(e){}return syncMe;}
-function syncEmpty(v){return v==null||v===''||v==='[]'||v==='{}'||v==='null';}
-function ktsLoad(){try{return JSON.parse(localStorage.getItem(ukey('workie_sync_kts')))||{};}catch(e){return {};}}
-function ktsSave(m){try{localStorage.setItem(ukey('workie_sync_kts'),JSON.stringify(m));}catch(e){}}
-// primo avvio col nuovo sync: marca come "correnti" le chiavi locali già presenti (non vuote)
-function syncSeedKts(){try{if(!CUR_ACC)return;if(localStorage.getItem(ukey('workie_sync_kts'))!=null)return;const now=Date.now(),m={};SYNC_KEYS.forEach(k=>{const v=localStorage.getItem(ukey(k));if(v!=null&&!syncEmpty(v))m[k]=now;});localStorage.setItem(ukey('workie_sync_kts'),JSON.stringify(m));}catch(e){}}
-async function syncCloud(me){try{const{data}=await sb.from('app_data').select('data').eq('id',me).maybeSingle();return (data&&data.data)?data.data:null;}catch(e){return null;}}
-// Push con MERGE per-chiave: il cloud conserva sempre l'unione (per ogni chiave vince il timestamp più recente)
-async function syncPush(){
-  if(!sb||syncApplying)return;const me=await syncUid();if(!me)return;syncSeedKts();
-  const localKts=ktsLoad();const cloud=await syncCloud(me)||{};const cloudKts=cloud._kts||{};const legacyTs=+cloud._ts||0;
-  const blob={},mergedKts={},outKts=Object.assign({},localKts);
-  SYNC_KEYS.forEach(k=>{
-    const lv=localStorage.getItem(ukey(k));
-    const lt=+localKts[k]||0;
-    const hasCloud=cloud[k]!=null;
-    const ct=cloudKts[k]!=null?(+cloudKts[k]||0):(hasCloud?legacyTs:0);
-    if(lt>=ct){ if(lv!=null){blob[k]=lv;mergedKts[k]=lt||ct;outKts[k]=lt||ct;} else if(hasCloud){blob[k]=cloud[k];mergedKts[k]=ct;} }
-    else{ if(hasCloud){blob[k]=cloud[k];mergedKts[k]=ct;} else if(lv!=null){blob[k]=lv;mergedKts[k]=lt;outKts[k]=lt;} }
-  });
-  const ts=Date.now();blob._ts=ts;blob._kts=mergedKts;
-  try{const{error}=await sb.from('app_data').upsert({id:me,data:blob,updated_at:new Date(ts).toISOString()});if(!error){localStorage.setItem(ukey('workie_sync_ts'),String(ts));ktsSave(outKts);}}catch(e){}
-}
-function syncSchedule(){if(syncApplying||!sb)return;clearTimeout(syncTimer);syncTimer=setTimeout(syncPush,1600);}
-// Pull per-chiave: applica in locale solo le chiavi più recenti nel cloud
-async function syncPull(){
-  if(!sb)return false;const me=await syncUid();if(!me)return false;syncSeedKts();
-  let d=await syncCloud(me);
-  if(!d){await syncPush();return false;} // nessun dato in cloud: seed
-  if(!d._kts){await syncPush();d=await syncCloud(me)||d;} // riga legacy: prima push-merge (aggiunge _kts) per non perdere i dati unici
-  const cloudKts=d._kts||{};const localKts=ktsLoad();
-  syncApplying=true;let changed=false;const newKts=Object.assign({},localKts);
-  SYNC_KEYS.forEach(k=>{const ct=+cloudKts[k]||0,lt=+localKts[k]||0;if(d[k]!=null&&ct>lt){const cur=localStorage.getItem(ukey(k));if(cur!==d[k]){localStorage.setItem(ukey(k),d[k]);changed=true;}newKts[k]=ct;}});
-  localStorage.setItem(ukey('workie_sync_ts'),String(+d._ts||Date.now()));
-  ktsSave(newKts);syncApplying=false;return changed;
-}
+// ===== SYNC cross-device: funzioni in sync.js. Qui restano solo intercettatore + listener (ordine di avvio). =====
 // intercetta i salvataggi delle chiavi-dati: marca la chiave (timestamp) e programma un push (debounce)
 (function(){const _si=localStorage.setItem.bind(localStorage);localStorage.setItem=function(k,v){_si(k,v);try{if(!syncApplying&&sb&&typeof k==='string'){const i=k.indexOf('::');if(i>0){const base=k.slice(0,i);if(SYNC_KEYS.indexOf(base)>=0){const m=ktsLoad();m[base]=Date.now();ktsSave(m);syncSchedule();}}}}catch(e){}};})();
-// Pull anche quando torni/riapri l'app (non solo all'avvio) → cambiando device vedi subito i dati aggiornati
-let lastFocusPull=0;
-function syncOnFocus(){
-  if(!sb||document.hidden)return;
-  if(!localStorage.getItem('workie_session'))return;
-  const now=Date.now();if(now-lastFocusPull<4000)return;lastFocusPull=now;
-  // non ricaricare mentre stai scrivendo in una finestra aperta
-  if(document.querySelector('.overlay.open, .stm-overlay.open, .m-create-ov.open, #socAddModal.open'))return;
-  syncPull().then(applied=>{if(applied)location.reload();}).catch(()=>{});
-}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncOnFocus();});
 window.addEventListener('focus',syncOnFocus);
 let greetRotTimer=null;
