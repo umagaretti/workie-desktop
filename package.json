@@ -29,6 +29,7 @@
       "electron/**/*",
       "index.html",
       "css/**/*",
+      "svg.js",
       "api.js",
       "i18n.js",
       "dates.js",
