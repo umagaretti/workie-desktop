@@ -6791,13 +6791,7 @@ document.getElementById('langRow').addEventListener('click',e=>{
 });
 
 // ---------- Temi ----------
-const THEME_DEFS=[
-  {k:'classico',name:'Classico',desc:'Scuro · lilla',bg:'#171718',side:'#212123',card:'#232325',accent:'#b8a6f4'},
-  {k:'futuristico',name:'Futuristico',desc:'Viola vetro',bg:'#150f26',side:'#1a1430',card:'#2a2049',accent:'#8b5cf6'},
-  {k:'chiaro',name:'Chiaro',desc:'Classico, bianco',bg:'#f3f2f8',side:'#ffffff',card:'#ffffff',accent:'#7c5cff'},
-  {k:'custom',name:'Personalizzato',desc:'Scegli tu',bg:'#1e1836',side:'#2a2246',card:'#342a55',accent:'#e879c9'}
-];
-const THEME_SOON={futuristico:1,custom:1}; // temi disattivati ("in arrivo") fino al lancio
+// --- dati temi (THEME_DEFS / THEME_SOON) spostati in themes.js, caricato prima di app.js ---
 let curTheme=(()=>{try{return localStorage.getItem(ukey('workie_theme'))||'chiaro';}catch(e){return 'chiaro';}})();
 let customCfg=(()=>{try{const s=JSON.parse(localStorage.getItem(ukey('workie_theme_custom')));if(s&&typeof s==='object')return s;}catch(e){}return {bg:'#191327',bgImg:'',accent:'#8b5cf6',panel:'#2a2246',text:'#ececf4'};})();
 let savedThemes=(()=>{try{const s=JSON.parse(localStorage.getItem(ukey('workie_saved_themes')));if(Array.isArray(s))return s.filter(x=>x&&x.id&&x.cfg);}catch(e){}return [];})();
