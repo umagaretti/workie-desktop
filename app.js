@@ -598,7 +598,7 @@ function renderUpgrade(reason){
 async function startCheckout(){
   if(isPro()){closeUpgrade();openUsage();return;}
   try{
-    const r=await fetch('/.netlify/functions/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:(typeof USER!=='undefined'&&USER.email)||''})});
+    const r=await fetch(FN_BASE+'/.netlify/functions/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:(typeof USER!=='undefined'&&USER.email)||''})});
     const raw=await r.text();let d={};try{d=JSON.parse(raw);}catch(_){}
     if(r.ok&&d&&d.url){window.location.href=d.url;return;}
     throw new Error((d&&d.error)||('HTTP '+r.status));
@@ -1142,7 +1142,7 @@ async function agwDoRecord(ta,mic){
     agwRecOn=false;mic.classList.remove('rec');mic.classList.add('loading');try{if(agwStream)agwStream.getTracks().forEach(t=>t.stop());}catch(_){}agwStream=null;
     try{const blob=new Blob(agwChunks,{type:(agwRec&&agwRec.mimeType)||mime||'audio/webm'});if(!blob.size){mic.classList.remove('loading');agwRecMic=null;return;}
       const dataUrl=await blobToDataUrl(blob);
-      const r=await fetch('/.netlify/functions/transcribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({audio:dataUrl,lang:(typeof LANG!=='undefined'?LANG:'it')})});
+      const r=await fetch(FN_BASE+'/.netlify/functions/transcribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({audio:dataUrl,lang:(typeof LANG!=='undefined'?LANG:'it')})});
       const d=await r.json().catch(()=>({}));
       if(r.ok&&d&&d.text){ta.value=(ta.value?ta.value.replace(/\s*$/,'')+'\n':'')+d.text;try{ta.dispatchEvent(new Event('input',{bubbles:true}));}catch(_){}if(typeof aiConsume==='function')aiConsume();}
       else if(typeof showToast==='function')showToast((d&&d.error)||tr('mic_err'));
@@ -3139,7 +3139,7 @@ function svcSave(id){
 // OAuth account (Higgsfield via Clerk/MCP): apre il login in popup, riceve i token via postMessage
 function svcStartOAuth(id){
   if(id!=='higgsfield'){if(typeof showToast==='function')showToast(tr('svc_oauth_todo'));return;}
-  let w;try{w=window.open('/.netlify/functions/higgsfield-auth?action=start','hf_oauth','width=480,height=740');}catch(_){}
+  let w;try{w=window.open(FN_BASE+'/.netlify/functions/higgsfield-auth?action=start','hf_oauth','width=480,height=740');}catch(_){}
   if(!w){if(typeof showToast==='function')showToast(tr('svc_oauth_popup'));return;}
   function onMsg(e){
     if(e.origin!==location.origin)return;
@@ -4828,7 +4828,7 @@ function blobToDataUrl(blob){return new Promise((res,rej)=>{const r=new FileRead
          const blob=new Blob(chunks,{type:(mediaRec&&mediaRec.mimeType)||mime||'audio/webm'});
          if(!blob.size){mic.classList.remove('loading');return;}
          const dataUrl=await blobToDataUrl(blob);
-         const r=await fetch('/.netlify/functions/transcribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({audio:dataUrl,lang:(typeof LANG!=='undefined'?LANG:'it')})});
+         const r=await fetch(FN_BASE+'/.netlify/functions/transcribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({audio:dataUrl,lang:(typeof LANG!=='undefined'?LANG:'it')})});
          const d=await r.json().catch(()=>({}));
          if(r.ok&&d&&d.text){if(ta){ta.value=(ta.value?ta.value.replace(/\s*$/,'')+'\n':'')+d.text;try{ta.dispatchEvent(new Event('input',{bubbles:true}));}catch(_){}}if(typeof aiConsume==='function')aiConsume();}
          else if(typeof showToast==='function')showToast((d&&d.error)||tr('mic_err'));
@@ -5105,7 +5105,7 @@ async function rsvGenStep(i){
 async function aiChat(opts){
   opts=opts||{};
   if(opts.meter!==false&&!aiConsume())throw new Error('ai_limit');
-  const r=await fetch('/.netlify/functions/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:opts.mode||'chat',messages:opts.messages||[],lang:LANG,context:opts.context||''})});
+  const r=await fetch(FN_BASE+'/.netlify/functions/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:opts.mode||'chat',messages:opts.messages||[],lang:LANG,context:opts.context||''})});
   let data={};try{data=await r.json();}catch(_){}
   if(!r.ok||!data||!data.reply)throw new Error((data&&data.error)||('HTTP '+r.status));
   return String(data.reply);
@@ -5233,7 +5233,7 @@ async function rsvSend(text,img){text=(text||'').trim();if(!text&&!img)return;co
     const hist=e.msgs.filter(m=>!m.typing).map(m=>({role:m.r,text:m.t,image:m.img}));
     let pageCtx='';
     const urlM=(text||'').match(/\bhttps?:\/\/[^\s<>"')]+/i)||(text||'').match(/\bwww\.[^\s<>"')]+/i);
-    if(urlM){try{const rr=await fetch('/.netlify/functions/fetch-url',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:urlM[0]})});const dd=await rr.json();if(rr.ok&&dd&&(dd.text||dd.title))pageCtx='\n\nContenuto della pagina '+(dd.url||urlM[0])+(dd.title?(' — "'+dd.title+'"'):'')+':\n'+String(dd.text||'').slice(0,10000);}catch(_){}}
+    if(urlM){try{const rr=await fetch(FN_BASE+'/.netlify/functions/fetch-url',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:urlM[0]})});const dd=await rr.json();if(rr.ok&&dd&&(dd.text||dd.title))pageCtx='\n\nContenuto della pagina '+(dd.url||urlM[0])+(dd.title?(' — "'+dd.title+'"'):'')+':\n'+String(dd.text||'').slice(0,10000);}catch(_){}}
     reply=await aiChat({mode:'chat',messages:hist,context:rsvScopeContext(t)+pageCtx+aiProfileContext()+aiMemContext()});
     rsvOnline=true;
   }catch(err){
@@ -6295,7 +6295,7 @@ function aiAskReply(replyText){aiShowTyping();setTimeout(()=>{aiHideTyping();aiS
 // ---- Risposta AI a testo libero. Prova la Netlify Function (Mistral/Groq/Claude); gestisce limiti ed errori. ----
 async function aiReply(){
   try{
-    const r=await fetch('/.netlify/functions/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:aiCur().msgs.slice(-16),lang:LANG})});
+    const r=await fetch(FN_BASE+'/.netlify/functions/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:aiCur().msgs.slice(-16),lang:LANG})});
     const d=await r.json().catch(()=>null);
     if(r.ok&&d&&d.reply)return d.reply;
     if(r.status===429)return tr('ai_limit'); // limite momentaneo: messaggio gentile
@@ -7197,7 +7197,7 @@ async function pushDisable(){const sub=await pushGetSub();if(sub){await pushDele
 async function pushSend(toUserId,payload){
   if(!toUserId||!sb)return;
   try{let token='';try{const s=await sb.auth.getSession();token=(s.data.session&&s.data.session.access_token)||'';}catch(e){}
-    await fetch('/.netlify/functions/push',{method:'POST',headers:Object.assign({'Content-Type':'application/json'},token?{'Authorization':'Bearer '+token}:{}),body:JSON.stringify(Object.assign({toUserId:toUserId},payload))});
+    await fetch(FN_BASE+'/.netlify/functions/push',{method:'POST',headers:Object.assign({'Content-Type':'application/json'},token?{'Authorization':'Bearer '+token}:{}),body:JSON.stringify(Object.assign({toUserId:toUserId},payload))});
   }catch(e){}
 }
 // riallinea lo switch in Impostazioni allo stato reale + hint

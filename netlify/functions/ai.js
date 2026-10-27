@@ -5,7 +5,16 @@
 // Il front-end chiama /.netlify/functions/ai con { mode, messages, lang, context } e riceve { reply }.
 
 function json(statusCode, obj) {
-  return { statusCode, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(obj) };
+  return {
+    statusCode,
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    },
+    body: JSON.stringify(obj),
+  };
 }
 
 async function fetchRetry(url, opts) {

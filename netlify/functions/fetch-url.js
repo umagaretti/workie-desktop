@@ -3,7 +3,16 @@
 // Nessuna chiave richiesta. Protezioni: solo http/https, blocco indirizzi privati/locali (anti-SSRF), timeout, limiti di dimensione.
 
 function json(statusCode, obj) {
-  return { statusCode, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(obj) };
+  return {
+    statusCode,
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    },
+    body: JSON.stringify(obj),
+  };
 }
 
 function htmlToText(html) {

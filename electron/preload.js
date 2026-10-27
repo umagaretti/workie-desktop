@@ -12,4 +12,8 @@ const { contextBridge } = require('electron')
 contextBridge.exposeInMainWorld('workieDesktop', {
   platform: process.platform,
   version: '0.1.0',
+  // Backend base: l'app desktop (file locale) non raggiunge le Netlify functions con
+  // percorsi relativi, quindi le chiama su questo sito pubblicato. ⚠️ Metti qui l'URL
+  // reale del tuo sito Netlify (quello con le API key impostate).
+  apiBase: 'https://workieapp.netlify.app',
 })

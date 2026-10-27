@@ -4,7 +4,16 @@
 // Node 18+: FormData, Blob e fetch sono globali (nessuna dipendenza npm).
 
 function json(statusCode, obj) {
-  return { statusCode, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(obj) };
+  return {
+    statusCode,
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    },
+    body: JSON.stringify(obj),
+  };
 }
 
 exports.handler = async (event) => {

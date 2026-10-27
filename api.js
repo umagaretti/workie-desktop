@@ -14,6 +14,11 @@ let sb=null;
 // Supabase attivo ovunque si carichi da un'origine web reale (web, PWA e app desktop Tauri che
 // punta al sito live). Si disattiva SOLO se i file fossero serviti localmente da Tauri (tauri://).
 try{if(location.protocol!=='tauri:'&&window.supabase&&window.supabase.createClient)sb=window.supabase.createClient(SB_URL,SB_KEY);}catch(e){console.warn('Supabase init fallito',e);}
+// ---------- Backend functions base ----------
+// Le Netlify functions (AI, dettatura, ecc.) stanno sul sito pubblicato. Sul web l'app è
+// servita da lì → base relativa (''). Nell'app desktop (file locale) serve l'URL assoluto,
+// fornito dal guscio Electron (preload → window.workieDesktop.apiBase).
+const FN_BASE=(typeof window!=='undefined'&&window.workieDesktop&&window.workieDesktop.apiBase)||'';
 // ---- Helper auth/profilo Supabase ----
 async function sbSignUp(email,pw){if(!sb)return{error:'no-server'};const{data,error}=await sb.auth.signUp({email:email,password:pw});if(error)return{error:error.message};return{ok:true,user:data.user,session:data.session,needConfirm:!data.session};}
 async function sbSignIn(email,pw){if(!sb)return{error:'no-server'};const{data,error}=await sb.auth.signInWithPassword({email:email,password:pw});if(error)return{error:error.message};return{ok:true,user:data.user,session:data.session};}
