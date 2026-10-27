@@ -28,7 +28,7 @@
     "files": [
       "electron/**/*",
       "index.html",
-      "styles.css",
+      "css/**/*",
       "api.js",
       "i18n.js",
       "dates.js",

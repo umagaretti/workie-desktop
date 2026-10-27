@@ -1,0 +1,104 @@
+/* =================== TEMA CHIARO (classico ma bianco) =================== */
+html.theme-chiaro{
+  --bg:#ffffff; --sidebar:#f6f6f8; --panel:#ffffff; --panel-2:#f2f2f5; --panel-3:#e9e9ef;
+  --bg-b:#e9e9ef; --inset:#f5f5f7; --active-bg:#ededf2;
+  --border:rgba(20,20,35,.10); --border-soft:rgba(20,20,35,.055); --border-strong:rgba(20,20,35,.22);
+  --text:#1c1830; --text-dim:#565270; --muted:#8b8699; --faint:#aaa5ba;
+  --accent:#7c5cff; --accent-2:#5b3fd6; --accent-dim:#6a4ae0; --accent-soft:rgba(124,92,255,.13);
+}
+html.theme-chiaro body{background:var(--bg);}
+html.theme-chiaro .home-greet,html.theme-chiaro #greet,html.theme-chiaro .page-title,html.theme-chiaro .modal-title{color:#171226;}
+html.theme-chiaro .nav-item.active{background:var(--accent-soft);color:var(--accent-2);}
+html.theme-chiaro .nav-item.active .ni,html.theme-chiaro .nav-item.active svg{color:var(--accent-2);}
+html.theme-chiaro .nav-item:hover{background:rgba(24,18,45,.05);}
+html.theme-chiaro ::-webkit-scrollbar-thumb{background:rgba(24,18,45,.16);}
+html.theme-chiaro .sidebar{box-shadow:0 8px 30px -18px rgba(24,18,45,.25);}
+html.theme-chiaro .seg .s.active,html.theme-chiaro .grp-pill.active,html.theme-chiaro .grp-toggle.on{color:var(--accent-2);}
+html.theme-chiaro .primary-btn,html.theme-chiaro .btn-primary-sm.accent{color:#fff;}
+html.theme-chiaro .grp-n{background:rgba(24,18,45,.08);}
+html.theme-chiaro .dw-fitem.focused .dw-fitem-card{background:#fff;}
+html.theme-chiaro .quick:hover,html.theme-chiaro .alert:hover{background:rgba(24,18,45,.03);}
+html.theme-chiaro .tk-check,html.theme-chiaro .dw-check{border-color:rgba(24,18,45,.28);}
+html.theme-chiaro .modal{background:#fff;}
+
+/* =================== TIPOGRAFIA APPLE (clean, San Francisco) =================== */
+/* Titoli display: semibold + tracking negativo, niente corsivi editoriali */
+.page-title,.tdw-title,.tdp-title,.tdp2-title,.cs-title,.home-greet,
+.pday-title,.pl-title,.auth-title,.auth-h,.ob-pro-h,.ob-q,.su-title,.su-slide-t,
+.splash-welcome,.pf-name,.profile-name,.pd-rename,.wf-hero-t,.wf-inbox-title,
+.ai-empty-t,.ai-flow-q,.cc-title,.modal-title,.mcs-title,.se-h,.event-day{
+  font-weight:600;
+  letter-spacing:-.021em;
+}
+/* Titoli/etichette medie: peso intermedio pulito */
+.sh-name,.cal-month,.cal-range,.crumb .c-cur,.proj-name,.sp-proj-card .proj-name,
+.ov-scope,.dk-tab,.dk-tab input,.agent-name,.wcat,.hist-mh .hist-mname,
+.m-drawer-brand,.ob-logo-top,.su-brand,.ob-card-label,.ob-gcard-label,
+.page-sub,.auth-sub,.ob-pro-sub,.auth-card-sub,.ob-user-at{
+  font-weight:500;
+  letter-spacing:-.011em;
+}
+/* Via i corsivi: l'estetica Apple usa il tondo */
+.page-sub,.auth-sub,.ob-pro-sub,.auth-card-sub,.agent-name,
+.ob-card-label,.ob-gcard-label,.ob-user-at{font-style:normal;}
+/* Il tema futuristico mantiene i suoi font display */
+html.theme-futuristico .page-title,html.theme-futuristico .tdw-title,
+html.theme-futuristico .ov-greet,html.theme-futuristico .home-greet{letter-spacing:-.01em;}
+
+/* =================== TEMA FUTURISTICO (viola glass) =================== */
+html.theme-futuristico{
+  --bg:#14101f; --sidebar:#1a1430; --panel:#221a3d; --panel-2:#2a2049; --panel-3:#332658;
+  --inset:#17112e; --active-bg:#0f0b1e;
+  --border:rgba(255,255,255,.08); --border-soft:rgba(255,255,255,.05); --border-strong:rgba(255,255,255,.24);
+  --text:#ECE9F7; --text-dim:#B0A8CE; --muted:#8079a0; --faint:#564f74;
+  --accent:#8b5cf6; --accent-2:#b79bff; --accent-dim:#6d4aff; --accent-soft:rgba(124,92,255,.16);
+  --serif:'Space Grotesk','Inter',system-ui,sans-serif;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+}
+html.theme-futuristico body{
+  background:
+    radial-gradient(1100px 560px at 12% -12%,#33235e 0%,transparent 58%),
+    radial-gradient(1000px 680px at 108% -6%,#3c1f6b 0%,transparent 52%),
+    radial-gradient(900px 700px at 100% 120%,#241a44 0%,transparent 55%),
+    linear-gradient(160deg,#130f22 0%,#0c0916 100%);
+  background-attachment:fixed;
+}
+html.theme-futuristico .main{background:transparent;}
+html.theme-futuristico .sidebar{
+  background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.015));
+  border:1px solid var(--border);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  box-shadow:0 24px 60px -24px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.06);
+}
+html.theme-futuristico .nav-item.active{
+  background:linear-gradient(180deg,rgba(124,92,255,.30),rgba(124,92,255,.10));color:#fff;
+  border:1px solid var(--accent-soft);box-shadow:inset 0 0 0 1px rgba(139,92,246,.35),0 8px 20px -8px rgba(124,92,255,.6);}
+html.theme-futuristico .nav-item.active .ni,html.theme-futuristico .nav-item.active svg{color:#fff;}
+html.theme-futuristico .page-title,html.theme-futuristico .home-greet,html.theme-futuristico #greet{font-family:var(--serif);letter-spacing:-.01em;}
+html.theme-futuristico .alerts,html.theme-futuristico .alert,html.theme-futuristico .quick,html.theme-futuristico .card,
+html.theme-futuristico .panel,html.theme-futuristico .task,html.theme-futuristico .dw-widget-card,html.theme-futuristico .dw-fitem-card,
+html.theme-futuristico .conn-card,html.theme-futuristico .proj-card,html.theme-futuristico .cal,html.theme-futuristico .bigcal,
+html.theme-futuristico .dw-side,html.theme-futuristico .dw-strip,html.theme-futuristico .teamcard,html.theme-futuristico .team-card,
+html.theme-futuristico .setup-card,html.theme-futuristico .hist-link,html.theme-futuristico .dw-habit,html.theme-futuristico .tk,
+html.theme-futuristico .grp-pill,html.theme-futuristico .grp-toggle,html.theme-futuristico .pd-frow,html.theme-futuristico .chat-panel{
+  background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.016));
+  border:1px solid var(--border);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);}
+html.theme-futuristico .alerts,html.theme-futuristico .card,html.theme-futuristico .panel,html.theme-futuristico .cal,
+html.theme-futuristico .bigcal,html.theme-futuristico .dw-side,html.theme-futuristico .conn-card,html.theme-futuristico .proj-card{
+  box-shadow:0 16px 44px -20px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.05);}
+html.theme-futuristico .primary-btn,html.theme-futuristico .btn-primary-sm.accent,html.theme-futuristico .dw-widget-add.on{
+  background:linear-gradient(150deg,var(--accent-dim),#a26bff);color:#fff;border:none;
+  box-shadow:0 12px 26px -8px rgba(124,92,255,.65),inset 0 1px 0 rgba(255,255,255,.3);}
+html.theme-futuristico .seg .s.active,html.theme-futuristico .seg .s.on{
+  background:linear-gradient(180deg,rgba(124,92,255,.30),rgba(124,92,255,.12));color:#fff;box-shadow:inset 0 0 0 1px rgba(139,92,246,.4);}
+html.theme-futuristico .modal-search,html.theme-futuristico .gm-name,html.theme-futuristico .prof-input,html.theme-futuristico textarea{
+  background:rgba(0,0,0,.22);border:1px solid var(--border);}
+html.theme-futuristico .dw-check.on,html.theme-futuristico .tk-check{box-shadow:var(--glow);}
+html.theme-futuristico .grp-pill.active{background:var(--accent-soft);border-color:rgba(139,92,246,.5);color:#fff;}
+html.theme-futuristico .grp-toggle.on{background:var(--accent-soft);border-color:rgba(139,92,246,.5);color:var(--accent-2);}
+html.theme-futuristico .modal{background:linear-gradient(180deg,#221a3c,#171029);border:1px solid rgba(139,92,246,.4);
+  box-shadow:0 30px 90px -24px #000,0 0 40px rgba(124,92,255,.25);}
+html.theme-futuristico .logo{filter:drop-shadow(0 0 10px rgba(124,92,255,.55));}
+
+/* =================== TEMA PERSONALIZZATO =================== */
+/* Le variabili base vengono impostate inline via JS; qui il tocco glass opzionale */
+html.theme-custom .sidebar{box-shadow:0 20px 50px -24px rgba(0,0,0,.5);}

@@ -1,0 +1,36 @@
+:root{
+  --bg:#171718;
+  --bg-b:#1f1f22;
+  --sidebar:#212123;
+  --panel:#232325;
+  --panel-2:#2a2a2d;
+  --panel-3:#313134;
+  --inset:#1b1b1d;
+  --active-bg:#121213;
+  --border:rgba(255,255,255,.07);
+  --border-soft:rgba(255,255,255,.045);
+  --border-strong:rgba(255,255,255,.22);
+  --text:#ededec;
+  --text-dim:#b6b6b8;
+  --muted:#7d7d82;
+  --faint:#56565a;
+  --accent:#b8a6f4;
+  --accent-2:#cdbef9;
+  --accent-dim:#8d7bd0;
+  --accent-soft:rgba(184,166,244,.14);
+  --serif:-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+  --sans:-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+  --radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:var(--sans);
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:20px}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.15)}
