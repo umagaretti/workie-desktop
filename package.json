@@ -29,6 +29,7 @@
       "electron/**/*",
       "index.html",
       "styles.css",
+      "i18n.js",
       "app.js",
       "*.svg",
       "*.png",
