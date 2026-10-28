@@ -20,8 +20,8 @@
    Nascondo i puntini finti e sposto il toggle sidebar accanto ai comandi nativi. */
 html.is-tauri .wc-lights{display:none!important;}
 /* Bottoni allineati alla riga dei pallini macOS (trafficLightPosition y:22) e sopra la striscia-drag. */
-html.is-tauri .app-chrome{left:80px;top:10px;z-index:400;}
-html.is-tauri .side-nav-arrows{top:11px;z-index:400;}
+html.is-tauri .app-chrome{left:80px;top:7px;z-index:400;}
+html.is-tauri .side-nav-arrows{top:9px;z-index:400;}
 /* icona Giornata in alto a destra: stessa taglia delle iconcine di sinistra */
 html.is-tauri #daySideBtn svg{width:18px;height:18px;}
 /* Drawer "Giornata" a destra (segnaposto) */
@@ -31,7 +31,7 @@ html.is-tauri #daySideBtn svg{width:18px;height:18px;}
 .day-drawer .dd-close{border:none;background:transparent;color:var(--muted);font-size:15px;cursor:pointer;width:28px;height:28px;border-radius:7px;line-height:1;}
 .day-drawer .dd-close:hover{background:var(--panel-2);color:var(--text);}
 .day-drawer .dd-body{padding:4px 16px;color:var(--muted);font-size:13.5px;line-height:1.5;}
-html.is-tauri .ai-side-btn{top:4px;z-index:400;}
+html.is-tauri .ai-side-btn{top:8px;z-index:400;}
 /* Bottone chat AI a destra disattivato per ora (le chat sono nella sidebar sinistra; lo riuseremo). */
 #aiSideBtn{display:none!important;}
 /* La fascia trascinabile ora è gestita via JS (mousedown nei primi px): niente elemento che copre/blocca. */
@@ -184,7 +184,8 @@ html.theme-chiaro .stb-btn.active,html.theme-custom .stb-btn.active{background:#
 /* titolo sezione "Chat" (come "Tasks"), con un po' di spazio sopra per abbassare la lista */
 .sc-secttl{font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--faint);padding:2px 9px 4px;margin-top:10px;font-family:var(--sans);}
 /* pallino di stato: viola quando l'AI ha risposto per ultima (da leggere) */
-.sc-dot{flex:none;width:4px;height:4px;border-radius:50%;background:transparent;}
+/* .sc-item prefisso: batte il .sc-dot da 9px di team-projects (stesso nome classe, conflitto) */
+.sc-item .sc-dot{flex:none;width:4px;height:4px;border-radius:50%;background:transparent;}
 .sc-item.unread .sc-dot{background:var(--accent);opacity:.85;}
 .sc-item:hover{background:rgba(255,255,255,.05);}
 .sc-item.active{background:var(--panel-2);}
