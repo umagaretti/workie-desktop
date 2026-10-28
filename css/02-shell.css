@@ -23,6 +23,8 @@ html.is-tauri .wc-lights{display:none!important;}
 html.is-tauri .app-chrome{left:80px;top:4px;z-index:400;}
 html.is-tauri .side-nav-arrows{top:6px;z-index:400;}
 html.is-tauri .ai-side-btn{top:4px;z-index:400;}
+/* Bottone chat AI a destra disattivato per ora (le chat sono nella sidebar sinistra; lo riuseremo). */
+#aiSideBtn{display:none!important;}
 /* La fascia trascinabile ora è gestita via JS (mousedown nei primi px): niente elemento che copre/blocca. */
 html.is-tauri .wco-drag{display:none;}
 /* Vibrancy nativa macOS: il materiale "sidebar" della finestra Tauri traspare dietro la sidebar.

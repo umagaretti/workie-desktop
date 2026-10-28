@@ -45,8 +45,9 @@ function go(page){
   if(page==='plugin'&&typeof renderPlugins==='function'){try{renderPlugins();}catch(e){}}
   if(page==='tasks'&&typeof renderTasks==='function'){try{renderTasks();}catch(e){}}
   if(typeof renderSideTasks==='function'){try{renderSideTasks();}catch(e){}}
-  // Tornare alla vista "home" della sidebar (task) navigando su una pagina normale; la chat resta solo in taskdetail
-  if(page!=='taskdetail'&&typeof setSideView==='function'){try{setSideView('home');}catch(e){}}
+  // La sidebar sinistra mostra le CHAT delle task (non più le viste task). Su ogni pagina normale
+  // forziamo la vista "chat"; in taskdetail resta la chat della task corrente.
+  if(page!=='taskdetail'&&typeof setSideView==='function'){try{setSideView('chat');}catch(e){}}
   // Bottone chat AI fisso: su tasks/day/project (non su home dove c'è l'icona accanto alla matita, né in taskdetail)
   {const ab=document.getElementById('aiSideBtn');if(ab)ab.style.display='';}
   try{navRecord(page);}catch(e){}
@@ -2789,7 +2790,8 @@ try{renderSideTasks();}catch(e){}
    arz.addEventListener('dblclick',e=>{e.preventDefault();adr.classList.remove('no-anim');setAidW(ADEF);try{localStorage.setItem('workie_ai_drawer_w',String(ADEF));}catch(e){}});
  }}
 // Toolbar sidebar: Home/Chat (viste nella sidebar) + azioni Inbox/?/Cerca
-var sideView='home';
+// Default = 'chat': la sidebar mostra le chat delle task al posto delle viste task.
+var sideView='chat';
 function setSideView(v){
   sideView=v;
   document.querySelectorAll('[data-sview]').forEach(b=>b.classList.toggle('active',b.dataset.sview===v));
