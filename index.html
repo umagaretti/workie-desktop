@@ -243,8 +243,6 @@ try{
           <div class="ov-date" id="homeDate">Mercoledì 11 giugno</div>
           <div class="ov-greet" id="greet">Buonasera, Umberto</div>
           <div class="ov-chatbox" id="ovChatbox">
-            <!-- LIVELLO 3 (fullsize): lista task grande sopra -->
-            <div class="ovc-list" id="ovcList"></div>
             <!-- menù piccolo "Task recenti" (versione ridotta) -->
             <div class="ovc-mini" id="ovcMini"></div>
             <!-- LIVELLO 1: pill compatta con selettore task a destra -->
@@ -252,9 +250,11 @@ try{
               <span class="ovc-ph" data-i18n="ov_chat_ph">Chiedi qualsiasi cosa…</span>
               <span class="ovc-taskbtn" id="ovcTaskBtn1"><span class="ovc-slash">/</span><span class="ovc-tlbl" id="ovcTaskLbl1">Seleziona task</span><span class="ovc-clear" id="ovcClear1" role="button" title="Rimuovi" data-i18n-t="ib_remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></span></span>
             </div>
-            <!-- LIVELLO 2: box espansa (selettore sopra, invio a destra) -->
+            <!-- LIVELLO 2: box espansa — cresce verso l'ALTO (fondo ancorato) -->
             <div class="ovc-exp-wrap">
               <div class="ovc-expanded" id="ovcExpanded">
+                <!-- LIVELLO 3: lista task INLINE, dentro lo stesso box (niente pannello con ombra) -->
+                <div class="ovc-listwrap"><div class="ovc-list" id="ovcList"></div></div>
                 <div class="ovc-top">
                   <button type="button" class="ovc-scope" id="ovcScopeBtn"><span class="ovc-slash">/</span><span class="ovc-tlbl" id="ovcTaskLbl2">Seleziona task</span><svg class="ovc-cv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
                 </div>
@@ -268,7 +268,7 @@ try{
           <div class="ov-help-row">
             <div class="ov-help" data-i18n="ov_help">Come posso aiutarti oggi?</div>
             <div class="ov-actions">
-              <button class="ov-abtn primary" id="pmdRun"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v2.4M12 18.6V21M4.6 4.6l1.7 1.7M17.7 17.7l1.7 1.7M3 12h2.4M18.6 12H21M4.6 19.4l1.7-1.7M17.7 6.3l1.7-1.7"/><circle cx="12" cy="12" r="3.3"/></svg><span data-i18n="ov_plan">Pianifica la giornata</span></button>
+              <button class="ov-abtn primary" id="pmdRun"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.6V12l3 1.8"/></svg><span data-i18n="ov_plan">Pianifica la giornata</span></button>
               <button class="ov-abtn" id="ovNewTask"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span data-i18n="ov_newtask">Segna nuove task</span></button>
             </div>
           </div>
@@ -373,7 +373,7 @@ try{
       <div class="topbar"><div><div class="dw-title-row"><span class="tk-headic dw-headic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2.5M12 19.5V22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M2 12h2.5M19.5 12H22M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg></span><div class="page-title" data-i18n="nav_routine">Giornata</div></div></div>
         <div class="dw-topbtns">
           <button class="dw-routine-btn" id="dwRoutine" title="Routine" data-i18n-t="dw_routine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2.1l3.5 3.5-3.5 3.5"/><path d="M3.5 12v-2a4 4 0 0 1 4-4h13"/><path d="M7 21.9l-3.5-3.5L7 14.9"/><path d="M20.5 12v2a4 4 0 0 1-4 4h-13"/></svg><span data-i18n="dw_routine">Routine</span></button>
-          <button class="btn-primary-sm dw-plan-btn" id="dwSetup" title="Pianifica la giornata" data-i18n-t="ov_plan"><svg class="ic-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v2.4M12 18.6V21M4.6 4.6l1.7 1.7M17.7 17.7l1.7 1.7M3 12h2.4M18.6 12H21M4.6 19.4l1.7-1.7M17.7 6.3l1.7-1.7"/><circle cx="12" cy="12" r="3.3"/></svg><span data-i18n="ov_plan">Pianifica la giornata</span></button>
+          <button class="btn-primary-sm dw-plan-btn" id="dwSetup" title="Pianifica la giornata" data-i18n-t="ov_plan"><svg class="ic-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.6V12l3 1.8"/></svg><span data-i18n="ov_plan">Pianifica la giornata</span></button>
         </div></div>
       <div class="dw-strip">
         <button class="dw-nav" id="dwPrev">‹</button>

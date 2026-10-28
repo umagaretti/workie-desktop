@@ -3337,7 +3337,7 @@ let PLAN_DAY=(()=>{try{return JSON.parse(localStorage.getItem(ukey('workie_plan_
 function savePlanDay(){try{localStorage.setItem(ukey('workie_plan_day'),PLAN_DAY?JSON.stringify(PLAN_DAY):'');}catch(e){}}
 function planDayValid(){return !!(PLAN_DAY&&PLAN_DAY.date&&cmpDate(PLAN_DAY.date,realToday())===0&&PLAN_DAY.order&&PLAN_DAY.order.length);}
 // ---- Pianifica la giornata: picker + caricamento + roadmap ----
-const PDAY_SPARK='<svg class="ic-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v2.4M12 18.6V21M4.6 4.6l1.7 1.7M17.7 17.7l1.7 1.7M3 12h2.4M18.6 12H21M4.6 19.4l1.7-1.7M17.7 6.3l1.7-1.7"/><circle cx="12" cy="12" r="3.3"/></svg>';
+const PDAY_SPARK='<svg class="ic-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.6V12l3 1.8"/></svg>';
 const PDAY_GRIP='<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="9" cy="6" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="6" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="15" cy="18" r="1.4"/></svg>';
 const PLAN_FILTERS=[{k:'overdue',lk:'g_overdue'},{k:'today',lk:'g_today'},{k:'upcoming',lk:'g_upcoming'}];
 let planFilter='today',planOrder=[],planSel=new Set(),pdayView='pick',planSched=[];
@@ -3490,7 +3490,7 @@ function renderOvPlan(){
  function ovcRecentTasks(){return (typeof TASKS!=='undefined'?TASKS:[]).filter(x=>!x.done).slice().sort((a,b)=>(b.id||0)-(a.id||0)).slice(0,5);}
  function ovcMiniOpen(open){const cb=document.getElementById('ovChatbox');if(!cb)return;if(open){const box=document.getElementById('ovcMini');if(box){const list=ovcRecentTasks();box.innerHTML='<div class="ovc-mini-h">'+tr('ovc_recent')+'</div>'+(list.length?list.map(ovcItemHTML).join(''):'<div class="ovc-empty">'+tr('ovc_none')+'</div>');}}cb.classList.toggle('miniopen',open);}
  function ovcListOpen(open){const cb=document.getElementById('ovChatbox');if(!cb)return;if(open)ovcRenderList();cb.classList.toggle('listopen',open);}
- function ovcExpand(open){const cb=document.getElementById('ovChatbox');if(!cb)return;if(open)ovcMiniOpen(false);cb.classList.toggle('expanded',open);if(open){const ta=document.getElementById('ovcInput');if(ta){ovcAutoGrow();setTimeout(()=>ta.focus(),120);}}else{ovcListOpen(false);}}
+ function ovcExpand(open){const cb=document.getElementById('ovChatbox');if(!cb)return;if(open)ovcMiniOpen(false);cb.classList.toggle('expanded',open);const ov=cb.closest('.ov');if(ov)ov.classList.toggle('ovc-focus',open);if(open){const ta=document.getElementById('ovcInput');if(ta){ovcAutoGrow();setTimeout(()=>ta.focus(),120);}}else{ovcListOpen(false);}}
  function ovcRenderList(){const box=document.getElementById('ovcList');if(!box)return;const list=(typeof TASKS!=='undefined'?TASKS:[]).filter(x=>!x.done);
    let h='<div class="ovc-list-h">'+tr('ovc_pick_h')+'</div>';
    if(!list.length)h+='<div class="ovc-empty">'+tr('ovc_none')+'</div>';
@@ -4961,7 +4961,7 @@ function openTaskPage(id, asChat){
 }
 function tdRow(icon,key,valHTML){return valHTML?`<div class="tdp-row"><span class="tdp-ic">${icon}</span><span class="tdp-k">${key}</span><span class="tdp-v">${valHTML}</span></div>`:'';}
 // ---- Resolve: chat per aiutarti a risolvere la task ----
-const RSV_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v2.4M12 18.6V21M4.6 4.6l1.7 1.7M17.7 17.7l1.7 1.7M3 12h2.4M18.6 12H21M4.6 19.4l1.7-1.7M17.7 6.3l1.7-1.7"/><circle cx="12" cy="12" r="3.3"/></svg>';
+const RSV_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.6V12l3 1.8"/></svg>';
 const ROBOT_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="8" width="15" height="11" rx="3"/><circle cx="9.5" cy="13" r="1.15"/><circle class="rb-eye-wink" cx="14.5" cy="13" r="1.15"/><path d="M12 4.6V8"/><circle cx="12" cy="3.6" r="1"/><path d="M2.6 12v3M21.4 12v3"/></svg>';
 const RSV_SEND='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="6 11 12 5 18 11"/></svg>';
 const PIB_ICONS={

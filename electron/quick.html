@@ -38,14 +38,14 @@
   .icbtn{flex:none; width:34px; height:34px; border:0; border-radius:50%; cursor:pointer;
     display:flex; align-items:center; justify-content:center; transition:background .15s ease, color .15s ease, border-radius .25s ease;}
   .icbtn svg{width:17px; height:17px;}
-  .cancel{background:transparent; color:var(--muted);}       /* X: annulla la dettatura, non salva */
-  .cancel:hover{background:var(--inset); color:#e0574c;}
+  .cancel{background:var(--border-strong); color:var(--text);}  /* X dentro un pallino grigio: annulla, non salva */
+  .cancel:hover{color:#e0574c;}
   .mic{background:transparent; color:var(--muted);}
   .mic:hover{background:var(--inset); color:var(--text);}
   .mic .i-stop{display:none;}
-  .mic.rec{background:#e0574c; color:#fff; border-radius:11px; animation:pulse 1.6s ease-in-out infinite;} /* quadratino rosso = stop & salva */
+  .mic.rec{background:#e0574c; color:#fff; animation:pulse 1.6s ease-in-out infinite;} /* cerchio rosso col quadrato = stop & salva */
   .mic.rec .i-mic{display:none;} .mic.rec .i-stop{display:flex;}
-  .mic.rec svg{width:13px; height:13px;}
+  .mic.rec svg{width:12px; height:12px;}
   @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(224,87,76,.5);}50%{box-shadow:0 0 0 6px rgba(224,87,76,0);}}
   .send{background:var(--accent); color:var(--btn-text);}
   .send:hover{filter:brightness(1.06);}
@@ -62,18 +62,33 @@
   /* ---- STEP 2: anteprima ---- */
   .panel{background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:13px;
     box-shadow:0 12px 34px rgba(10,8,22,.30);}
-  .revh{font-size:12.5px; color:var(--text-dim); margin-bottom:9px; line-height:1.4;}
+  .revh{font-size:12.5px; color:var(--text-dim); margin-bottom:10px; line-height:1.4;}
   .revh b{color:var(--text);}
-  .list{max-height:228px; overflow-y:auto; display:flex; flex-direction:column; gap:7px; margin:0 -2px; padding:0 2px;}
-  .mt-row{background:var(--inset); border:1px solid var(--border); border-radius:10px; padding:8px 9px;}
-  .mt-row .rt{width:100%; background:transparent; border:0; color:var(--text); font-size:13px; font-weight:550; outline:none; -webkit-user-select:text; user-select:text;}
-  .rmeta{display:flex; align-items:center; gap:6px; margin-top:6px;}
-  .rmeta input[type=date],.rmeta input[type=time]{background:var(--panel2); border:1px solid var(--border-soft);
-    border-radius:7px; color:var(--text-dim); font-size:11.5px; padding:3px 6px; outline:none; font-family:inherit; color-scheme:dark;}
-  body.light .rmeta input[type=date],body.light .rmeta input[type=time]{color-scheme:light;}
-  .rmeta input[type=date]{flex:1;}
-  .rm{margin-left:auto; width:24px; height:24px; border:0; background:transparent; color:var(--muted); border-radius:6px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex:none;}
+  .list{max-height:260px; overflow-y:auto; display:flex; flex-direction:column; gap:6px; margin:0 -2px; padding:0 2px;}
+  /* righe senza bordi: solo un filo di sfondo per separarle */
+  .mt-row{background:var(--inset); border:0; border-radius:12px; padding:9px 11px;}
+  .mt-row .rt{width:100%; background:transparent; border:0; color:var(--text); font-size:13.5px; font-weight:550; outline:none; -webkit-user-select:text; user-select:text;}
+  .mt-row .rt::placeholder{color:var(--muted);}
+  /* data semplificata: chip Oggi / Domani / Manuale */
+  .rdates{display:flex; align-items:center; gap:6px; margin-top:8px;}
+  .rchip{border:1px solid var(--border); background:transparent; color:var(--text-dim); font-size:11.5px; font-weight:550;
+    padding:4px 11px; border-radius:999px; cursor:pointer; font-family:inherit; transition:background .14s,color .14s,border-color .14s;}
+  .rchip:hover{color:var(--text); border-color:var(--border-strong);}
+  .rchip.on{background:var(--accent-soft); border-color:transparent; color:var(--accent);}
+  .rm{margin-left:auto; width:24px; height:24px; border:0; background:transparent; color:var(--muted); border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; flex:none;}
   .rm svg{width:13px; height:13px;} .rm:hover{background:var(--border-soft); color:#e0574c;}
+  .rman{display:none; gap:6px; margin-top:8px;}
+  .rman.show{display:flex;}
+  .rman input[type=date],.rman input[type=time]{background:var(--panel2); border:1px solid var(--border-soft);
+    border-radius:8px; color:var(--text-dim); font-size:11.5px; padding:4px 7px; outline:none; font-family:inherit; color-scheme:dark;}
+  body.light .rman input[type=date],body.light .rman input[type=time]{color-scheme:light;}
+  .rman input[type=date]{flex:1;}
+  /* bottone "aggiungi task" in stile app (ghost tratteggiato) */
+  .mt-add{display:flex; align-items:center; justify-content:center; gap:7px; width:100%; margin-top:8px;
+    background:transparent; border:1px dashed var(--border-strong); color:var(--text-dim); border-radius:12px;
+    padding:9px; font-size:12.5px; font-weight:550; font-family:inherit; cursor:pointer; transition:color .14s,border-color .14s;}
+  .mt-add:hover{color:var(--accent); border-color:var(--accent);}
+  .mt-add svg{width:15px; height:15px;}
   .ractions{display:flex; gap:8px; margin-top:12px;}
   .btn{flex:1; border:0; border-radius:11px; cursor:pointer; font-size:13.5px; font-weight:600; padding:10px; background:var(--accent); color:var(--btn-text);}
   .btn:active{transform:translateY(1px);} .btn:disabled{opacity:.55; cursor:default;}
@@ -109,6 +124,7 @@
     <div class="panel hide" id="stepReview">
       <div class="revh" id="revh"></div>
       <div class="list" id="list"></div>
+      <button class="mt-add" id="addRow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span id="addRowLbl">Aggiungi task</span></button>
       <div class="hint" id="hint2" style="margin-top:9px"></div>
       <div class="ractions">
         <button class="btn ghost" id="back">Torna</button>
@@ -120,10 +136,10 @@
   var lang='en'; try{ lang=((localStorage.getItem('workie_lang')||'en')+'').slice(0,2).toLowerCase(); }catch(e){}
   var STR={
     it:{ph:'Aggiungi una o più task…',hint:'Scrivi o detta, poi invia',listening:'Sto ascoltando… clic per fermare',transcribing:'Trascrivo…',thinking:'Preparo le task…',
-      review_h:'Workie ha preparato %n task — controlla e conferma',confirm:'Aggiungi %n task',back:'Torna',none:'Non ho riconosciuto nessuna task. Riprova.',added:'%n task aggiunte ✓',
+      review_h:'Workie ha preparato %n task — controlla e conferma',manual_h:'Non ho capito bene le task — scrivile qui a mano',confirm:'Aggiungi %n task',addtask:'Aggiungi task',today:'Oggi',tomorrow:'Domani',manual:'Manuale',newtask:'Nuova task',back:'Torna',none:'Non ho riconosciuto nessuna task. Riprova.',added:'%n task aggiunte ✓',
       mic:'Detta le task',stop:'Ferma e salva',remove:'Rimuovi',denied:'Microfono non consentito',novoice:'Dettatura non supportata',micerr:'Errore microfono',fail:'Trascrizione non riuscita',empty:'Non ho capito, riprova'},
     en:{ph:'Add one or more tasks…',hint:'Type or dictate, then send',listening:'Listening… click to stop',transcribing:'Transcribing…',thinking:'Preparing tasks…',
-      review_h:'Workie prepared %n tasks — review and confirm',confirm:'Add %n tasks',back:'Back',none:'I didn’t catch any task. Try again.',added:'%n tasks added ✓',
+      review_h:'Workie prepared %n tasks — review and confirm',manual_h:'I didn’t catch any task — type it here by hand',confirm:'Add %n tasks',addtask:'Add task',today:'Today',tomorrow:'Tomorrow',manual:'Manual',newtask:'New task',back:'Back',none:'I didn’t catch any task. Try again.',added:'%n tasks added ✓',
       mic:'Dictate tasks',stop:'Stop & save',remove:'Remove',denied:'Microphone not allowed',novoice:'Dictation not supported',micerr:'Microphone error',fail:'Transcription failed',empty:'Didn’t catch that, try again'}
   };
   var L=STR[lang]||STR.en;
@@ -133,8 +149,9 @@
       revh=document.getElementById('revh'), hint2=document.getElementById('hint2'),
       cancelBtn=document.getElementById('cancel'),
       backBtn=document.getElementById('back'), confirmBtn=document.getElementById('confirm');
-  var DRAFTS=[];
-  ta.placeholder=L.ph; mic.title=L.mic; backBtn.textContent=L.back; hint.textContent='';
+  var addRowBtn=document.getElementById('addRow'), addRowLbl=document.getElementById('addRowLbl');
+  var DRAFTS=[], reviewManual=false;
+  ta.placeholder=L.ph; mic.title=L.mic; backBtn.textContent=L.back; hint.textContent=''; if(addRowLbl)addRowLbl.textContent=L.addtask;
 
   function fit(){ try{ window.quickApi.resize(Math.ceil(document.querySelector('.wrap').getBoundingClientRect().height)); }catch(e){} }
   // La finestra nativa non si anima da sola: durante l'apertura/chiusura dell'onda
@@ -165,35 +182,85 @@
 
   // ---- step ----
   function showInput(){ stepReview.classList.add('hide'); bar.classList.remove('hide'); hint.classList.remove('hide'); setHint(hint,'',''); requestAnimationFrame(function(){ autoGrow(); ta.focus(); fit(); }); }
-  function showReview(){ renderReview(); bar.classList.add('hide'); hint.classList.add('hide'); stepReview.classList.remove('hide'); fit(); }
-  function renderReview(){
-    list.innerHTML=DRAFTS.map(function(d,i){
-      var iso=d.date?(d.date[0]+'-'+pad(d.date[1]+1)+'-'+pad(d.date[2])):'';
-      return '<div class="mt-row" data-i="'+i+'"><input class="rt" value="'+esc(d.title)+'">'
-        +'<div class="rmeta"><input type="date" class="rd" value="'+iso+'"><input type="time" class="rtime" value="'+(d.time||'')+'">'
-        +'<button class="rm" title="'+esc(L.remove)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button></div></div>';
-    }).join('');
-    updateCounts();
+  function showReview(manual){ renderReview(!!manual); bar.classList.add('hide'); hint.classList.add('hide'); stepReview.classList.remove('hide');
+    requestAnimationFrame(function(){ if(manual){ var ri=list.querySelector('.rt'); if(ri)ri.focus(); } fit(); }); }
+
+  // ---- date: oggi / domani / manuale ----
+  function todayArr(){ var d=new Date(); return [d.getFullYear(),d.getMonth(),d.getDate()]; }
+  function tomorrowArr(){ var d=new Date(); d.setDate(d.getDate()+1); return [d.getFullYear(),d.getMonth(),d.getDate()]; }
+  function arrEq(a,b){ return !!a&&!!b&&a[0]===b[0]&&a[1]===b[1]&&a[2]===b[2]; }
+  function toIso(a){ return a?(a[0]+'-'+pad(a[1]+1)+'-'+pad(a[2])):''; }
+  function isoToArr(s){ if(!s||typeof s!=='string')return null; var p=s.split('-').map(Number); return (p.length===3&&p[0])?[p[0],p[1]-1,p[2]]:null; }
+  function dateMode(a){ if(!a)return ''; if(arrEq(a,todayArr()))return 'today'; if(arrEq(a,tomorrowArr()))return 'tomorrow'; return 'manual'; }
+
+  function rowHTML(d){
+    var mode=dateMode(d.date), iso=toIso(d.date);
+    function chip(k,lbl){ return '<button class="rchip'+(mode===k?' on':'')+'" data-d="'+k+'">'+esc(lbl)+'</button>'; }
+    return '<div class="mt-row"><input class="rt" value="'+esc(d.title)+'" placeholder="'+esc(L.newtask)+'">'
+      +'<div class="rdates">'+chip('today',L.today)+chip('tomorrow',L.tomorrow)+chip('manual',L.manual)
+      +'<button class="rm" title="'+esc(L.remove)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button></div>'
+      +'<div class="rman'+(mode==='manual'?' show':'')+'"><input type="date" class="rd" value="'+iso+'"><input type="time" class="rtime" value="'+esc(d.time||'')+'"></div></div>';
   }
-  function updateCounts(){ var n=list.querySelectorAll('.mt-row').length; revh.innerHTML=esc(L.review_h).replace('%n','<b>'+n+'</b>'); confirmBtn.textContent=L.confirm.replace('%n',n); confirmBtn.disabled=!n; }
-  list.addEventListener('click',function(e){ var rm=e.target.closest('.rm'); if(rm){ var row=rm.closest('.mt-row'); if(row){ row.remove(); updateCounts(); fit(); } } });
+  function renderReview(manual){ list.innerHTML=DRAFTS.map(rowHTML).join(''); reviewManual=!!manual; updateCounts(); }
+  function updateCounts(){
+    var rows=list.querySelectorAll('.mt-row'), n=0;
+    rows.forEach(function(r){ if((r.querySelector('.rt').value||'').trim())n++; });
+    revh.innerHTML=(reviewManual&&!n) ? esc(L.manual_h) : esc(L.review_h).replace('%n','<b>'+n+'</b>');
+    confirmBtn.textContent=L.confirm.replace('%n',n); confirmBtn.disabled=!n;
+  }
+  // clic nella lista: rimuovi riga oppure seleziona chip data (Manuale apre il calendarino)
+  list.addEventListener('click',function(e){
+    var rm=e.target.closest('.rm'); if(rm){ var row=rm.closest('.mt-row'); if(row){ row.remove(); updateCounts(); fit(); } return; }
+    var chip=e.target.closest('.rchip'); if(chip){ var r=chip.closest('.mt-row');
+      r.querySelectorAll('.rchip').forEach(function(c){ c.classList.toggle('on',c===chip); });
+      var man=r.querySelector('.rman'), isMan=chip.getAttribute('data-d')==='manual';
+      man.classList.toggle('show',isMan);
+      if(isMan){ var rd=r.querySelector('.rd'); if(!rd.value)rd.value=toIso(todayArr()); setTimeout(function(){ try{ rd.showPicker?rd.showPicker():rd.focus(); }catch(_){ try{rd.focus();}catch(e){} } },20); }
+      fit(); return;
+    }
+    // clic sulla data → apri subito il calendario (niente digitazione a mano)
+    var dd=e.target.closest('.rd'); if(dd){ try{ dd.showPicker&&dd.showPicker(); }catch(_){} }
+  });
+  list.addEventListener('input',function(e){ if(e.target&&e.target.classList.contains('rt'))updateCounts(); });
+  function addRow(){ list.insertAdjacentHTML('beforeend',rowHTML({title:'',date:null,time:''})); updateCounts();
+    var rows=list.querySelectorAll('.mt-row'), last=rows[rows.length-1]; if(last){ var ti=last.querySelector('.rt'); if(ti)ti.focus(); } fit(); }
 
   function setBusy(on){ sendBtn.disabled=on; if(on)setHint(hint,L.thinking,''); else setHint(hint,'',''); }
+  // JSON tollerante: l'AI a volte avvolge in ```json … ```
+  function parseLoose(s){ try{ s=String(s).replace(/```json/gi,'').replace(/```/g,'').trim(); var a=s.indexOf('{'),b=s.lastIndexOf('}'); if(a>=0&&b>a)s=s.slice(a,b+1); return JSON.parse(s); }catch(e){ return null; } }
+  // Estrazione con l'AI: riconosce le task vere, scarta saluti/chiacchiere (ok:false)
+  async function aiExtract(text){
+    var d=new Date(), today=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+    var prompt="Sei l'estrattore di task di Workie. Dall'input dell'utente estrai SOLO task concrete e azionabili. "
+      +"Rispondi SOLO con JSON valido, nient'altro: {\"ok\":true|false,\"tasks\":[{\"title\":\"...\",\"date\":\"YYYY-MM-DD\"|null,\"time\":\"HH:MM\"|\"\"}]}. "
+      +"ok=false se l'input non contiene vere task (saluti, chiacchiere, domande generiche). Il title breve e imperativo. "
+      +"Risolvi le date relative (oggi, domani, lunedì…) rispetto a oggi "+today+". Lingua: "+lang+".\n\nINPUT: "+text;
+    var r=await fetch(window.quickApi.apiBase+'/.netlify/functions/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:'assistant',lang:lang,messages:[{role:'user',text:prompt}]})});
+    var data={}; try{ data=await r.json(); }catch(_){}
+    if(!r.ok||!data||typeof data.reply!=='string') throw new Error('ai-http');
+    var obj=parseLoose(data.reply); if(!obj||typeof obj!=='object') return {ok:false,tasks:[]};
+    var tasks=(obj.tasks||[]).map(function(t){ return {title:String(t.title||'').trim(),date:isoToArr(t.date),time:String(t.time||'').trim()}; }).filter(function(t){return t.title;});
+    return {ok:(obj.ok!==false)&&tasks.length>0, tasks:tasks};
+  }
   async function analyze(){
     var text=ta.value.trim(); if(!text){ ta.focus(); return; }
     setBusy(true);
-    var drafts=[]; try{ drafts=await window.quickApi.parse(text); }catch(e){ drafts=[]; }
+    var res=null;
+    try{ res=await aiExtract(text); }
+    catch(e){ try{ var local=await window.quickApi.parse(text); res={ok:!!(local&&local.length),tasks:local||[]}; }catch(_){ res={ok:false,tasks:[]}; } }
     setBusy(false);
-    if(!drafts||!drafts.length){ flash(L.none,'err'); return; }
-    DRAFTS=drafts; showReview();
+    if(!res||!res.ok||!res.tasks.length){ DRAFTS=[{title:'',date:null,time:''}]; showReview(true); return; }
+    DRAFTS=res.tasks; showReview(false);
   }
   function confirm(){
     var rows=[].slice.call(list.querySelectorAll('.mt-row')), out=[];
     rows.forEach(function(r){
       var title=(r.querySelector('.rt').value||'').trim(); if(!title)return;
-      var dv=r.querySelector('.rd').value, date=null;
-      if(dv){ var p=dv.split('-').map(Number); if(p.length===3&&p[0]) date=[p[0],p[1]-1,p[2]]; }
-      out.push({title:title,date:date,time:(r.querySelector('.rtime').value||'').trim()});
+      var on=r.querySelector('.rchip.on'), mode=on?on.getAttribute('data-d'):'', date=null, time='';
+      if(mode==='today')date=todayArr();
+      else if(mode==='tomorrow')date=tomorrowArr();
+      else if(mode==='manual'){ date=isoToArr(r.querySelector('.rd').value); time=(r.querySelector('.rtime').value||'').trim(); }
+      out.push({title:title,date:date,time:time});
     });
     if(!out.length){ flash(L.none,'err'); return; }
     window.quickApi.addMany(out);
@@ -203,6 +270,7 @@
   sendBtn.addEventListener('click',analyze);
   backBtn.addEventListener('click',showInput);
   confirmBtn.addEventListener('click',confirm);
+  if(addRowBtn)addRowBtn.addEventListener('click',addRow);
   ta.addEventListener('input',autoGrow);
   ta.addEventListener('keydown',function(e){
     if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); analyze(); }
