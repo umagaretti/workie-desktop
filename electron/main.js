@@ -56,6 +56,7 @@ function createWindow() {
     minHeight: 600,
     backgroundColor: '#ffffff',
     titleBarStyle: 'hiddenInset', // native macOS traffic lights, roomy title bar
+    trafficLightPosition: { x: 13, y: 16 }, // pallini macOS un filo più in basso
     show: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),

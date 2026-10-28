@@ -20,7 +20,7 @@
    Nascondo i puntini finti e sposto il toggle sidebar accanto ai comandi nativi. */
 html.is-tauri .wc-lights{display:none!important;}
 /* Bottoni allineati alla riga dei pallini macOS (trafficLightPosition y:22) e sopra la striscia-drag. */
-html.is-tauri .app-chrome{left:88px;top:4px;z-index:400;}
+html.is-tauri .app-chrome{left:80px;top:4px;z-index:400;}
 html.is-tauri .side-nav-arrows{top:6px;z-index:400;}
 html.is-tauri .ai-side-btn{top:4px;z-index:400;}
 /* La fascia trascinabile ora è gestita via JS (mousedown nei primi px): niente elemento che copre/blocca. */

@@ -4883,9 +4883,11 @@ function openNewTask(teamCtx){
   ntTeamCtx=(teamCtx&&teamCtx.tid!==undefined)?teamCtx:null;ntAssignee='me';ntScope='personal';ntColor=TCOLORS[0];
   pendingDate=null;ntImages=[];ntDueMode='date';
   ['ntName','ntDesc','ntTag','ntTarget','ntDate','ntMonth','ntTime'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  // La scadenza parte da OGGI di default (niente più "Pick a date" vuoto).
+  {const t=realToday();const iso=t[0]+'-'+String(t[1]+1).padStart(2,'0')+'-'+String(t[2]).padStart(2,'0');const dEl=document.getElementById('ntDate');if(dEl)dEl.value=iso;}
   ntUpdateColorDot();
   document.querySelectorAll('#ntDueType .s').forEach(x=>x.classList.toggle('active',x.dataset.due==='date'));
-  document.querySelectorAll('#ntDateQuick .nt-dchip').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('#ntDateQuick .nt-dchip').forEach(x=>x.classList.toggle('active',x.dataset.day==='0'));
   document.getElementById('ntDateBtn').style.display='flex';document.getElementById('ntMonthBtn').style.display='none';document.getElementById('ntDateQuick').style.display='flex';ntCloseCal();ntCloseMonth();ntUpdateDateLabel();ntUpdateMonthLabel();
   {const mt=document.getElementById('ntModalTitle');if(mt)mt.textContent=tr('nt_pick_title');}
   document.getElementById('ntCreate').textContent=tr('nt_create');
