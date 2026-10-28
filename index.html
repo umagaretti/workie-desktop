@@ -467,18 +467,24 @@ try{
 
     <!-- TEAM LIST -->
     <section class="page" data-page="team">
-      <div class="topbar">
-        <div class="page-title" data-i18n="nav_team">Team</div>
-        <div class="topbar-actions">
-          <button class="btn-primary-sm" id="createTeamBtn" data-i18n="team_create">+ Crea team</button>
+      <div class="scroll td-scroll">
+      <div class="tk-page">
+      <!-- Breadcrumb "Tutti i team" (stile pagina Tasks) -->
+      <div class="tdw-crumb tk-crumb"><span class="tdw-cloud"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 0 0 .5-8.97A6 6 0 0 0 6.1 9.2 4 4 0 0 0 6.5 19z"/></svg></span><span class="tdw-crumb-cur">Tutti i team</span></div>
+      <!-- Titolo grande + azioni a destra (identico a Tasks) -->
+      <div class="tk-head">
+        <span class="tk-headic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-1.8a3.8 3.8 0 0 0-2.8-3.67M3 21v-1.8A3.8 3.8 0 0 1 6.8 15.6h3.4A3.8 3.8 0 0 1 14 19.2V21"/><circle cx="8.5" cy="8" r="3.2"/><path d="M15.2 5a3.2 3.2 0 0 1 0 6"/></svg></span>
+        <div class="page-title tk-bigtitle">Teams</div>
+        <div class="tasks-actions">
           <div class="req-bellwrap" style="position:relative">
-            <div class="bell" id="reqBell"></div>
+            <button class="tasks-mic" id="reqBell" title="Richieste" style="position:relative"></button>
             <div id="reqPop"></div>
           </div>
+          <button class="tasks-add" id="createTeamBtn" title="Crea team" data-i18n-t="team_create"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
         </div>
       </div>
-      <div class="scroll">
-        <div class="team-grid" id="teamGrid"></div>
+      <div class="team-grid" id="teamGrid"></div>
+      </div>
       </div>
     </section>
 
@@ -520,9 +526,10 @@ try{
     <!-- PLUGIN -->
     <section class="page pl-page" data-page="plugin">
       <div class="pl-wrap">
+        <div class="tdw-crumb tk-crumb"><span class="tdw-cloud"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 0 0 .5-8.97A6 6 0 0 0 6.1 9.2 4 4 0 0 0 6.5 19z"/></svg></span><span class="tdw-crumb-cur">Tutti i plugin</span></div>
         <div class="pl-head">
           <span class="tk-headic pl-headic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></svg></span>
-          <div class="pl-headtx"><div class="page-title pl-title" data-i18n="nav_plugin">Plugin</div><div class="pl-sub" data-i18n="pl_sub">Lavora con l'AI nei tuoi strumenti preferiti.</div></div>
+          <div class="pl-headtx"><div class="page-title pl-title" data-i18n="nav_plugin">Plugin</div></div>
         </div>
         <div class="pl-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="plSearch" placeholder="Cerca plugin…" data-i18n-ph="pl_search_ph" autocomplete="off"><button class="pl-clear" id="plClear" title="Cancella" data-i18n-t="tt_clear" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button></div>
         <div class="pl-body" id="plBody"></div>
