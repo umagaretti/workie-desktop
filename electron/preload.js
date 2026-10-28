@@ -7,7 +7,7 @@
  * Later, narrow native powers (notifications, file save, auto-update…) go here.
  */
 
-const { contextBridge } = require('electron')
+const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('workieDesktop', {
   platform: process.platform,
@@ -16,4 +16,7 @@ contextBridge.exposeInMainWorld('workieDesktop', {
   // percorsi relativi, quindi le chiama su questo sito pubblicato. ⚠️ Metti qui l'URL
   // reale del tuo sito Netlify (quello con le API key impostate).
   apiBase: 'https://workieapp.netlify.app',
+  // Scorciatoia globale / icona barra: il processo main chiede alla pagina di aprire
+  // la finestra "Nuova task". La pagina si registra con onQuickTask(cb).
+  onQuickTask: (cb) => ipcRenderer.on('workie:quick-task', () => { try { cb() } catch (e) {} }),
 })

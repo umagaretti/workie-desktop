@@ -7241,3 +7241,12 @@ if('serviceWorker' in navigator){
   }
   requestAnimationFrame(step);
 })();
+
+// Desktop: scorciatoia globale ⌘J o icona nella barra → apre "Nuova task" al volo.
+if(typeof window!=='undefined'&&window.workieDesktop&&typeof window.workieDesktop.onQuickTask==='function'){
+  window.workieDesktop.onQuickTask(function(){
+    try{go('tasks');}catch(e){}
+    try{openNewTask();}catch(e){}
+    try{ntPickType('task');}catch(e){}
+  });
+}
