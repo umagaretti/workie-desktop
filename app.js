@@ -7242,11 +7242,33 @@ if('serviceWorker' in navigator){
   requestAnimationFrame(step);
 })();
 
-// Desktop: scorciatoia globale ⌘J o icona nella barra → apre "Nuova task" al volo.
-if(typeof window!=='undefined'&&window.workieDesktop&&typeof window.workieDesktop.onQuickTask==='function'){
-  window.workieDesktop.onQuickTask(function(){
-    try{go('tasks');}catch(e){}
-    try{openNewTask();}catch(e){}
-    try{ntPickType('task');}catch(e){}
+// Desktop: il pannellino rapido (icona barra / ⌘J) manda qui le task approvate (array).
+// Stessa logica di mtConfirm(): finiscono negli stessi dati, salvate e sincronizzate.
+if(typeof window!=='undefined'&&window.workieDesktop&&typeof window.workieDesktop.onQuickCreateMany==='function'){
+  window.workieDesktop.onQuickCreateMany(function(drafts){
+    try{
+      if(!Array.isArray(drafts)||!drafts.length)return;
+      var pro=(typeof isPro==='function')?isPro():true;
+      var cap=pro?Infinity:((typeof tasksLeftToday==='function')?tasksLeftToday():Infinity);
+      if(cap<=0){ if(typeof openUpgrade==='function')openUpgrade('tasks'); return; }
+      var added=0;
+      drafts.forEach(function(d){
+        var t=(d&&d.title?(''+d.title):'').trim(); if(!t)return; if(added>=cap)return;
+        var task={id:++TID,title:t,scope:'personal',done:false};
+        task.date=(Array.isArray(d.date)&&d.date.length===3)?d.date:realToday();
+        if(d.time)task.time=d.time;
+        TASKS.push(task); added++;
+      });
+      if(!added)return;
+      if(typeof tasksTodayInc==='function')tasksTodayInc(added);
+      saveTasks();
+      try{if(typeof renderTasks==='function')renderTasks();}catch(e){}
+      try{if(typeof renderHomeAlerts==='function')renderHomeAlerts();}catch(e){}
+      try{if(typeof buildCalendar==='function')buildCalendar();}catch(e){}
+      try{if(typeof renderSideTasks==='function')renderSideTasks();}catch(e){}
+      if(typeof showToast==='function'&&typeof tr==='function')showToast(tr('mt_added').replace('%n',added));
+      var capped=!pro&&drafts.filter(function(d){return d&&(''+(d.title||'')).trim();}).length>added;
+      if(capped&&typeof openUpgrade==='function')setTimeout(function(){openUpgrade('tasks');},500);
+    }catch(e){}
   });
 }

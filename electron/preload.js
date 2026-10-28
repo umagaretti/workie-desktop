@@ -16,7 +16,7 @@ contextBridge.exposeInMainWorld('workieDesktop', {
   // percorsi relativi, quindi le chiama su questo sito pubblicato. ⚠️ Metti qui l'URL
   // reale del tuo sito Netlify (quello con le API key impostate).
   apiBase: 'https://workieapp.netlify.app',
-  // Scorciatoia globale / icona barra: il processo main chiede alla pagina di aprire
-  // la finestra "Nuova task". La pagina si registra con onQuickTask(cb).
-  onQuickTask: (cb) => ipcRenderer.on('workie:quick-task', () => { try { cb() } catch (e) {} }),
+  // Pannellino rapido (icona barra / ⌘J): il processo main manda qui le task da creare
+  // (array di bozze), salvate con la stessa logica dell'app. Registrarsi con onQuickCreateMany(cb).
+  onQuickCreateMany: (cb) => ipcRenderer.on('workie:create-many', (_e, drafts) => { try { cb(drafts) } catch (e) {} }),
 })

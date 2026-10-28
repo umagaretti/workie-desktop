@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Workie — Aggiungi task</title>
+<style>
+  /* Fallback dark (i colori veri arrivano dall'app via onTheme) */
+  :root{
+    --bg:#171718; --panel:#232325; --panel2:#2a2a2d; --inset:#1b1b1d;
+    --text:#ededec; --text-dim:#b6b6b8; --muted:#7d7d82;
+    --border:rgba(255,255,255,.07); --border-soft:rgba(255,255,255,.045);
+    --accent:#b8a6f4; --accent2:#cdbef9; --accent-soft:rgba(184,166,244,.14);
+    --btn-text:#1c1830;
+  }
+  *{box-sizing:border-box; margin:0; padding:0; -webkit-user-select:none; user-select:none;}
+  html,body{background:transparent; overflow:hidden;
+    font-family:-apple-system,"SF Pro Text","Inter",system-ui,sans-serif; color:var(--text);}
+  .wrap{padding:9px 11px 12px;}
+  .beak{position:absolute; top:3px; left:50%; width:14px; height:14px; background:var(--panel);
+    border-left:1px solid var(--border); border-top:1px solid var(--border);
+    transform:translateX(-50%) rotate(45deg); border-radius:4px 0 0 0;}
+  .card{position:relative; background:var(--panel); border:1px solid var(--border);
+    border-radius:16px; box-shadow:0 12px 34px rgba(10,8,22,.30); padding:14px;}
+
+  .head{display:flex; align-items:center; gap:9px; margin-bottom:11px;}
+  .head .ic{display:flex; align-items:center; justify-content:center; width:26px; height:26px;
+    border-radius:8px; background:var(--accent-soft); color:var(--accent); flex:none;}
+  .head .ic svg{width:15px; height:15px;}
+  .head .ttl{font-size:14px; font-weight:600; letter-spacing:-.01em;}
+  .head .x{margin-left:auto; width:24px; height:24px; border:0; background:transparent; color:var(--muted);
+    font-size:15px; line-height:1; border-radius:7px; cursor:pointer;}
+  .head .x:hover{background:var(--border-soft); color:var(--text);}
+
+  /* ---- step: scrittura / dettatura ---- */
+  .inbox{position:relative;}
+  textarea.brain{width:100%; min-height:92px; resize:none; background:var(--inset);
+    border:1px solid var(--border); border-radius:11px; color:var(--text); font-size:13.5px;
+    line-height:1.45; padding:11px 12px 34px; outline:none; -webkit-user-select:text; user-select:text;
+    font-family:inherit;}
+  textarea.brain:focus{border-color:var(--accent);}
+  textarea.brain::placeholder{color:var(--muted);}
+  .mic{position:absolute; right:7px; bottom:7px; width:30px; height:30px; border:0; border-radius:8px;
+    background:var(--panel2); color:var(--text-dim); display:flex; align-items:center; justify-content:center; cursor:pointer;}
+  .mic svg{width:16px; height:16px;}
+  .mic:hover{color:var(--text);}
+  .mic.rec{background:#e0574c; color:#fff; animation:pulse 1.1s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(224,87,76,.45);}50%{box-shadow:0 0 0 6px rgba(224,87,76,0);}}
+
+  /* ---- step: anteprima ---- */
+  .revh{font-size:12.5px; color:var(--text-dim); margin-bottom:9px; line-height:1.4;}
+  .revh b{color:var(--text);}
+  .list{max-height:230px; overflow-y:auto; display:flex; flex-direction:column; gap:7px; margin:0 -2px; padding:0 2px;}
+  .mt-row{background:var(--inset); border:1px solid var(--border); border-radius:10px; padding:8px 9px;}
+  .mt-row .rt{width:100%; background:transparent; border:0; color:var(--text); font-size:13px; font-weight:550;
+    outline:none; -webkit-user-select:text; user-select:text;}
+  .rmeta{display:flex; align-items:center; gap:6px; margin-top:6px;}
+  .rmeta input[type=date],.rmeta input[type=time]{background:var(--panel2); border:1px solid var(--border-soft);
+    border-radius:7px; color:var(--text-dim); font-size:11.5px; padding:3px 6px; outline:none;
+    font-family:inherit; color-scheme:dark;}
+  body.light .rmeta input[type=date],body.light .rmeta input[type=time]{color-scheme:light;}
+  .rmeta input[type=date]{flex:1;}
+  .rm{margin-left:auto; width:24px; height:24px; border:0; background:transparent; color:var(--muted);
+    border-radius:6px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex:none;}
+  .rm svg{width:13px; height:13px;} .rm:hover{background:var(--border-soft); color:#e0574c;}
+
+  .lbl{font-size:11px; color:var(--muted); text-align:center; margin-top:9px; min-height:14px;}
+  .lbl.ok{color:#2ea36a;} .lbl.err{color:#e0574c;}
+
+  .actions{display:flex; gap:8px; margin-top:12px;}
+  .btn{flex:1; border:0; border-radius:11px; cursor:pointer; font-size:13.5px; font-weight:600; padding:11px;
+    background:var(--accent); color:var(--btn-text);}
+  .btn:active{transform:translateY(1px);}
+  .btn:disabled{opacity:.55; cursor:default;}
+  .btn.ghost{flex:none; background:transparent; border:1px solid var(--border); color:var(--text-dim); font-weight:500; padding:11px 14px;}
+  .btn.ghost:hover{color:var(--text);}
+  .hide{display:none !important;}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="beak"></div>
+    <div class="card">
+      <div class="head">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="7" x2="20" y2="7"/><line x1="8" y1="12" x2="20" y2="12"/><line x1="8" y1="17" x2="20" y2="17"/><circle cx="3.6" cy="7" r="1.1" fill="currentColor" stroke="none"/><circle cx="3.6" cy="12" r="1.1" fill="currentColor" stroke="none"/><circle cx="3.6" cy="17" r="1.1" fill="currentColor" stroke="none"/></svg></span>
+        <span class="ttl" id="ttl">Aggiungi task</span>
+        <button class="x" id="x" title="Chiudi">✕</button>
+      </div>
+
+      <!-- STEP 1: scrittura / dettatura -->
+      <div id="stepInput">
+        <div class="inbox">
+          <textarea class="brain" id="ta" placeholder="Scrivi o detta tutte le task…" spellcheck="false"></textarea>
+          <button class="mic" id="mic" title="Detta le task">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0"/><line x1="12" y1="17.5" x2="12" y2="21"/><line x1="8.5" y1="21" x2="15.5" y2="21"/></svg>
+          </button>
+        </div>
+        <div class="lbl" id="hint">Scrivi o detta più task insieme</div>
+        <div class="actions">
+          <button class="btn" id="analyze">Crea le task</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: anteprima / conferma -->
+      <div id="stepReview" class="hide">
+        <div class="revh" id="revh"></div>
+        <div class="list" id="list"></div>
+        <div class="lbl" id="hint2"></div>
+        <div class="actions">
+          <button class="btn ghost" id="back">Torna</button>
+          <button class="btn" id="confirm">Aggiungi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<script>
+  var lang='en'; try{ lang=((localStorage.getItem('workie_lang')||'en')+'').slice(0,2).toLowerCase(); }catch(e){}
+  var STR={
+    it:{ttl:'Aggiungi task',ph:'Scrivi o detta tutte le task… es. Chiama il fornitore domani alle 10, prepara 5 caroselli entro venerdì',
+      analyze:'Crea le task',hint:'Scrivi o detta più task insieme',listening:'Sto ascoltando… clic per fermare',transcribing:'Trascrivo…',thinking:'Preparo le task…',
+      review_h:'Workie ha preparato %n task — controlla e conferma',confirm:'Aggiungi %n task',back:'Torna',none:'Non ho riconosciuto nessuna task. Riprova.',added:'%n task aggiunte ✓',
+      mic:'Detta le task',remove:'Rimuovi',denied:'Microfono non consentito',novoice:'Dettatura non supportata',micerr:'Errore microfono',fail:'Trascrizione non riuscita (manca la chiave sul server?)',empty:'Non ho capito, riprova'},
+    en:{ttl:'Add tasks',ph:'Write or dictate all your tasks… e.g. Call the supplier tomorrow at 10, prepare 5 carousels by Friday',
+      analyze:'Create tasks',hint:'Write or dictate several tasks',listening:'Listening… click to stop',transcribing:'Transcribing…',thinking:'Preparing tasks…',
+      review_h:'Workie prepared %n tasks — review and confirm',confirm:'Add %n tasks',back:'Back',none:'I didn’t catch any task. Try again.',added:'%n tasks added ✓',
+      mic:'Dictate tasks',remove:'Remove',denied:'Microphone not allowed',novoice:'Dictation not supported',micerr:'Microphone error',fail:'Transcription failed (missing server key?)',empty:'Didn’t catch that, try again'}
+  };
+  var L=STR[lang]||STR.en;
+  var ta=document.getElementById('ta'), mic=document.getElementById('mic'), hint=document.getElementById('hint'),
+      analyzeBtn=document.getElementById('analyze'), stepInput=document.getElementById('stepInput'),
+      stepReview=document.getElementById('stepReview'), list=document.getElementById('list'),
+      revh=document.getElementById('revh'), hint2=document.getElementById('hint2'),
+      backBtn=document.getElementById('back'), confirmBtn=document.getElementById('confirm');
+  var DRAFTS=[];
+  // lingua
+  document.getElementById('ttl').textContent=L.ttl; ta.placeholder=L.ph; mic.title=L.mic;
+  analyzeBtn.textContent=L.analyze; backBtn.textContent=L.back; hint.textContent=L.hint;
+
+  function fit(){ try{ window.quickApi.resize(Math.ceil(document.querySelector('.wrap').getBoundingClientRect().height)); }catch(e){} }
+  function esc(x){ return String(x==null?'':x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function pad(n){ return (n<10?'0':'')+n; }
+  function setHint(el,msg,cls){ el.textContent=msg; el.className='lbl'+(cls?' '+cls:''); }
+  function flash(msg,cls){ var el=stepReview.classList.contains('hide')?hint:hint2; setHint(el,msg,cls);
+    clearTimeout(flash._t); flash._t=setTimeout(function(){ setHint(hint,L.hint,''); if(hint2)hint2.textContent=''; },1700); }
+
+  // ---- tema dall'app ----
+  function isDark(c){ try{ c=(c||'').trim(); if(c[0]==='#'){ var h=c.slice(1); if(h.length===3)h=h.split('').map(function(x){return x+x;}).join(''); var r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16); return (0.2126*r+0.7152*g+0.0722*b)<140; } var m=c.match(/\d+/g); if(m&&m.length>=3) return (0.2126*+m[0]+0.7152*+m[1]+0.0722*+m[2])<140; }catch(e){} return true; }
+  window.quickApi.onTheme(function(th){
+    if(!th)return; var r=document.documentElement.style;
+    function set(k,v){ if(v) r.setProperty(k,v); }
+    set('--bg',th.bg); set('--panel',th.panel); set('--panel2',th.panel2); set('--inset',th.inset);
+    set('--text',th.text); set('--text-dim',th.textDim); set('--muted',th.muted);
+    set('--border',th.border); set('--border-soft',th.borderSoft);
+    set('--accent',th.accent); set('--accent2',th.accent2); set('--accent-soft',th.accentSoft);
+    var dark=isDark(th.bg); document.body.classList.toggle('light',!dark);
+    // testo del bottone primario: scuro su accent chiaro, bianco su accent scuro
+    r.setProperty('--btn-text', isDark(th.accent)?'#fff':'#1c1830');
+    fit();
+  });
+
+  // ---- navigazione step ----
+  function showInput(){ stepReview.classList.add('hide'); stepInput.classList.remove('hide'); setHint(hint,L.hint,''); setTimeout(function(){ ta.focus(); fit(); },20); }
+  function showReview(){ renderReview(); stepInput.classList.add('hide'); stepReview.classList.remove('hide'); fit(); }
+
+  function renderReview(){
+    list.innerHTML=DRAFTS.map(function(d,i){
+      var iso=d.date?(d.date[0]+'-'+pad(d.date[1]+1)+'-'+pad(d.date[2])):'';
+      return '<div class="mt-row" data-i="'+i+'">'
+        +'<input class="rt" value="'+esc(d.title)+'">'
+        +'<div class="rmeta"><input type="date" class="rd" value="'+iso+'">'
+        +'<input type="time" class="rtime" value="'+(d.time||'')+'">'
+        +'<button class="rm" title="'+esc(L.remove)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button></div></div>';
+    }).join('');
+    updateCounts();
+  }
+  function rowCount(){ return list.querySelectorAll('.mt-row').length; }
+  function updateCounts(){
+    var n=rowCount();
+    revh.innerHTML=esc(L.review_h).replace('%n','<b>'+n+'</b>');
+    confirmBtn.textContent=L.confirm.replace('%n',n);
+    confirmBtn.disabled=!n;
+  }
+  list.addEventListener('click',function(e){ var rm=e.target.closest('.rm'); if(rm){ var row=rm.closest('.mt-row'); if(row){ row.remove(); updateCounts(); fit(); } } });
+
+  function setBusy(on,msg){ analyzeBtn.disabled=on; if(on)setHint(hint,msg||L.thinking,''); else setHint(hint,L.hint,''); }
+
+  async function analyze(){
+    var text=ta.value.trim(); if(!text){ ta.focus(); return; }
+    setBusy(true,L.thinking);
+    var drafts=[];
+    try{ drafts=await window.quickApi.parse(text); }catch(e){ drafts=[]; }
+    setBusy(false);
+    if(!drafts||!drafts.length){ flash(L.none,'err'); return; }
+    DRAFTS=drafts; showReview();
+  }
+  function confirm(){
+    var rows=[].slice.call(list.querySelectorAll('.mt-row')), out=[];
+    rows.forEach(function(r){
+      var title=(r.querySelector('.rt').value||'').trim(); if(!title)return;
+      var dv=r.querySelector('.rd').value, date=null;
+      if(dv){ var p=dv.split('-').map(Number); if(p.length===3&&p[0]) date=[p[0],p[1]-1,p[2]]; }
+      var tm=(r.querySelector('.rtime').value||'').trim();
+      out.push({title:title,date:date,time:tm});
+    });
+    if(!out.length){ flash(L.none,'err'); return; }
+    window.quickApi.addMany(out);
+    ta.value=''; DRAFTS=[];
+    showInput(); flash(L.added.replace('%n',out.length),'ok');
+  }
+
+  analyzeBtn.addEventListener('click',analyze);
+  backBtn.addEventListener('click',showInput);
+  confirmBtn.addEventListener('click',confirm);
+  document.getElementById('x').addEventListener('click',function(){ window.quickApi.close(); });
+  ta.addEventListener('keydown',function(e){
+    if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){ e.preventDefault(); analyze(); }
+    else if(e.key==='Escape'){ e.preventDefault(); window.quickApi.close(); }
+  });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ window.quickApi.close(); } });
+
+  // ---- dettatura: microfono → /transcribe → nel testo ----
+  var rec=null, stream=null, chunks=[], recording=false;
+  function updateMic(){ mic.classList.toggle('rec',recording); }
+  function cleanup(){ recording=false; updateMic(); try{ stream&&stream.getTracks().forEach(function(x){x.stop();}); }catch(_){} stream=null; }
+  mic.addEventListener('click',async function(){
+    if(recording){ recording=false; updateMic(); setHint(hint,L.transcribing,''); try{ rec&&rec.state!=='inactive'&&rec.stop(); }catch(_){} return; }
+    if(!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder)){ flash(L.novoice,'err'); return; }
+    try{ stream=await navigator.mediaDevices.getUserMedia({audio:true}); }catch(e){ flash(L.denied,'err'); return; }
+    chunks=[]; var mime='';
+    try{ ['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg'].some(function(x){ if(MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(x)){ mime=x; return true; } return false; }); }catch(_){}
+    try{ rec=mime?new MediaRecorder(stream,{mimeType:mime}):new MediaRecorder(stream); }catch(e){ try{ rec=new MediaRecorder(stream); }catch(_){ flash(L.micerr,'err'); cleanup(); return; } }
+    rec.ondataavailable=function(e){ if(e.data&&e.data.size)chunks.push(e.data); };
+    rec.onstop=async function(){
+      var blob=new Blob(chunks,{type:(rec&&rec.mimeType)||'audio/webm'}); cleanup();
+      if(!blob.size){ setHint(hint,L.hint,''); return; }
+      try{
+        var dataUrl=await new Promise(function(res,rej){ var fr=new FileReader(); fr.onload=function(){res(fr.result);}; fr.onerror=rej; fr.readAsDataURL(blob); });
+        var r=await fetch(window.quickApi.apiBase+'/.netlify/functions/transcribe',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({audio:dataUrl,lang:lang}) });
+        var data={}; try{ data=await r.json(); }catch(_){}
+        if(!r.ok||!data.text){ flash(L.fail,'err'); return; }
+        ta.value=(ta.value.trim()? ta.value.trim()+'\n':'')+String(data.text).trim(); setHint(hint,L.hint,''); ta.focus(); fit();
+      }catch(e){ flash(L.fail,'err'); }
+    };
+    recording=true; updateMic(); setHint(hint,L.listening,''); rec.start();
+  });
+
+  window.quickApi.onFocus(function(){
+    ta.value=''; DRAFTS=[]; showInput();
+    if(recording){ recording=false; updateMic(); try{ rec&&rec.state!=='inactive'&&rec.stop(); }catch(_){} cleanup(); }
+    setTimeout(function(){ ta.focus(); fit(); },30);
+  });
+  window.addEventListener('load',fit);
+</script>
+</body>
+</html>
