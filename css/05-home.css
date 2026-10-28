@@ -31,9 +31,11 @@
 .ov-help-item b{color:var(--text);font-weight:600;}
 /* chatbox "Ask anything" sotto il saluto — 3 livelli stile Granola */
 .ov-chatbox{display:none;position:relative;width:100%;max-width:560px;margin:20px auto 0;text-align:left;min-height:52px;z-index:5;}
-/* Il saluto sfuma quando apri la chat: il box cresce verso l'alto senza accavallarsi */
-.ov-head{transition:opacity .28s ease,transform .3s cubic-bezier(.22,1,.36,1);}
-.ov.ovc-focus .ov-head{opacity:0;transform:translateY(-8px);pointer-events:none;}
+/* Il saluto (data + testo) sfuma quando apri la chat, così il box cresce verso l'alto senza accavallarsi.
+   ATTENZIONE: .ov-head qui racchiude anche la chatbox e la help-row, quindi NON va sfumato il contenitore
+   (farebbe sparire tutto) ma solo i due testi del saluto. */
+.ov-date,.ov-greet{transition:opacity .28s ease,transform .3s cubic-bezier(.22,1,.36,1);}
+.ov.ovc-focus .ov-date,.ov.ovc-focus .ov-greet{opacity:0;transform:translateY(-8px);pointer-events:none;}
 /* LIVELLO 1 — pill compatta (max-height animata per morphing fluido) */
 .ovc-collapsed{display:flex;align-items:center;gap:10px;width:100%;height:52px;max-height:52px;overflow:hidden;background:var(--panel);border:1px solid var(--border);border-radius:999px;padding:0 8px 0 20px;box-shadow:0 10px 34px -22px rgba(0,0,0,.4);cursor:text;transition:max-height .42s cubic-bezier(.22,1,.36,1),opacity .22s ease,border-width .3s ease,border-color .16s,box-shadow .16s;}
 .ovc-collapsed:hover{border-color:var(--border-strong);}
