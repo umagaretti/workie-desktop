@@ -218,35 +218,54 @@
   });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ window.quickApi.close(); } });
 
-  // ---- dettatura: microfono → /transcribe → nel testo ----
-  var rec=null, stream=null, chunks=[], recording=false;
+  // ---- dettatura: microfono → /transcribe → nel testo, DAL VIVO ----
+  // Registriamo a pezzetti (timeslice) e ritrascriviamo l'audio accumulato ogni ~2s,
+  // così il testo compare mentre parli. Lingua: auto-detect (parli italiano → italiano).
+  var rec=null, stream=null, chunks=[], recording=false, transcribing=false, needFinal=false, dictBase='', liveTimer=null;
   function updateMic(){ mic.classList.toggle('rec',recording); }
-  function cleanup(){ recording=false; updateMic(); try{ stream&&stream.getTracks().forEach(function(x){x.stop();}); }catch(_){} stream=null; }
+  function blobToDataUrl(b){ return new Promise(function(res,rej){ var fr=new FileReader(); fr.onload=function(){res(fr.result);}; fr.onerror=rej; fr.readAsDataURL(b); }); }
+  function stopStream(){ try{ stream&&stream.getTracks().forEach(function(x){x.stop();}); }catch(_){} stream=null; }
+  function endDict(){ setHint(hint,L.hint,''); ta.focus(); fit(); }
+  async function transcribeNow(isFinal){
+    if(transcribing){ if(isFinal) needFinal=true; return; }
+    if(!chunks.length){ if(isFinal) endDict(); return; }
+    transcribing=true;
+    try{
+      var blob=new Blob(chunks,{type:(rec&&rec.mimeType)||'audio/webm'});
+      var dataUrl=await blobToDataUrl(blob);
+      var r=await fetch(window.quickApi.apiBase+'/.netlify/functions/transcribe',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({audio:dataUrl}) });
+      var data={}; try{ data=await r.json(); }catch(_){}
+      if(r.ok&&typeof data.text==='string'){ ta.value=dictBase+String(data.text).trim(); fit(); }
+      else if(isFinal){ flash(L.fail,'err'); }
+    }catch(e){ if(isFinal) flash(L.fail,'err'); }
+    transcribing=false;
+    if(isFinal){ endDict(); }
+    else if(needFinal){ needFinal=false; transcribeNow(true); }
+  }
+  function stopDict(){
+    if(!recording) return;
+    recording=false; updateMic(); if(liveTimer){ clearInterval(liveTimer); liveTimer=null; }
+    setHint(hint,L.transcribing,'');
+    try{ rec&&rec.state!=='inactive'&&rec.stop(); }catch(_){}
+  }
   mic.addEventListener('click',async function(){
-    if(recording){ recording=false; updateMic(); setHint(hint,L.transcribing,''); try{ rec&&rec.state!=='inactive'&&rec.stop(); }catch(_){} return; }
+    if(recording){ stopDict(); return; }
     if(!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder)){ flash(L.novoice,'err'); return; }
     try{ stream=await navigator.mediaDevices.getUserMedia({audio:true}); }catch(e){ flash(L.denied,'err'); return; }
-    chunks=[]; var mime='';
+    chunks=[]; needFinal=false; dictBase=ta.value?(ta.value.replace(/\s+$/,'')+'\n'):'';
+    var mime='';
     try{ ['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg'].some(function(x){ if(MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(x)){ mime=x; return true; } return false; }); }catch(_){}
-    try{ rec=mime?new MediaRecorder(stream,{mimeType:mime}):new MediaRecorder(stream); }catch(e){ try{ rec=new MediaRecorder(stream); }catch(_){ flash(L.micerr,'err'); cleanup(); return; } }
+    try{ rec=mime?new MediaRecorder(stream,{mimeType:mime}):new MediaRecorder(stream); }catch(e){ try{ rec=new MediaRecorder(stream); }catch(_){ flash(L.micerr,'err'); stopStream(); return; } }
     rec.ondataavailable=function(e){ if(e.data&&e.data.size)chunks.push(e.data); };
-    rec.onstop=async function(){
-      var blob=new Blob(chunks,{type:(rec&&rec.mimeType)||'audio/webm'}); cleanup();
-      if(!blob.size){ setHint(hint,L.hint,''); return; }
-      try{
-        var dataUrl=await new Promise(function(res,rej){ var fr=new FileReader(); fr.onload=function(){res(fr.result);}; fr.onerror=rej; fr.readAsDataURL(blob); });
-        var r=await fetch(window.quickApi.apiBase+'/.netlify/functions/transcribe',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({audio:dataUrl,lang:lang}) });
-        var data={}; try{ data=await r.json(); }catch(_){}
-        if(!r.ok||!data.text){ flash(L.fail,'err'); return; }
-        ta.value=(ta.value.trim()? ta.value.trim()+'\n':'')+String(data.text).trim(); setHint(hint,L.hint,''); ta.focus(); fit();
-      }catch(e){ flash(L.fail,'err'); }
-    };
-    recording=true; updateMic(); setHint(hint,L.listening,''); rec.start();
+    rec.onstop=function(){ stopStream(); transcribeNow(true); };
+    recording=true; updateMic(); setHint(hint,L.listening,'');
+    rec.start(800); // emette un pezzo ~ogni 800ms
+    liveTimer=setInterval(function(){ if(recording&&!transcribing) transcribeNow(false); }, 2000);
   });
 
   window.quickApi.onFocus(function(){
-    ta.value=''; DRAFTS=[]; showInput();
-    if(recording){ recording=false; updateMic(); try{ rec&&rec.state!=='inactive'&&rec.stop(); }catch(_){} cleanup(); }
+    if(recording){ recording=false; updateMic(); if(liveTimer){clearInterval(liveTimer);liveTimer=null;} try{ rec&&rec.state!=='inactive'&&rec.stop(); }catch(_){} stopStream(); }
+    ta.value=''; DRAFTS=[]; needFinal=false; transcribing=false; showInput();
     setTimeout(function(){ ta.focus(); fit(); },30);
   });
   window.addEventListener('load',fit);
