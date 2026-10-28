@@ -80,7 +80,7 @@ function createPopover() {
   if (popover) return
   popover = new BrowserWindow({
     width: 344,
-    height: 330,
+    height: 104,
     show: false,
     frame: false,
     transparent: true,
@@ -235,6 +235,20 @@ app.whenReady().then(() => {
   })
   session.defaultSession.setPermissionCheckHandler((_wc, permission) =>
     permission === 'media' || permission === 'microphone' || permission === 'audioCapture')
+
+  // CORS per il backend: l'app gira su file:// e le Netlify functions non mandano
+  // l'header Access-Control-Allow-Origin → le risposte verrebbero bloccate. Inietto
+  // l'header CORS SOLO sulle risposte del nostro backend, così AI e dettatura funzionano.
+  session.defaultSession.webRequest.onHeadersReceived(
+    { urls: ['https://workieapp.netlify.app/*'] },
+    (details, cb) => {
+      const h = details.responseHeaders || {}
+      h['Access-Control-Allow-Origin'] = ['*']
+      h['Access-Control-Allow-Methods'] = ['POST, GET, OPTIONS']
+      h['Access-Control-Allow-Headers'] = ['Content-Type, Authorization']
+      cb({ responseHeaders: h })
+    }
+  )
 
   // Scorciatoia globale: apre il pannellino "Aggiungi task" da qualsiasi app.
   const ok = globalShortcut.register(QUICK_TASK_ACCEL, togglePopover)
