@@ -3535,7 +3535,7 @@ function renderOvPlan(){
     const coll=document.getElementById('ovcCollapsed');
     if(coll){coll.addEventListener('click',e=>{
         if(e.target.closest('#ovcClear1')){e.stopPropagation();ovcClearTask();return;}
-        if(e.target.closest('#ovcTaskBtn1')){e.stopPropagation();ovcMiniOpen(!cb.classList.contains('miniopen'));return;}
+        if(e.target.closest('#ovcTaskBtn1')){e.stopPropagation();ovcExpand(true);ovcListOpen(true);return;}
         ovcExpand(true);});
       coll.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();ovcExpand(true);}});}
     const sc=document.getElementById('ovcScopeBtn');if(sc)sc.addEventListener('click',e=>{e.stopPropagation();ovcListOpen(!cb.classList.contains('listopen'));});
