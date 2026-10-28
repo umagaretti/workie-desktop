@@ -170,7 +170,13 @@ html.theme-chiaro .stb-btn.active,html.theme-custom .stb-btn.active{background:#
 .sc-empty{font-size:12.5px;color:var(--faint);padding:14px 9px;text-align:center;}
 /* lista chat Resolve nella sidebar */
 .sc-list{display:flex;flex-direction:column;gap:2px;}
-.sc-item{display:flex;align-items:center;gap:9px;padding:8px 9px;border-radius:9px;cursor:pointer;transition:background .15s;}
+/* box chat identici ai nav-item (stesso font/colore/padding) */
+.sc-item{display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;cursor:pointer;transition:background .15s,color .15s;}
+/* titolo sezione "Chat" (come "Tasks"), con un po' di spazio sopra per abbassare la lista */
+.sc-secttl{font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--faint);padding:2px 9px 4px;margin-top:10px;font-family:var(--sans);}
+/* pallino di stato: viola quando l'AI ha risposto per ultima (da leggere) */
+.sc-dot{flex:none;width:6px;height:6px;border-radius:50%;background:transparent;}
+.sc-item.unread .sc-dot{background:var(--accent);}
 .sc-item:hover{background:rgba(255,255,255,.05);}
 .sc-item.active{background:var(--panel-2);}
 html.theme-chiaro .sc-item:hover,html.theme-custom .sc-item:hover{background:rgba(24,18,45,.05);}
@@ -178,7 +184,9 @@ html.theme-chiaro .sc-item.active,html.theme-custom .sc-item.active{background:#
 .sc-ic{flex:none;width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);}
 .sc-ic svg{width:15px;height:15px;}
 .sc-cbody{min-width:0;display:flex;flex-direction:column;gap:1px;}
-.sc-ctitle{font-size:13px;color:var(--text);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sc-ctitle{flex:1;min-width:0;font-size:13.5px;line-height:1;color:var(--text-dim);font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sc-item:hover .sc-ctitle{color:var(--text);}
+.sc-item.active .sc-ctitle{color:var(--text);}
 .sc-cprev{font-size:11.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 html.theme-chiaro .stb-btn:hover,html.theme-chiaro .stb-ico:hover{background:rgba(24,18,45,.05);}
 /* icona toolbar attiva (Inbox come vista) */

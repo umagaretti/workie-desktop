@@ -102,6 +102,8 @@ function openAiSide(force){
 }
 {const oa=document.getElementById('ovAiBtn');if(oa)oa.addEventListener('click',e=>{e.stopPropagation();openAiSide();});
  const aa=document.getElementById('aiSideBtn');if(aa)aa.addEventListener('click',e=>{e.stopPropagation();openAiSide();});
+ // Bottone Giornata in alto a destra: apre la pagina Giornata (per ora; comportamento definitivo da decidere con Umberto)
+ {const da=document.getElementById('daySideBtn');if(da)da.addEventListener('click',e=>{e.stopPropagation();if(typeof go==='function')go('desktop');});}
  const ax=document.getElementById('aidClose');if(ax)ax.addEventListener('click',()=>openAiSide(false));
  const adr=document.getElementById('aiDrawer');if(adr)adr.addEventListener('click',e=>{
    const del=e.target.closest('[data-scdel]');
@@ -2807,14 +2809,16 @@ function renderSideChat(){
   if(typeof rsvLoad==='function')rsvLoad();
   const store=(typeof RESOLVE_CHATS!=='undefined'&&RESOLVE_CHATS)?RESOLVE_CHATS:{};
   const chats=Object.keys(store).map(k=>({id:+k,e:store[k]})).filter(x=>x.e&&x.e.msgs&&x.e.msgs.length&&TASKS.some(t=>t.id===x.id));
-  if(!chats.length){el.innerHTML='<div class="sc-empty">'+tr('side_chat_empty')+'</div>';return;}
+  const ttl='<div class="sc-secttl">Chat</div>';
+  if(!chats.length){el.innerHTML=ttl+'<div class="sc-empty">'+tr('side_chat_empty')+'</div>';return;}
   const onChat=!!document.querySelector('.tdw.chat-open');
-  const icon=(typeof RSV_ICON!=='undefined')?RSV_ICON:'';
-  el.innerHTML='<div class="sc-list">'+chats.map(({id,e})=>{
+  // Riga sottile: solo titolo + pallino viola quando l'ultimo messaggio è dell'AI (= da leggere) e non sei dentro quella chat.
+  el.innerHTML=ttl+'<div class="sc-list">'+chats.map(({id,e})=>{
     const t=TASKS.find(x=>x.id===id);const title=t?taskTitle(t):('#'+id);
-    const last=e.msgs[e.msgs.length-1];let prev=last?String(last.t):'';prev=prev.replace(/\s+/g,' ').trim();
     const active=(onChat&&taskPageId===id);
-    return '<div class="sc-item'+(active?' active':'')+'" data-scchat="'+id+'"><span class="sc-ic">'+icon+'</span><span class="sc-cbody"><span class="sc-ctitle">'+bdEsc(title)+'</span><span class="sc-cprev">'+bdEsc(prev)+'</span></span></div>';
+    const last=e.msgs[e.msgs.length-1];
+    const unread=!active&&!!last&&last.r==='ai';
+    return '<div class="sc-item'+(active?' active':'')+(unread?' unread':'')+'" data-scchat="'+id+'"><span class="sc-ctitle">'+bdEsc(title)+'</span><span class="sc-dot"></span></div>';
   }).join('')+'</div>';
 }
 {const el=document.getElementById('sideChat');if(el)el.addEventListener('click',e=>{const it=e.target.closest('[data-scchat]');if(it&&typeof openResolveChat==='function')openResolveChat(+it.dataset.scchat);});}
