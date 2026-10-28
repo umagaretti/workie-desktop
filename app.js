@@ -2637,6 +2637,9 @@ window.addEventListener('focus',tasksDayRefresh);
 let taskFilter='all';
 let catFilter=null;
 let ovScope={mode:'day',d:null,today:true},miniCur=new Date();
+// Bozza del chatbox home: sopravvive alla navigazione finché NON si invia.
+// Dopo l'invio si azzera (si riseleziona la task); se non invii, task+testo restano.
+let ovcDraft={task:null,text:''};
 function realToday(){const n=new Date();return [n.getFullYear(),n.getMonth(),n.getDate()];}
 ovScope.d=realToday();ovScope.today=true;
 function cmpDate(a,b){return a[0]-b[0]||a[1]-b[1]||a[2]-b[2];}
@@ -3477,7 +3480,7 @@ function renderOvPlan(){
  const rv=document.getElementById('ovResolve');if(rv)rv.addEventListener('click',()=>{if(typeof go==='function')go('tasks');});
  const nt=document.getElementById('ovNewTask');if(nt)nt.addEventListener('click',()=>{if(typeof openNewTask==='function')openNewTask();});
  // ===== Home "Ask anything" — chat a 3 livelli (stile Granola) =====
- let ovcTaskSel=null;
+ let ovcTaskSel=ovcDraft.task;
  function ovcSelTask(){return ovcTaskSel!=null?TASKS.find(x=>x.id===ovcTaskSel):null;}
  function ovcTaskLabel(){const t=ovcSelTask();return t?taskTitle(t):tr('ovc_pick');}
  function ovcSyncLabels(){const lbl=ovcTaskLabel();['ovcTaskLbl1','ovcTaskLbl2'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=lbl;});const cb=document.getElementById('ovChatbox');if(cb)cb.classList.toggle('has-task',ovcTaskSel!=null);}
@@ -3493,13 +3496,33 @@ function renderOvPlan(){
    if(!list.length)h+='<div class="ovc-empty">'+tr('ovc_none')+'</div>';
    else h+=list.map(ovcItemHTML).join('');
    box.innerHTML=h;}
- function ovcPickTask(id){ovcTaskSel=id;ovcSyncLabels();ovcListOpen(false);ovcMiniOpen(false);const cb=document.getElementById('ovChatbox');if(cb&&cb.classList.contains('expanded')){const ta=document.getElementById('ovcInput');if(ta)ta.focus();}}
- function ovcClearTask(){ovcTaskSel=null;ovcSyncLabels();ovcMiniOpen(false);ovcListOpen(false);}
+ function ovcPickTask(id){ovcTaskSel=id;ovcDraft.task=id;ovcSyncLabels();ovcListOpen(false);ovcMiniOpen(false);const cb=document.getElementById('ovChatbox');if(cb&&cb.classList.contains('expanded')){const ta=document.getElementById('ovcInput');if(ta)ta.focus();}}
+ function ovcClearTask(){ovcTaskSel=null;ovcDraft.task=null;ovcSyncLabels();ovcMiniOpen(false);ovcListOpen(false);}
+ function ovcMorph(r1){
+   if(!r1||!r1.width)return;
+   requestAnimationFrame(()=>requestAnimationFrame(()=>{
+     const comp=document.getElementById('rsvComposer');
+     let r2=comp?comp.getBoundingClientRect():null;
+     if(!r2||!r2.width){const W=Math.min(640,window.innerWidth-300);r2={left:(window.innerWidth-W)/2+120,top:window.innerHeight-92,width:W,height:54};}
+     const g=document.createElement('div');g.className='ovc-morph';
+     g.style.left=r1.left+'px';g.style.top=r1.top+'px';g.style.width=r1.width+'px';g.style.height=r1.height+'px';
+     document.body.appendChild(g);void g.offsetWidth;
+     g.style.left=r2.left+'px';g.style.top=r2.top+'px';g.style.width=r2.width+'px';g.style.height=r2.height+'px';g.style.opacity='0';
+     setTimeout(()=>{try{g.remove();}catch(_){}},500);
+   }));
+ }
  function ovcSend(){const ta=document.getElementById('ovcInput');if(!ta)return;const text=ta.value.trim();if(!text)return;
    if(ovcTaskSel==null){ovcListOpen(true);try{showToast(tr('ovc_need'));}catch(_){}return;}
-   const id=ovcTaskSel;ta.value='';ovcAutoGrow();ovcExpand(false);
+   const id=ovcTaskSel;
+   // posizione di partenza (box in home) PRIMA di navigare
+   const cbx=document.getElementById('ovChatbox');
+   const startEl=(cbx&&cbx.classList.contains('expanded'))?document.getElementById('ovcExpanded'):document.getElementById('ovcCollapsed');
+   const r1=startEl?startEl.getBoundingClientRect():null;
+   ta.value='';ovcAutoGrow();ovcExpand(false);
+   ovcDraft.task=null;ovcDraft.text='';            // inviato → nessuna bozza
    try{openResolveChat(id);}catch(_){}
-   setTimeout(()=>{try{if(typeof rsvSend==='function')rsvSend(text);}catch(_){}},140);}
+   try{ovcMorph(r1);}catch(_){}                    // box scivola dal centro al basso
+   setTimeout(()=>{try{if(typeof rsvSend==='function')rsvSend(text);}catch(_){}},160);}
  {const cb=document.getElementById('ovChatbox');
   if(cb){
     const coll=document.getElementById('ovcCollapsed');
@@ -3512,9 +3535,13 @@ function renderOvPlan(){
     cb.addEventListener('click',e=>{const it=e.target.closest('[data-ovctask]');if(it){e.stopPropagation();ovcPickTask(+it.dataset.ovctask);}});
     const sd=document.getElementById('ovcSend');if(sd)sd.addEventListener('click',ovcSend);
     const ta=document.getElementById('ovcInput');
-    if(ta){ta.addEventListener('input',ovcAutoGrow);ta.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ovcSend();}else if(e.key==='Escape'){ovcExpand(false);}});}
+    if(ta){ta.addEventListener('input',()=>{ovcAutoGrow();ovcDraft.text=ta.value;});ta.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ovcSend();}else if(e.key==='Escape'){ovcExpand(false);}});}
     document.addEventListener('click',e=>{if(!e.target.closest('#ovChatbox')){ovcMiniOpen(false);const t2=document.getElementById('ovcInput');if(!t2||!t2.value.trim())ovcExpand(false);else ovcListOpen(false);}});
     ovcSyncLabels();
+    // Ripristina la bozza non inviata (task già ripristinata in ovcTaskSel; qui testo + espandi)
+    {const ti=document.getElementById('ovcInput');
+     if(ti&&ovcDraft.text)ti.value=ovcDraft.text;
+     if(ovcDraft.text&&ovcDraft.text.trim()){ovcExpand(true);ovcAutoGrow();}}
   }
  }
  const pb=document.getElementById('pdayBody');

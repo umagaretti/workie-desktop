@@ -315,3 +315,5 @@ html.theme-chiaro .ov,html.theme-custom .ov{--gc:rgba(24,18,45,.06);}
 .hist-item:hover{background:var(--panel-2);}
 .hist-title{font-size:13px;color:var(--text);}
 .hist-date{font-size:11px;color:var(--faint);margin-top:2px;}
+/* Morph del chatbox: dal box in home (pill, al centro) all'input della chat task (in basso) */
+.ovc-morph{position:fixed;z-index:4000;background:var(--panel);border:1px solid var(--border);border-radius:999px;box-shadow:0 16px 44px -16px rgba(0,0,0,.48);pointer-events:none;will-change:left,top,width,height,border-radius,opacity;transition:left .46s cubic-bezier(.22,1,.36,1),top .46s cubic-bezier(.22,1,.36,1),width .46s cubic-bezier(.22,1,.36,1),height .46s cubic-bezier(.22,1,.36,1),border-radius .46s ease,opacity .32s ease .16s;}
