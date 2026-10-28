@@ -102,8 +102,9 @@ function openAiSide(force){
 }
 {const oa=document.getElementById('ovAiBtn');if(oa)oa.addEventListener('click',e=>{e.stopPropagation();openAiSide();});
  const aa=document.getElementById('aiSideBtn');if(aa)aa.addEventListener('click',e=>{e.stopPropagation();openAiSide();});
- // Bottone Giornata in alto a destra: apre la pagina Giornata (per ora; comportamento definitivo da decidere con Umberto)
- {const da=document.getElementById('daySideBtn');if(da)da.addEventListener('click',e=>{e.stopPropagation();if(typeof go==='function')go('desktop');});}
+ // Bottone Giornata in alto a destra: apre/chiude un drawer a destra (segnaposto; la funzione verrà rifatta)
+ {const da=document.getElementById('daySideBtn');if(da)da.addEventListener('click',e=>{e.stopPropagation();const dd=document.getElementById('dayDrawer');if(dd)dd.classList.toggle('open');});
+  const dc=document.getElementById('dayDrawerClose');if(dc)dc.addEventListener('click',e=>{e.stopPropagation();const dd=document.getElementById('dayDrawer');if(dd)dd.classList.remove('open');});}
  const ax=document.getElementById('aidClose');if(ax)ax.addEventListener('click',()=>openAiSide(false));
  const adr=document.getElementById('aiDrawer');if(adr)adr.addEventListener('click',e=>{
    const del=e.target.closest('[data-scdel]');

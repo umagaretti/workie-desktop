@@ -20,8 +20,17 @@
    Nascondo i puntini finti e sposto il toggle sidebar accanto ai comandi nativi. */
 html.is-tauri .wc-lights{display:none!important;}
 /* Bottoni allineati alla riga dei pallini macOS (trafficLightPosition y:22) e sopra la striscia-drag. */
-html.is-tauri .app-chrome{left:80px;top:4px;z-index:400;}
-html.is-tauri .side-nav-arrows{top:6px;z-index:400;}
+html.is-tauri .app-chrome{left:80px;top:10px;z-index:400;}
+html.is-tauri .side-nav-arrows{top:11px;z-index:400;}
+/* icona Giornata in alto a destra: stessa taglia delle iconcine di sinistra */
+html.is-tauri #daySideBtn svg{width:18px;height:18px;}
+/* Drawer "Giornata" a destra (segnaposto) */
+.day-drawer{position:fixed;top:0;right:0;height:100vh;width:340px;max-width:85vw;background:var(--panel);border-left:1px solid var(--border);box-shadow:-10px 0 40px rgba(0,0,0,.10);transform:translateX(102%);transition:transform .28s cubic-bezier(.22,.61,.36,1);z-index:120;display:flex;flex-direction:column;-webkit-app-region:no-drag;}
+.day-drawer.open{transform:translateX(0);}
+.day-drawer .dd-head{display:flex;align-items:center;justify-content:space-between;padding:46px 16px 14px;font-weight:600;font-size:15px;color:var(--text);}
+.day-drawer .dd-close{border:none;background:transparent;color:var(--muted);font-size:15px;cursor:pointer;width:28px;height:28px;border-radius:7px;line-height:1;}
+.day-drawer .dd-close:hover{background:var(--panel-2);color:var(--text);}
+.day-drawer .dd-body{padding:4px 16px;color:var(--muted);font-size:13.5px;line-height:1.5;}
 html.is-tauri .ai-side-btn{top:4px;z-index:400;}
 /* Bottone chat AI a destra disattivato per ora (le chat sono nella sidebar sinistra; lo riuseremo). */
 #aiSideBtn{display:none!important;}
@@ -175,8 +184,8 @@ html.theme-chiaro .stb-btn.active,html.theme-custom .stb-btn.active{background:#
 /* titolo sezione "Chat" (come "Tasks"), con un po' di spazio sopra per abbassare la lista */
 .sc-secttl{font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--faint);padding:2px 9px 4px;margin-top:10px;font-family:var(--sans);}
 /* pallino di stato: viola quando l'AI ha risposto per ultima (da leggere) */
-.sc-dot{flex:none;width:6px;height:6px;border-radius:50%;background:transparent;}
-.sc-item.unread .sc-dot{background:var(--accent);}
+.sc-dot{flex:none;width:4px;height:4px;border-radius:50%;background:transparent;}
+.sc-item.unread .sc-dot{background:var(--accent);opacity:.85;}
 .sc-item:hover{background:rgba(255,255,255,.05);}
 .sc-item.active{background:var(--panel-2);}
 html.theme-chiaro .sc-item:hover,html.theme-custom .sc-item:hover{background:rgba(24,18,45,.05);}
