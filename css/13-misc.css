@@ -641,3 +641,10 @@ a.pf-soc{text-decoration:none;}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.06s!important;}
 }
+
+/* Riga impostazione con interruttore (es. Sfondo animato) */
+.set-row{display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;padding:5px 0;}
+.set-row-tx{min-width:0;}
+.set-row-t{font-size:14px;color:var(--text);font-weight:500;}
+.set-row-d{font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.4;}
+.set-row .ov-switch{flex:none;}

@@ -446,6 +446,10 @@ Object.assign(STR.zh,{nav_home:`主页`,nav_desktop:`Daily`,nav_tasks:`任务`,n
 Object.assign(STR.ja,{nav_home:`ホーム`,nav_desktop:`Daily`,nav_tasks:`タスク`,nav_team:`チーム`,nav_projects:`プロジェクト`,nav_connections:`つながり`,nav_settings:`設定`,nav_social:`ソーシャル`,nav_workflow:`Workflow`,nav_resolve:`Resolve`,nav_soon:`近日公開`,g_morning:`おはようございます`,g_afternoon:`こんにちは`,g_evening:`こんばんは`,home_watch:`注目`,dw_upcoming:`今後の予定`,new_task:`+ 新しいタスク`,new_project:`+ 新しいプロジェクト`,team_create:`+ チームを作成`,team_join:`参加`,back:`戻る`,al_all_clear:`すべて完了、期限のものはありません。`,g_overdue:`期限切れ`,g_today:`今日`,connect:`つながる`,nt_group:`グループ`,grp_all:`すべて`,grp_none:`なし`,grp_new:`新しいグループ`,grp_manage:`グループを管理`,grp_link:`プロジェクトにリンク`,grp_link_none:`プロジェクトなし`,proj_link_group:`リンク中のグループ`,proj_link_none:`グループなし`,gm_title:`グループを管理`,gm_add:`追加`,gm_active:`有効`,set_language:`言語`,set_appearance:`外観`,stm_prefs:`環境設定`,stm_home:`ホーム`,stm_notif:`通知`,stm_notif_push:`プッシュ通知`,stm_notif_push_d:`メッセージ・招待・タスクのリマインダーを通知します。`,stm_generale:`一般`,stm_privacy:`プライバシー`,stm_billing:`お支払い`,stm_features:`機能`,stm_profile:`プロフィール`,set_account:`アカウント`,stm_home_daily:`ホームに Daily を表示`,stm_home_tasks:`ホームにタスクを表示`,stm_g_settings:`設定`,stm_g_desktop:`デスクトップアプリ`,stm_g_custom:`カスタマイズ`,mcs_title:`作成`,mcs_task:`新しいタスク`,mcs_project:`新しいプロジェクト`,dw_setup:`一日を設定`,dw_setup_title:`一日を設定しましょう`,soc_tab_recent:`最近のチャット`,soc_tab_conn:`つながり`,soc_tab_team:`チーム`,soc_add:`+ 追加`,soc_sub:`あなたのネットワーク：チャット、つながり、チーム`,pd_board:`ボード`,pd_files:`ファイル`,members_word:`メンバー`,pd_task_ph:`プロジェクトにタスクを追加…`,add:`追加`,requests:`リクエスト`,no_requests:`リクエストはありません`,accept:`承認`,decline:`拒否`,invited_you:`があなたを招待しました:`,grp_save:`保存`,grp_create:`グループを作成`,grp_delete:`グループを削除`,grp_name:`グループ名`,stm_save:`保存`,coming_soon:`近日公開`,splash_lang:`言語を選択`});
 Object.assign(STR.ko,{nav_home:`홈`,nav_desktop:`Daily`,nav_tasks:`작업`,nav_team:`팀`,nav_projects:`프로젝트`,nav_connections:`연결`,nav_settings:`설정`,nav_social:`소셜`,nav_workflow:`Workflow`,nav_resolve:`Resolve`,nav_soon:`곧 출시`,g_morning:`좋은 아침이에요`,g_afternoon:`안녕하세요`,g_evening:`좋은 저녁이에요`,home_watch:`살펴볼 만한`,dw_upcoming:`예정`,new_task:`+ 새 작업`,new_project:`+ 새 프로젝트`,team_create:`+ 팀 만들기`,team_join:`참여`,back:`뒤로`,al_all_clear:`모두 완료, 마감된 항목이 없어요.`,g_overdue:`기한 초과`,g_today:`오늘`,connect:`연결`,nt_group:`그룹`,grp_all:`전체`,grp_none:`없음`,grp_new:`새 그룹`,grp_manage:`그룹 관리`,grp_link:`프로젝트에 연결`,grp_link_none:`프로젝트 없음`,proj_link_group:`연결된 그룹`,proj_link_none:`그룹 없음`,gm_title:`그룹 관리`,gm_add:`추가`,gm_active:`활성`,set_language:`언어`,set_appearance:`화면`,stm_prefs:`환경설정`,stm_home:`홈`,stm_notif:`알림`,stm_notif_push:`푸시 알림`,stm_notif_push_d:`메시지, 초대, 작업 알림에 대한 알림입니다.`,stm_generale:`일반`,stm_privacy:`개인정보`,stm_billing:`결제`,stm_features:`기능`,stm_profile:`프로필`,set_account:`계정`,stm_home_daily:`홈에 Daily 표시`,stm_home_tasks:`홈에 작업 표시`,stm_g_settings:`설정`,stm_g_desktop:`데스크톱 앱`,stm_g_custom:`사용자 지정`,mcs_title:`만들기`,mcs_task:`새 작업`,mcs_project:`새 프로젝트`,dw_setup:`하루 설정`,dw_setup_title:`하루를 설정하세요`,soc_tab_recent:`최근 채팅`,soc_tab_conn:`연결`,soc_tab_team:`팀`,soc_add:`+ 추가`,soc_sub:`내 네트워크: 채팅, 연결, 팀`,pd_board:`보드`,pd_files:`파일`,members_word:`멤버`,pd_task_ph:`프로젝트에 작업 추가…`,add:`추가`,requests:`요청`,no_requests:`요청 없음`,accept:`수락`,decline:`거절`,invited_you:`님이 초대했습니다:`,grp_save:`저장`,grp_create:`그룹 만들기`,grp_delete:`그룹 삭제`,grp_name:`그룹 이름`,stm_save:`저장`,coming_soon:`곧 출시`,splash_lang:`언어 선택`});
 
+// Etichette impostazioni interfaccia (sfondo animato). tr() fa fallback en→it per le altre lingue.
+Object.assign(STR.it,{set_interface:`Interfaccia`,set_gradient:`Sfondo animato`,set_gradient_d:`La luce viola che si muove dietro l'app.`});
+Object.assign(STR.en,{set_interface:`Interface`,set_gradient:`Animated background`,set_gradient_d:`The purple light drifting behind the app.`});
+
 let LANG=(function(){try{return localStorage.getItem('workie_lang')||'en';}catch(e){return 'en';}})();
 function tr(k){const o=STR[LANG];if(o&&o[k]!=null)return o[k];if(STR.en&&STR.en[k]!=null)return STR.en[k];if(STR.it&&STR.it[k]!=null)return STR.it[k];return k;}
 // --- livello account/storage (DEV_LOCAL / CUR_ACC / ukey / migrazione) spostato in storage.js, caricato prima di app.js ---
@@ -645,6 +649,9 @@ function applyOvPrefs(){
  document.addEventListener('click',e=>{if(!e.target.closest('.ov-icwrap'))ovCloseMenus(null);});
 }
 try{applyOvPrefs();}catch(e){}
+// Impostazioni → Interfaccia: interruttore dello sfondo animato (palla viola)
+{const gr=document.getElementById('setGradRow');
+ if(gr)gr.addEventListener('click',()=>{ovPrefs.gradient=!ovPrefs.gradient;saveOvPrefs();applyOvPrefs();});}
 function updateGreeting(){
   const now=new Date();const h=now.getHours();
   const g=h<12?tr('g_morning'):h<18?tr('g_afternoon'):tr('g_evening');
@@ -2062,7 +2069,7 @@ try{Object.assign(STR.it,{suf2_tasks_t:'Gestisci le task',suf2_tasks_d:'Task e g
 const SU_FEATURES=[
   {ik:'suf2_tasks_t',dk:'suf2_tasks_d',svg:'<path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l.7.7L6.2 5.2M4 12l.7.7L6.2 11.2M4 18l.7.7L6.2 17.2"/>',mock:['a hi','b','a']},
   {ik:'suf2_mail_t',dk:'suf2_mail_d',svg:'<path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.4 5.5 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.4-6.5A2 2 0 0 0 16.8 4H7.2a2 2 0 0 0-1.8 1.5z"/>',mock:['a','b hi','c']},
-  {ik:'suf2_plan_t',dk:'suf2_plan_d',svg:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2.5M12 19.5V22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M2 12h2.5M19.5 12H22M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/>',mock:['b','a hi','c']},
+  {ik:'suf2_plan_t',dk:'suf2_plan_d',svg:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.6V12l3 1.8"/>',mock:['b','a hi','c']},
   {ik:'suf2_resolve_t',dk:'suf2_resolve_d',svg:'<path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3.2"/>',mock:['a hi','b','a hi']}
 ];
 let suSlide=0,suTimer=null;
