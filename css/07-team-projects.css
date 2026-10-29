@@ -50,7 +50,9 @@
 .tt-list .task.done .check{background:#8168e6;border-color:#8168e6;}
 .tt-list .task-del{opacity:0;width:0;overflow:hidden;transition:.15s;}
 .tt-row:hover .task-del{width:26px;opacity:1;margin-left:4px;}
-.tt-filters{margin:0 0 16px;}
+.tk-filters.tt-filters{margin:0 0 16px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;}
+.tt-filters::-webkit-scrollbar{display:none;}
+.tt-filters .tk-fil{flex:none;}
 .tt-week{margin-bottom:26px;}
 .tt-week .dw-day{background:var(--panel-2);}
 .tt-week .dw-day.sel{background:#8168e6;border-color:#8168e6;}

@@ -2427,8 +2427,7 @@ function renderTeamMain(){
       body=`${strip}<div class="tpb-grid">${grid}</div>`;
     }
     main.innerHTML=`<div class="tk-filters tt-filters">${chips}</div>
-      ${body}
-      <button class="btn-add" id="teamTaskBtn">${tr('new_task')}</button>`;
+      ${body}`;
   }else if(teamSection==='feed'){
     const feed=Array.isArray(t.feed)?t.feed.slice().reverse():[];
     const body=feed.length?feed.map(f=>`<div class="feed-row"><span class="feed-dot"></span><div class="feed-main"><div class="feed-t">${bdEsc(f.text)}</div><div class="feed-time">${relTime(f.ts)}</div></div></div>`).join(''):`<div class="task-empty">${tr('feed_empty')}</div>`;
@@ -2473,6 +2472,7 @@ document.getElementById('teamQuickLinks').addEventListener('click',e=>{const q=e
   if(n.classList.contains('open')){n.classList.remove('open');return;}
   renderTeamNotif();n.classList.add('open');const d=document.getElementById('teamBellDot');if(d)d.style.display='none';});}
 {const ct=document.getElementById('teamCrumbTeam');if(ct)ct.addEventListener('click',()=>{if(!curTeam)return;teamSection='overview';delConfirm=false;renderTeamQuickLinks();renderTeamMain();});}
+{const at=document.getElementById('teamAddTask');if(at)at.addEventListener('click',()=>{if(curTeam)openNewTask(curTeam);});}
 document.addEventListener('click',e=>{
   const m=document.getElementById('teamQuickLinks');if(m&&m.classList.contains('open')&&!e.target.closest('#teamQuickLinks')&&!e.target.closest('#teamMenuBtn'))m.classList.remove('open');
   const n=document.getElementById('teamNotif');if(n&&n.classList.contains('open')&&!e.target.closest('#teamNotif')&&!e.target.closest('#teamBell'))n.classList.remove('open');
@@ -7705,7 +7705,17 @@ function seedExampleTeams(){
   addTask(t1.tid,'Programmare post Instagram',2,1,false);
   addTask(t1.tid,'Revisione articolo economia',3,4,false);
   addTask(t1.tid,'Approvare piano editoriale',0,-1,true);
-  t1.act=3;
+  addTask(t1.tid,'Call con il cliente',0,0,false);        // Umberto oggi
+  addTask(t1.tid,'Registrare episodio 5',1,0,false);       // Marco oggi
+  addTask(t1.tid,'Storie Instagram',2,0,false);            // Giulia oggi
+  addTask(t1.tid,'Montaggio reel',4,0,false);              // Luca oggi
+  addTask(t1.tid,'Copertina podcast',5,0,false);           // Anna oggi
+  addTask(t1.tid,'Ottimizzare articolo SEO',6,0,false);    // Paolo oggi
+  addTask(t1.tid,'Newsletter settimanale',3,0,false);      // Sara oggi
+  addTask(t1.tid,'Intervista ospite',1,3,false);           // Marco +3
+  addTask(t1.tid,'Rivedere grafiche social',5,1,false);    // Anna domani
+  addTask(t1.tid,'Keyword research',6,2,false);            // Paolo +2
+  t1.act=12;
   // --- Team 2: Studio Cervino ---
   const t2={tid:TEAM_SEQ++,name:'Studio Cervino',color:'#ef9a9a',act:0,owner:true,desc:'Campagna Cervino',invites:[],spaces:[],
     members:[
