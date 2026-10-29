@@ -2846,8 +2846,7 @@ function renderSideChat(){
   el.innerHTML=ttl+'<div class="sc-list">'+chats.map(({id,e})=>{
     const t=TASKS.find(x=>x.id===id);const title=t?taskTitle(t):('#'+id);
     const active=(onChat&&taskPageId===id);
-    const last=e.msgs[e.msgs.length-1];
-    const unread=!active&&!!last&&last.r==='ai';
+    const unread=!active&&!!e.unread; // pallino solo per una risposta AI non ancora letta
     return '<div class="sc-item'+(active?' active':'')+(unread?' unread':'')+'" data-scchat="'+id+'"><span class="sc-ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7A8.38 8.38 0 0 1 4 11.5 8.5 8.5 0 0 1 12.5 3 8.5 8.5 0 0 1 21 11.5z"/></svg></span><span class="sc-ctitle">'+bdEsc(title)+'</span><span class="sc-dot"></span></div>';
   }).join('')+'</div>';
 }
@@ -5058,7 +5057,7 @@ function openTaskPage(id, asChat){
   taskPageBack=(cp&&cp!=='taskdetail')?cp:'tasks';
   taskPageId=t.id;
   // di default apre le INFO della task; la chat solo se richiesto (sezione chat / robot)
-  try{const e=rsvGet(t.id);e.opened=!!asChat;rsvSave();}catch(_){}
+  try{const e=rsvGet(t.id);e.opened=!!asChat;if(asChat)e.unread=false;rsvSave();}catch(_){}
   const bk=document.getElementById('tdBack');if(bk)bk.dataset.go=taskPageBack;
   go('taskdetail');
 }
@@ -5383,7 +5382,11 @@ async function rsvSend(text,img){text=(text||'').trim();if(!text&&!img)return;co
   const cur=rsvGet(id);
   for(let i=cur.msgs.length-1;i>=0;i--){if(cur.msgs[i].typing){cur.msgs.splice(i,1);break;}}
   let _txt='',_hasOpt=false;
-  {let txt=reply;const rm=rsvParseRoadmap(txt);if(rm)txt=rm.clean;const op=rsvParseOptions(txt);if(op)txt=op.clean;_txt=txt;_hasOpt=!!op;const aim={r:'ai',t:txt};if(rm)aim.roadmap=rm.steps;if(op){aim.options=op.options;if(op.total)aim.optTotal=op.total;}cur.msgs.push(aim);}rsvSave();
+  {let txt=reply;const rm=rsvParseRoadmap(txt);if(rm)txt=rm.clean;const op=rsvParseOptions(txt);if(op)txt=op.clean;_txt=txt;_hasOpt=!!op;const aim={r:'ai',t:txt};if(rm)aim.roadmap=rm.steps;if(op){aim.options=op.options;if(op.total)aim.optTotal=op.total;}cur.msgs.push(aim);}
+  // Pallino "da leggere" solo se NON stai guardando quella chat in questo momento
+  const _viewing=(taskPageId===id)&&!!document.querySelector('.page[data-page="taskdetail"].active')&&!!document.querySelector('.tdw.chat-open');
+  if(!_viewing)cur.unread=true;
+  rsvSave();
   if(taskPageId===id){renderRsvMsgs();if(!_hasOpt)rsvTypeLast(_txt);}
   // Memoria: dopo una risposta reale (non il fallback offline) imparo 1-2 fatti sull'utente.
   if(rsvOnline&&!_hasOpt)aiMemLearn(cur.msgs.filter(m=>!m.typing));
@@ -5546,13 +5549,13 @@ function tdwFlipPanel(toOpen){
 }
 function openTaskChat(){
   const t=TASKS.find(x=>x.id==taskPageId);if(!t)return;
-  const e=rsvGet(t.id);e.opened=true;e.state='active';if(!e.msgs.length)e.msgs.push({r:'ai',t:rsvFirstResponse(t),starters:rsvStarters()});rsvSave();
+  const e=rsvGet(t.id);e.opened=true;e.state='active';e.unread=false;if(!e.msgs.length)e.msgs.push({r:'ai',t:rsvFirstResponse(t),starters:rsvStarters()});rsvSave();
   tdwFlipPanel(true);renderRsvMsgs();
   const inp=document.getElementById('rsvInput');if(inp)setTimeout(()=>inp.focus(),160);
 }
 function openResolveChat(id){
   const t=TASKS.find(x=>x.id===id);if(!t)return;
-  const e=rsvGet(id);e.state='active';if(!e.msgs.length)e.msgs.push({r:'ai',t:rsvFirstResponse(t),starters:rsvStarters()});rsvSave();
+  const e=rsvGet(id);e.state='active';e.unread=false;if(!e.msgs.length)e.msgs.push({r:'ai',t:rsvFirstResponse(t),starters:rsvStarters()});rsvSave();
   openTaskPage(id, true); // apre in modalità chat
   requestAnimationFrame(()=>requestAnimationFrame(()=>{try{rsvPlayMorph();}catch(_){}})); // trasforma il box home → chat
 }
