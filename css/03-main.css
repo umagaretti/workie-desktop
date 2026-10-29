@@ -149,7 +149,36 @@
 .ib-cmp-field{display:flex;align-items:center;gap:10px;padding:0 18px;border-bottom:1px solid var(--border-soft);}
 .ib-cmp-lbl{flex:none;width:58px;font-size:13px;color:var(--muted);}
 .ib-cmp-field input{flex:1;min-width:0;border:none;background:none;outline:none;color:var(--text);font-size:14px;font-family:var(--sans);padding:13px 0;}
-.ib-cmp-body{min-height:200px;border:none;outline:none;resize:none;background:none;color:var(--text);font-size:14px;line-height:1.55;font-family:var(--sans);padding:16px 18px;}
+/* Cc / Ccn: toggle a destra del campo A, campi rivelabili */
+.ib-cmp-cc{flex:none;display:flex;gap:2px;}
+.ib-cmp-cctg{border:none;background:none;color:var(--muted);font-size:12.5px;font-weight:600;font-family:var(--sans);cursor:pointer;padding:5px 8px;border-radius:7px;transition:background .12s,color .12s;}
+.ib-cmp-cctg:hover{background:var(--panel-2);color:var(--text);}
+.ib-cmp-cctg.on{color:#8168e6;}
+.ib-cmp-ccrow[hidden]{display:none;}
+/* Barra formattazione */
+.ib-cmp-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:2px;padding:7px 14px;border-bottom:1px solid var(--border-soft);}
+.ib-tb-b{position:relative;width:30px;height:30px;border:none;background:none;color:var(--muted);border-radius:7px;cursor:pointer;display:grid;place-items:center;transition:background .12s,color .12s;}
+.ib-tb-b:hover{background:var(--panel-2);color:var(--text);}
+.ib-tb-b.active{background:var(--panel-2);color:#8168e6;}
+.ib-tb-b svg{width:17px;height:17px;}
+.ib-tb-color{padding-bottom:3px;}
+.ib-tb-cbar{position:absolute;left:7px;right:7px;bottom:4px;height:3px;border-radius:2px;}
+.ib-tb-sep{width:1px;height:18px;background:var(--border-soft);margin:0 5px;flex:none;}
+.ib-tb-size{border:none;background:none;color:var(--text);font-size:12.5px;font-family:var(--sans);cursor:pointer;border-radius:7px;padding:5px 4px;outline:none;}
+.ib-tb-size:hover{background:var(--panel-2);}
+.ib-cmp-body{min-height:190px;max-height:46vh;overflow-y:auto;border:none;outline:none;background:none;color:var(--text);font-size:14px;line-height:1.55;font-family:var(--sans);padding:16px 18px;}
+.ib-cmp-body:empty:before{content:attr(data-ph);color:var(--muted);pointer-events:none;}
+.ib-cmp-body a{color:#8168e6;}
+.ib-cmp-body ul,.ib-cmp-body ol{padding-left:22px;margin:6px 0;}
+/* Allegati */
+.ib-cmp-atts{display:flex;flex-wrap:wrap;gap:8px;padding:0 18px;}
+.ib-cmp-atts:not(:empty){padding:4px 18px 12px;}
+.ib-cmp-att{display:inline-flex;align-items:center;gap:7px;background:var(--panel-2);border:1px solid var(--border-soft);border-radius:9px;padding:6px 8px 6px 10px;font-size:12.5px;color:var(--text);max-width:220px;}
+.ib-cmp-att span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ib-cmp-att b{color:var(--muted);font-weight:500;flex:none;}
+.ib-cmp-att-x{flex:none;width:18px;height:18px;border:none;background:none;color:var(--muted);border-radius:5px;cursor:pointer;display:grid;place-items:center;}
+.ib-cmp-att-x:hover{background:var(--border-soft);color:var(--text);}
+.ib-cmp-att-x svg{width:12px;height:12px;}
 .ib-cmp-foot{display:flex;align-items:center;gap:10px;padding:14px 18px;border-top:1px solid var(--border-soft);}
 .ib-cmp-send{display:inline-flex;align-items:center;gap:7px;border:none;background:var(--accent);color:#fff;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;transition:filter .15s;}
 .ib-cmp-send:hover{filter:brightness(1.07);}
@@ -191,13 +220,13 @@
 .ib-rd-mside.collapsed{justify-content:center;gap:6px;}
 .ib-rd-date{flex:none;font-size:12px;color:var(--faint);white-space:nowrap;}
 /* Create task tutto viola, scritta e simbolo bianchi, squadrato (box aperto) */
-.ib-rd-ctask{display:inline-flex;align-items:center;gap:7px;border:none;background:#8168e6;color:#fff;border-radius:9px;padding:7px 13px;font-size:12.5px;font-weight:600;font-family:var(--sans);cursor:pointer;transition:filter .15s;white-space:nowrap;}
+.ib-rd-ctask{display:inline-flex;align-items:center;gap:6px;border:none;background:#8168e6;color:#fff;border-radius:8px;padding:5px 10px;font-size:11.5px;font-weight:600;font-family:var(--sans);cursor:pointer;transition:filter .15s;white-space:nowrap;}
 .ib-rd-ctask:hover{filter:brightness(1.08);}
-.ib-rd-ctask svg{width:16px;height:16px;}
+.ib-rd-ctask svg{width:14px;height:14px;}
 /* box chiuso: solo il quadratino viola con il cerchio+ */
-.ib-rd-ctask-ic{width:30px;height:30px;border:none;background:#8168e6;color:#fff;border-radius:9px;display:grid;place-items:center;cursor:pointer;transition:filter .15s;}
+.ib-rd-ctask-ic{width:26px;height:26px;border:none;background:#8168e6;color:#fff;border-radius:8px;display:grid;place-items:center;cursor:pointer;transition:filter .15s;}
 .ib-rd-ctask-ic:hover{filter:brightness(1.08);}
-.ib-rd-ctask-ic svg{width:17px;height:17px;}
+.ib-rd-ctask-ic svg{width:15px;height:15px;}
 /* destinatari: A: e Cc/Ccn su righe separate, ognuna scorrevole, vicine */
 .ib-rd-recips{margin-top:7px;display:flex;flex-direction:column;gap:3px;}
 .ib-rd-rline{display:flex;align-items:baseline;gap:6px;font-size:12.5px;color:var(--muted);max-width:100%;}
