@@ -2918,10 +2918,11 @@ function renderInboxConnect(){
   const IC_SHIELD='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5.5c0 4.3-3 7.3-7 8.5-4-1.2-7-4.2-7-8.5V6z"/><path d="M9.2 12.2l1.9 1.9 3.7-3.9"/></svg>';
   const bene=(ic,t,d)=>'<div class="ib-cs-b"><span class="ib-cs-b-ic">'+ic+'</span><div class="ib-cs-b-tx"><div class="ib-cs-b-t">'+t+'</div><div class="ib-cs-b-d">'+d+'</div></div></div>';
   const btn=(id,label)=>{const p=IB_PROVIDERS.find(x=>x.id===id);if(!p)return '';return '<button type="button" class="ib-cs-prov" data-ibprov="'+id+'"><span class="ib-cs-prov-ic">'+ibProvIcon(p)+'</span><span>'+tr('ib_cont').replace('%s',label)+'</span></button>';};
+  const INBOX_IC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.4 5.5 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.4-6.5A2 2 0 0 0 16.8 4H7.2a2 2 0 0 0-1.8 1.5z"/></svg>';
+  const WK=(typeof SVG!=='undefined'&&SVG.blob)?SVG.blob:'<span style="font-family:var(--serif);font-weight:700">W</span>';
   el.innerHTML=
-    '<div class="ib-cs-head"><span class="tk-headic">'+MAIL+'</span><div class="page-title tk-bigtitle">'+tr('nav_inbox')+'</div></div>'
-   +'<div class="ib-cs-center"><div class="ib-cs-card">'
-   +'<div class="ib-cs-logos"><span class="ib-cs-logo">'+MAIL+'</span><span class="ib-cs-swap">'+SWAP+'</span><span class="ib-cs-logo wk">W</span></div>'
+    '<div class="ib-cs-center"><div class="ib-cs-card">'
+   +'<div class="ib-cs-logos"><span class="ib-cs-logo brand">'+WK+'</span><span class="ib-cs-swap">'+SWAP+'</span><span class="ib-cs-logo">'+INBOX_IC+'</span></div>'
    +'<div class="ib-cs-title">'+tr('ib_connect_t')+'</div>'
    +'<div class="ib-cs-sub">'+tr('ib_connect_sub')+'</div>'
    +'<div class="ib-cs-benefits">'+bene(IC_LINK,tr('ib_b1_t'),tr('ib_b1_d'))+bene(IC_LOCK,tr('ib_b2_t'),tr('ib_b2_d'))+bene(IC_SHIELD,tr('ib_b3_t'),tr('ib_b3_d'))+'</div>'
