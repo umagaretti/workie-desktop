@@ -115,8 +115,9 @@
 .ib-act.primary:hover{filter:brightness(1.07);background:#8168e6;color:#fff;border-color:#8168e6;}
 /* filtri All/Unread come i chip dei Task */
 .ib-toolbar{display:flex;align-items:center;gap:12px;padding:0 2px 16px;}
-.ib-filters{display:flex;align-items:center;gap:7px;background:none;border-radius:0;padding:0;}
-.ib-fbtn{display:inline-flex;align-items:center;height:31px;padding:0 14px;border-radius:999px;border:1px solid var(--border-soft);background:var(--panel);color:var(--text-dim);font-size:12.5px;font-weight:500;font-family:var(--sans);cursor:pointer;transition:background .15s,color .15s,border-color .15s;white-space:nowrap;}
+.ib-filters{display:flex;align-items:center;gap:7px;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none;background:none;border-radius:0;padding:0;}
+.ib-filters::-webkit-scrollbar{display:none;}
+.ib-fbtn{flex:none;display:inline-flex;align-items:center;height:31px;padding:0 14px;border-radius:999px;border:1px solid var(--border-soft);background:var(--panel);color:var(--text-dim);font-size:12.5px;font-weight:500;font-family:var(--sans);cursor:pointer;transition:background .15s,color .15s,border-color .15s;white-space:nowrap;}
 .ib-fbtn:hover{background:var(--panel-2);color:var(--text);}
 .ib-fbtn.active{background:var(--accent-soft);border-color:transparent;color:var(--accent);font-weight:600;}
 .ib-fbtn .ib-fcount{margin-left:5px;font-size:11px;color:var(--accent);font-weight:600;}
