@@ -2953,18 +2953,15 @@ function ibMsgHTML(msg,idx,open,mailId){
   const initial=(msg.from||'?').trim().charAt(0).toUpperCase();
   const av='<div class="ib-rd-av" style="background:'+ibAvatarColor(msg.from)+'">'+bdEsc(initial)+'</div>';
   const atts=(open&&msg.attachments&&msg.attachments.length)?'<div class="ib-rd-atts">'+msg.attachments.map(a=>'<span class="ib-rd-att">'+IB_IC_CLIP+'<span class="ib-rd-att-n">'+bdEsc(a.name)+'</span>'+(a.size?'<span class="ib-rd-att-s">'+bdEsc(a.size)+'</span>':'')+'</span>').join('')+'</div>':'';
-  const acts='<div class="ib-rd-acts"><button class="ib-rd-aic" data-ibreplyone title="'+tr('ib_reply')+'">'+IB_IC_REPLY+'</button><button class="ib-rd-aic" data-ibreplyall title="'+tr('ib_reply_all')+'">'+IB_IC_REPLYALL+'</button><button class="ib-rd-aic" data-ibforward title="'+tr('ib_forward')+'">'+IB_IC_FWD+'</button><button class="ib-rd-aic" data-ibtask="'+mailId+'" title="'+tr('ib_make_task')+'">'+IB_IC_TASK+'</button></div>';
   const dateHTML='<span class="ib-rd-date">'+bdEsc(ibFmtDate(msg.date))+'</span>';
-  let minfo,right;
+  let sub;
   if(open){
-    minfo='<div class="ib-rd-minfo"><div class="ib-rd-name">'+bdEsc(msg.from)+'</div>'+(msg.fromEmail?'<div class="ib-rd-email">'+bdEsc(msg.fromEmail)+'</div>':'')
-      +'<div class="ib-rd-l2">'+(msg.to?'<span><b>A:</b> '+bdEsc(msg.to)+'</span>':'')+(msg.cc?'<span><b>Cc:</b> '+bdEsc(msg.cc)+'</span>':'')+'</div></div>';
-    right='<div class="ib-rd-right">'+acts+dateHTML+'</div>';
+    sub=(msg.fromEmail?'<div class="ib-rd-email">'+bdEsc(msg.fromEmail)+'</div>':'')
+      +((msg.to||msg.cc)?'<div class="ib-rd-recips">'+(msg.to?'<span><b>A:</b> '+bdEsc(msg.to)+'</span>':'')+(msg.cc?'<span><b>Cc:</b> '+bdEsc(msg.cc)+'</span>':'')+'</div>':'');
   }else{
-    minfo='<div class="ib-rd-minfo"><div class="ib-rd-name">'+bdEsc(msg.from)+'</div><div class="ib-rd-snip">'+bdEsc((msg.body||'').replace(/\s+/g,' ').trim().slice(0,110))+'</div></div>';
-    right='<div class="ib-rd-right">'+dateHTML+'</div>';
+    sub='<div class="ib-rd-snip">'+bdEsc((msg.body||'').replace(/\s+/g,' ').trim().slice(0,110))+'</div>';
   }
-  const head='<div class="ib-rd-mhead">'+av+minfo+right+'</div>';
+  const head='<div class="ib-rd-mhead">'+av+'<div class="ib-rd-minfo"><div class="ib-rd-name">'+bdEsc(msg.from)+'</div>'+sub+'</div>'+dateHTML+'</div>';
   const body=open?(atts+'<div class="ib-rd-body">'+ibBodyHTML(msg.body)+'</div>'+ibReplyBar()):'';
   return '<div class="ib-rd-msg'+(open?' open':' collapsed')+'" data-ibmsg="'+idx+'">'+head+body+'</div>';
 }
@@ -2975,7 +2972,7 @@ function ibRenderReader(){
   if(!m){reader.innerHTML='<div class="ib-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.4 5.5 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.4-6.5A2 2 0 0 0 16.8 4H7.2a2 2 0 0 0-1.8 1.5z"/></svg>'+tr('ib_pick')+'</div>';ibReaderFor=null;return;}
   const thread=(m.thread&&m.thread.length)?m.thread:[m];
   if(ibReaderFor!==m.id){ibReaderFor=m.id;ibThreadOpen=new Set([thread.length-1]);}
-  let html='<div class="ib-rd-subject"><span>'+bdEsc(m.subject)+'</span>'+(thread.length>1?'<span class="ib-rd-tcount">'+thread.length+'</span>':'')+'</div><div class="ib-rd-thread">';
+  let html='<div class="ib-rd-subject"><span class="ib-rd-subjtxt">'+bdEsc(m.subject)+'</span><button class="ib-rd-ctask" data-ibtask="'+m.id+'" title="'+tr('ib_make_task')+'">'+IB_IC_TASK+'<span>'+tr('ib_make_task')+'</span></button></div><div class="ib-rd-thread">';
   thread.forEach((msg,i)=>{html+=ibMsgHTML(msg,i,ibThreadOpen.has(i),m.id);});
   reader.innerHTML=html+'</div>';
 }
