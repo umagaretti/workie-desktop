@@ -2200,7 +2200,7 @@ function assigneeAv(t,task){
   const m=t.members[task.assignee];return `<div class="tt-av" style="background:${m.c}" data-assign="${task.id}" title="${bdEsc(m.name)}">${m.i}</div>`;
 }
 function relTime(ts){const d=Math.floor((nowTs()-ts)/1000);if(d<60)return tr('t_now');if(d<3600)return Math.floor(d/60)+tr('t_min');if(d<86400)return Math.floor(d/3600)+tr('t_hr');return Math.floor(d/86400)+tr('t_day');}
-let curTeam=null,teamSection='overview',delConfirm=false,curSpaceName=null,curEventIdx=-1,curChatId=null,GROUP_SEQ=1,chatOpen={groups:true,members:true},teamTaskFilter='group';
+let curTeam=null,teamSection='overview',delConfirm=false,curSpaceName=null,curEventIdx=-1,curChatId=null,GROUP_SEQ=1,chatOpen={groups:true,members:true},teamTaskMember=null;
 function chatRowHTML(t,c){
   const last=chatMsgs(t,c.id).slice(-1)[0];
   const prev=last?(last.proposal?(last.mine?tr('you_proposed'):tr('proposed_task')):last.text):'';
@@ -2376,25 +2376,27 @@ function renderTeamMain(){
     const strip=t.members.map((m,idx)=>{const n=memberOpenTasks(t,idx);
       return `<div class="tbm-card" data-mi="${idx}"><div class="tbm-av" style="background:${m.c}">${m.i}</div><div class="tbm-info"><div class="tbm-name">${firstName(m.name)}</div><div class="tbm-bar"><i style="width:${Math.round(n/maxLoad*100)}%;background:${m.c}"></i></div></div><div class="tbm-num">${n}</div></div>`;
     }).join('');
-    // Filtro: Task di gruppo / Le mie task
-    const mine=teamTaskFilter==='mine';
-    const meIdx=t.members.indexOf(meMember(t));
-    const pool=mine?allTT.filter(x=>x.assignee===meIdx):allTT;
-    // Lista raggruppata per data come la pagina Task (In ritardo / Oggi / In arrivo / Completate)
+    // Filtro a chip identico alle task normali: Tutte + un chip per membro
+    if(teamTaskMember!=null&&!t.members[teamTaskMember])teamTaskMember=null;
+    let chips=`<button class="tk-fil${teamTaskMember==null?' on':''}" data-ttm="all">${tr('filter_all')}</button>`;
+    chips+=t.members.map((m,idx)=>`<button class="tk-fil tk-fil-cat${teamTaskMember===idx?' on':''}" data-ttm="${idx}"><span class="tk-fdot" style="background:${m.c}"></span>${firstName(m.name)}</button>`).join('');
+    const pool=(teamTaskMember==null)?allTT:allTT.filter(x=>x.assignee===teamTaskMember);
+    // Lista identica alla pagina Task (vista Oggi: In ritardo / Oggi / In arrivo con pie)
     const overdue=pool.filter(x=>!x.done&&taskPast(x)).sort(taskByDue);
     const todayNd=pool.filter(x=>!x.done&&taskTodayCat(x));
     const upcoming=pool.filter(x=>!x.done&&taskFuture(x)).sort(taskByDue);
-    const doneL=pool.filter(x=>x.done);
-    const rowW=task=>`<div class="tt-row">${taskRow(task,true)}${assigneeAv(t,task)}</div>`;
+    const doneAll=pool.filter(x=>x.done);
+    const dueCat=x=>{const d=taskDue(x);if(!d)return 'today';const c=cmpDate(d,realToday());return c<0?'overdue':(c===0?'today':'upcoming');};
+    const rowW=task=>`<div class="tt-row">${taskRow(task,true,true)}${assigneeAv(t,task)}</div>`;
     let listHTML='';
-    const sec=(gk,items,red)=>{if(!items.length)return;const key='ttg_'+gk;listHTML+=tgHead(key,tr(gk),items.length,red);if(!taskCollapse[key])listHTML+=items.map(rowW).join('');};
-    sec('g_overdue',overdue,true);sec('g_today',todayNd,false);sec('g_upcoming',upcoming,false);sec('g_done',doneL,false);
+    const sec=(gk,cat,nd,red)=>{const dn=doneAll.filter(x=>dueCat(x)===cat);const total=nd.length+dn.length;if(!total)return;const key='ttg_'+gk;listHTML+=tgHeadPie(key,tr(gk),dn.length,total,red);if(!taskCollapse[key]){listHTML+=nd.map(rowW).join('');listHTML+=dn.map(rowW).join('');}};
+    sec('g_overdue','overdue',overdue,true);sec('g_today','today',todayNd,false);sec('g_upcoming','upcoming',upcoming,false);
     if(!listHTML)listHTML=`<div class="task-empty">${tr('no_tasks')}</div>`;
-    const seg=`<div class="seg tt-filter"><div class="s${!mine?' active':''}" data-ttf="group">${tr('tt_group')}</div><div class="s${mine?' active':''}" data-ttf="mine">${tr('tt_mine')}</div></div>`;
     main.innerHTML=`<div class="section-h2">${tr('nav_tasks')}</div>
       <div class="tbm-strip">${strip}</div>
-      ${seg}
-      <div class="mbr-list">${listHTML}<button class="btn-add" id="teamTaskBtn">${tr('new_task')}</button></div>`;
+      <div class="tk-filters tt-filters">${chips}</div>
+      <div class="tt-list">${listHTML}</div>
+      <button class="btn-add" id="teamTaskBtn">${tr('new_task')}</button>`;
   }else if(teamSection==='feed'){
     const feed=Array.isArray(t.feed)?t.feed.slice().reverse():[];
     const body=feed.length?feed.map(f=>`<div class="feed-row"><span class="feed-dot"></span><div class="feed-main"><div class="feed-t">${bdEsc(f.text)}</div><div class="feed-time">${relTime(f.ts)}</div></div></div>`).join(''):`<div class="task-empty">${tr('feed_empty')}</div>`;
@@ -2460,7 +2462,7 @@ document.getElementById('teamDetailMain').addEventListener('click',e=>{
   const cr=e.target.closest('.member-row.clickable[data-chat]');if(cr){curChatId=cr.dataset.chat;teamSection='chatconv';renderTeamMain();return;}
   if(e.target.closest('#crumbChat')){teamSection='chat';renderTeamMain();return;}
   if(e.target.closest('#newGroupBtn')){openGroupModal();return;}
-  {const ttf=e.target.closest('[data-ttf]');if(ttf){teamTaskFilter=ttf.dataset.ttf;renderTeamMain();return;}}
+  {const ttm=e.target.closest('[data-ttm]');if(ttm){const v=ttm.dataset.ttm;teamTaskMember=(v==='all')?null:+v;renderTeamMain();return;}}
   {const tg=e.target.closest('[data-tgroup]');if(tg){const k=tg.dataset.tgroup;if(k.indexOf('ttg_')===0){taskCollapse[k]=!taskCollapse[k];renderTeamMain();return;}}}
   if(e.target.closest('#teamTaskBtn')){openNewTask(curTeam);return;}
   if(e.target.closest('#tchatSend')){sendChatMsg();return;}
@@ -4706,24 +4708,28 @@ function renderScopeSelector(){
 function syncTaskTeams(){renderTaskFilter();renderScopeSelector();}
 function taskTitle(t){return (t&&t.tk)?tr(t.tk):((t&&t.title)||'');}
 function tagHTML(t){if(!t.tag)return '';const lbl=t.tag.lk?tr(t.tag.lk):t.tag.l;return `<span class="tag-pill" style="background:${t.tag.c}22;color:${t.tag.c}">${lbl}</span>`;}
-function taskSideTags(t){
+function taskSideTags(t,teamView){
   const isTeam=typeof t.scope==='string'&&t.scope.indexOf('team:')===0;
-  let scopePill;
-  if(isTeam){
-    const tid=+t.scope.split(':')[1];
-    const tm=(typeof TEAMS!=='undefined'&&Array.isArray(TEAMS))?TEAMS.find(x=>x.tid===tid):null;
-    const nm=tm?(typeof teamName==='function'?teamName(tm):(tm.name||tr('nav_team'))):tr('nav_team');
-    scopePill='<span class="tk-tag tk-team" title="'+bdEsc(nm)+'">'+bdEsc(nm)+'</span>';
-  }else{
-    scopePill='<span class="tk-tag tk-pers">'+tr('filter_personal')+'</span>';
+  let scopePill='';
+  if(!teamView){ // dentro un team il nome del team è già nell'intestazione
+    if(isTeam){
+      const tid=+t.scope.split(':')[1];
+      const tm=(typeof TEAMS!=='undefined'&&Array.isArray(TEAMS))?TEAMS.find(x=>x.tid===tid):null;
+      const nm=tm?(typeof teamName==='function'?teamName(tm):(tm.name||tr('nav_team'))):tr('nav_team');
+      scopePill='<span class="tk-tag tk-team" title="'+bdEsc(nm)+'">'+bdEsc(nm)+'</span>';
+    }else{
+      scopePill='<span class="tk-tag tk-pers">'+tr('filter_personal')+'</span>';
+    }
   }
   let catPill='';
-  if(t.catId!=null&&typeof CATEGORIES!=='undefined'){const c=catById(t.catId);if(c)catPill='<span class="tk-tag tk-cat" title="'+bdEsc(c.name)+'"><span class="tk-cdot" style="background:'+c.color+'"></span>'+bdEsc(c.name)+'</span>';}
+  if(t.catId!=null&&typeof CATEGORIES!=='undefined'){const c=catById(t.catId);
+    // nel team non ripeto la categoria legata al team (sarebbe identica al team)
+    if(c&&!(teamView&&c.teamId!=null))catPill='<span class="tk-tag tk-cat" title="'+bdEsc(c.name)+'"><span class="tk-cdot" style="background:'+c.color+'"></span>'+bdEsc(c.name)+'</span>';}
   let grpPill='';
   if(t.gid!=null&&typeof GROUPS!=='undefined'){const g=GROUPS.find(x=>x.id===t.gid);if(g)grpPill='<span class="tk-tag tk-grp" data-grpopen="'+g.id+'" title="'+bdEsc(g.name)+'"><span class="tk-gfold" style="color:'+g.color+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span>'+bdEsc(g.name)+'</span>';}
   return scopePill+catPill+grpPill;
 }
-function taskRow(t,showDate){
+function taskRow(t,showDate,teamView){
   const lvl=t.level?`<div class="lvl"><button class="lvl-btn" data-id="${t.id}" data-act="dec">−</button><span class="lvl-num">${t.level.cur}/${t.level.tgt}</span><button class="lvl-btn" data-id="${t.id}" data-act="inc">+</button></div>`:'';
   const chk=t.level?'':`<div class="check" data-id="${t.id}">${SVG.check}</div>`;
   const sub=t.sub?`<span>${tr(t.sub)}</span>`:'';
@@ -4731,7 +4737,7 @@ function taskRow(t,showDate){
   let dateR='';if(showDate){const d=taskDue(t);if(d){const months=MONTHS[LANG]||MONTHS.it;dateR=`<span class="task-date">${t.month?months[d[1]]+' '+d[0]:d[2]+' '+(months[d[1]]||'').slice(0,3)}</span>`;}}
   const desc=t.desc?`<div class="task-desc">${t.desc}</div>`:'';
   const imgs=(t.images&&t.images.length)?`<div class="task-imgs">${t.images.slice(0,5).map(s=>`<span style="background-image:url(${s})"></span>`).join('')}</div>`:'';
-  return `<div class="task ${t.done?'done':''}" data-id="${t.id}" draggable="true">${chk}<div class="task-main"><div class="task-title">${taskTitle(t)}</div>${desc}${imgs}</div><div class="task-end">${tagHTML(t)}${taskSideTags(t)}${time}${sub}${dateR}</div><button class="task-del" data-del="${t.id}" title="${tr('td_delete')||'Elimina'}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>${lvl}</div>`;
+  return `<div class="task ${t.done?'done':''}" data-id="${t.id}" draggable="true">${chk}<div class="task-main"><div class="task-title">${taskTitle(t)}</div>${desc}${imgs}</div><div class="task-end">${tagHTML(t)}${taskSideTags(t,teamView)}${time}${sub}${dateR}</div><button class="task-del" data-del="${t.id}" title="${tr('td_delete')||'Elimina'}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>${lvl}</div>`;
 }
 function renderGroupBar(){/* sostituito da renderTkFilters (filtro unificato) */ renderTkFilters();}
 function renderTkFilters(){

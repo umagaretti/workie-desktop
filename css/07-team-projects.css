@@ -36,9 +36,21 @@
 .section-h2{font-size:11.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin:2px 2px 12px;}
 .member-row{display:flex;align-items:center;gap:10px;background:transparent;border:none;border-radius:10px;padding:6px 12px;margin-bottom:3px;transition:background .13s;}
 .member-row:hover{background:var(--panel-2);}
-/* team: assegnazione + carico + feed */
-.tt-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
-.tt-row>.task{flex:1;margin-bottom:0;}
+/* team: lista task identica alla pagina Task (righe trasparenti) + avatar assegnatario */
+.tt-list{margin-bottom:12px;}
+.tt-row{display:flex;align-items:center;gap:6px;border-radius:9px;transition:background .13s;}
+.tt-row:hover{background:var(--panel-2);}
+.tt-row>.task{flex:1;min-width:0;background:transparent;border:none;border-radius:9px;padding:6px 10px;margin-bottom:0;gap:10px;}
+.tt-row>.task:hover{background:transparent;}
+.tt-list .task-main{display:flex;align-items:center;min-width:0;}
+.tt-list .task-title{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tt-list .task-end{display:flex;align-items:center;gap:10px;flex:none;margin-left:auto;padding-left:12px;}
+.tt-list .task-date{font-size:12px;color:var(--muted);white-space:nowrap;min-width:44px;text-align:right;}
+.tt-list .task-desc,.tt-list .task-imgs{display:none;}
+.tt-list .task.done .check{background:#8168e6;border-color:#8168e6;}
+.tt-list .task-del{opacity:0;width:0;overflow:hidden;transition:.15s;}
+.tt-row:hover .task-del{width:26px;opacity:1;margin-left:4px;}
+.tt-filters{margin:2px 0 14px;}
 .tt-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:12px;flex:none;cursor:pointer;transition:.12s;}
 .tt-av:hover{transform:scale(1.08);}
 .tt-av.tt-none{background:var(--inset);border:1.5px dashed var(--border-strong);color:var(--muted);font-weight:400;}
