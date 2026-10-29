@@ -3872,13 +3872,17 @@ function renderDaySide(){
   }
   const sched={};if(PLAN_DAY.sched)PLAN_DAY.sched.forEach(s=>{sched[s.id]=s.start;});
   const items=PLAN_DAY.order.map(id=>TASKS.find(t=>t.id==id)).filter(Boolean);
-  const rows=items.map(t=>{
-    let time=sched[t.id];
-    if(Array.isArray(time))time=fmtHM(time[0],time[1]); // computeSchedule dà [h,m]
-    if(time==null||time==='')time=t.time||'';
-    return '<button type="button" class="ds-item'+(t.done?' done':'')+'" data-dsw="'+t.id+'"><span class="ds-ic">'+dwWheelEmoji(taskTitle(t))+'</span><span class="ds-tx"><span class="ds-name">'+bdEsc(taskTitle(t))+'</span>'+(time?'<span class="ds-time">'+bdEsc(String(time))+'</span>':'')+'</span></button>';
-  }).join('');
-  body.innerHTML='<div class="ds-list">'+rows+'</div>';
+  const toMin=v=>{const m=/^(\d{1,2}):(\d{2})/.exec(String(v||''));return m?(+m[1]*60+ +m[2]):null;};
+  const nd=new Date(),nowMin=nd.getHours()*60+nd.getMinutes();
+  const list=items.map(t=>{let time=sched[t.id];if(Array.isArray(time))time=fmtHM(time[0],time[1]);if(time==null||time==='')time=t.time||'';return {t,time,min:toMin(time)};});
+  // linea che segna "ora": va dopo le attività già passate, prima delle prossime
+  const insertAt=list.filter(x=>x.min!=null&&x.min<=nowMin).length;
+  const nowLine='<div class="ds-now"><span class="ds-now-dot"></span><span class="ds-now-time">'+fmtHM(nd.getHours(),nd.getMinutes())+'</span></div>';
+  let html='';
+  list.forEach((x,i)=>{if(i===insertAt)html+=nowLine;
+    html+='<button type="button" class="ds-item'+(x.t.done?' done':'')+'" data-dsw="'+x.t.id+'"><span class="ds-name">'+bdEsc(taskTitle(x.t))+'</span>'+(x.time?'<span class="ds-time">'+bdEsc(String(x.time))+'</span>':'')+'</button>';});
+  if(insertAt>=list.length)html+=nowLine;
+  body.innerHTML='<div class="ds-list">'+html+'</div>';
 }
 // La "linea di fuoco" (dove il box è più grande) è vicina all'ALTO, non al centro:
 // l'attività corrente sta subito sotto i tasti, le successive scendono e sfumano in basso.
