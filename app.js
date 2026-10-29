@@ -2954,18 +2954,16 @@ function ibMsgHTML(msg,idx,open,mailId){
   const av='<div class="ib-rd-av" style="background:'+ibAvatarColor(msg.from)+'">'+bdEsc(initial)+'</div>';
   const atts=(open&&msg.attachments&&msg.attachments.length)?'<div class="ib-rd-atts">'+msg.attachments.map(a=>'<span class="ib-rd-att">'+IB_IC_CLIP+'<span class="ib-rd-att-n">'+bdEsc(a.name)+'</span>'+(a.size?'<span class="ib-rd-att-s">'+bdEsc(a.size)+'</span>':'')+'</span>').join('')+'</div>':'';
   const dateHTML='<span class="ib-rd-date">'+bdEsc(ibFmtDate(msg.date))+'</span>';
-  const ctaskBtn='<button class="ib-rd-ctask" data-ibtask="'+mailId+'">'+IB_IC_TASK+'<span>'+tr('ib_make_task')+'</span></button>';
-  const ctaskIc='<button class="ib-rd-ctask-ic" data-ibtask="'+mailId+'" title="'+tr('ib_make_task')+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="6" x2="12" y2="18"/><line x1="6" y1="12" x2="18" y2="12"/></svg></button>';
-  let sub,mside;
+  const ctaskBtn='<button class="ib-rd-ctask" data-ibtask="'+mailId+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8.5" x2="12" y2="15.5"/><line x1="8.5" y1="12" x2="15.5" y2="12"/></svg><span>'+tr('ib_make_task')+'</span></button>';
+  let sub;
   if(open){
     const rl=(lbl,val)=>val?'<div class="ib-rd-rline"><b class="ib-rd-rlabel">'+lbl+'</b><span class="ib-rd-rvals">'+bdEsc(val)+'</span></div>':'';
     sub=(msg.fromEmail?'<div class="ib-rd-email">'+bdEsc(msg.fromEmail)+'</div>':'')
       +((msg.to||msg.cc||msg.bcc)?'<div class="ib-rd-recips">'+rl('A:',msg.to)+rl('Cc:',msg.cc)+rl('Ccn:',msg.bcc)+'</div>':'');
-    mside='<div class="ib-rd-mside">'+ctaskBtn+dateHTML+'</div>';
   }else{
-    sub='<div class="ib-rd-snip">'+bdEsc((msg.body||'').replace(/\s+/g,' ').trim().slice(0,110))+'</div>';
-    mside='<div class="ib-rd-mside collapsed">'+dateHTML+ctaskIc+'</div>';
+    sub='<div class="ib-rd-snip">'+bdEsc((msg.body||'').replace(/\s+/g,' ').trim().slice(0,170))+'</div>';
   }
+  const mside='<div class="ib-rd-mside">'+dateHTML+ctaskBtn+'</div>'; // data sopra, Create task sotto (come il box chiuso)
   const head='<div class="ib-rd-mhead">'+av+'<div class="ib-rd-minfo"><div class="ib-rd-name">'+bdEsc(msg.from)+'</div>'+sub+'</div>'+mside+'</div>';
   const body=open?(atts+'<div class="ib-rd-body">'+ibBodyHTML(msg.body)+'</div>'+ibReplyBar()):'';
   return '<div class="ib-rd-msg'+(open?' open':' collapsed')+'" data-ibmsg="'+idx+'">'+head+body+'</div>';
