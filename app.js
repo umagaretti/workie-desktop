@@ -2930,7 +2930,7 @@ function renderInboxPage(){
   const body=document.getElementById('ibBody'),cs=document.getElementById('ibConnectScreen'),mng=document.getElementById('ibManage'),badge=document.getElementById('ibUnreadBadge');
   const head=document.querySelector('[data-page="inbox"] .ib-head');
   if(!ibConnected()){
-    if(head)head.style.display='none';
+    if(head)head.style.display=''; // header "Inbox" in alto a sinistra come le altre pagine
     {const tb=document.getElementById('ibToolbar');if(tb)tb.style.display='none';}
     if(body)body.style.display='none';if(cs)cs.style.display='flex';if(mng)mng.style.display='none';if(badge)badge.style.display='none';
     renderInboxConnect();return;
