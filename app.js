@@ -2218,7 +2218,7 @@ const TEAM_USERS_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
 function teamLogo(t){if(t.logo)return `<img src="${t.logo}" alt="">`;
   if(t.color)return `<span class="team-ini" style="background:${t.color}">${TEAM_USERS_SVG}</span>`;
   return `${t.emoji||'👥'}`;}
-function setTeamTitle(){if(curTeam)document.getElementById('teamDetailTitle').textContent=teamName(curTeam);}
+function setTeamTitle(){if(!curTeam)return;const tt=document.getElementById('teamDetailTitle');if(tt)tt.textContent=teamName(curTeam);const ic=document.getElementById('teamDetailIcon');if(ic)ic.innerHTML=teamLogo(curTeam);}
 const TAG_COLORS={Marketing:'#b8a6f4',Social:'#6f9bf0',Redazione:'#7ed0b0',Amministrazione:'#f0c46f'};
 const BASE_TAGS=['Marketing','Social','Redazione','Amministrazione'];
 function tagColor(tg){return TAG_COLORS[tg]||'#9a8fd6';}

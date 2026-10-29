@@ -192,6 +192,9 @@
 .pg-title{font-family:var(--serif);font-size:30px;font-weight:600;letter-spacing:-.02em;line-height:1.1;}
 /* Pagina Tasks in stile pagina gruppo: colonna centrata, breadcrumb + titolo con emoji */
 .tk-page{max-width:720px;margin:0 auto;position:relative;z-index:1;padding-top:8px;}
+.tk-page-wide{max-width:920px;}
+/* logo colorato del team nell'header del dettaglio */
+.tk-headlogo{width:40px;height:40px;border-radius:11px;}
 .tk-crumb{margin-bottom:22px;}
 .tk-head{display:flex;align-items:center;gap:12px;margin:14px 0 16px;}
 .tk-headic{flex:none;display:flex;align-items:center;color:#8168e6;}
