@@ -3524,6 +3524,18 @@ function renderOvPlan(){
    box.innerHTML=h;}
  function ovcPickTask(id){ovcTaskSel=id;ovcDraft.task=id;ovcSyncLabels();ovcListOpen(false);ovcMiniOpen(false);const cb=document.getElementById('ovChatbox');if(cb&&cb.classList.contains('expanded')){const ta=document.getElementById('ovcInput');if(ta)ta.focus();}}
  function ovcClearTask(){ovcTaskSel=null;ovcDraft.task=null;ovcSyncLabels();ovcMiniOpen(false);ovcListOpen(false);}
+ // Il box della home si TRASFORMA in quello della chat: il composer reale parte
+ // dalla posizione/misura del box home e scivola al suo posto. Niente sparizioni.
+ let ovcMorphFrom=null;
+ function rsvPlayMorph(){
+   if(!ovcMorphFrom)return;const comp=document.getElementById('rsvComposer');const r1=ovcMorphFrom;ovcMorphFrom=null;
+   if(!comp||!r1||!r1.width)return;const r2=comp.getBoundingClientRect();if(!r2.width)return;
+   const dx=r1.left-r2.left,dy=r1.top-r2.top,sx=r1.width/r2.width,sy=r1.height/r2.height;
+   comp.style.transformOrigin='top left';comp.style.transition='none';comp.style.transform='translate('+dx+'px,'+dy+'px) scale('+sx+','+sy+')';
+   void comp.offsetWidth;
+   requestAnimationFrame(()=>{comp.style.transition='transform .5s cubic-bezier(.4,0,.2,1)';comp.style.transform='';});
+   setTimeout(()=>{comp.style.transition='';comp.style.transform='';comp.style.transformOrigin='';},560);
+ }
  function ovcMorph(r1){
    if(!r1||!r1.width)return;
    requestAnimationFrame(()=>requestAnimationFrame(()=>{
@@ -3546,8 +3558,8 @@ function renderOvPlan(){
    const r1=startEl?startEl.getBoundingClientRect():null;
    ta.value='';ovcAutoGrow();ovcExpand(false);
    ovcDraft.task=null;ovcDraft.text='';            // inviato → nessuna bozza
+   ovcMorphFrom=r1;                                // il box si TRASFORMA in quello della chat (rsvPlayMorph), non sparisce
    try{openResolveChat(id);}catch(_){}
-   try{ovcMorph(r1);}catch(_){}                    // box scivola dal centro al basso
    setTimeout(()=>{try{if(typeof rsvSend==='function')rsvSend(text);}catch(_){}},160);}
  {const cb=document.getElementById('ovChatbox');
   if(cb){
@@ -5423,6 +5435,7 @@ function renderTaskPage(){
             <div class="rsv-box" id="rsvBox">
               <div class="rsv-inrow">
                 <textarea id="rsvInput" class="rsv-ta" rows="1" placeholder="${tr('ov_chat_ph')}"></textarea>
+                <button type="button" class="rsv-tbtn rsv-micbtn" id="rsvMic" title="${tr('rsv_voice')}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 11a6 6 0 0 0 12 0"/><line x1="12" y1="17" x2="12" y2="21"/></svg></button>
                 <button type="button" class="rsv-sendbtn" id="rsvSend" title="${tr('pib_send')}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/></svg></button>
               </div>
             </div>
@@ -5476,6 +5489,7 @@ function openResolveChat(id){
   const t=TASKS.find(x=>x.id===id);if(!t)return;
   const e=rsvGet(id);e.state='active';if(!e.msgs.length)e.msgs.push({r:'ai',t:rsvFirstResponse(t),starters:rsvStarters()});rsvSave();
   openTaskPage(id, true); // apre in modalità chat
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{try{rsvPlayMorph();}catch(_){}})); // trasforma il box home → chat
 }
 function closeTaskChat(){
   const t=TASKS.find(x=>x.id==taskPageId);if(t){const e=rsvGet(t.id);e.opened=false;rsvSave();}
