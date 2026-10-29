@@ -47,17 +47,15 @@ html.is-tauri #daySideBtn svg{width:18px;height:18px;}
 .day-drawer .dd-close{border:none;background:transparent;color:var(--muted);font-size:15px;cursor:pointer;width:28px;height:28px;border-radius:7px;line-height:1;}
 .day-drawer .dd-close:hover{background:var(--panel-2);color:var(--text);}
 .day-drawer .dd-body{flex:1;min-height:0;padding:0;color:var(--muted);font-size:13.5px;line-height:1.5;display:flex;flex-direction:column;}
-/* ruota del piano: subito sotto i tasti, in alto, con spazio libero sotto
-   (specificità alta per battere .dw-wheel base che è flex:1;height:100%) */
-.day-drawer .dsw-wheel{flex:none;height:min(58vh,520px);min-height:260px;}
-/* niente sfumatura in alto (l'attività corrente sta in cima, deve restare piena);
-   sfuma solo in basso, dove scorrono le prossime attività */
-.day-drawer .dw-wheel-scroll{-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 70%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0,#000 70%,transparent 100%);}
-.day-drawer .dw-wi{padding:0 18px;gap:13px;min-height:68px;transform-origin:left center;}
-.day-drawer .dw-wi-ic{width:46px;height:46px;font-size:22px;border-radius:14px;}
-.day-drawer .dw-wi-name{font-size:18px;}
-.day-drawer .dw-wi.sel .dw-wi-name{font-size:22px;}
-.day-drawer .dw-wi.done .dw-wi-name{text-decoration:line-through;opacity:.55;}
+/* attività della giornata come lista (stile nav), tutte visibili, con ingrandimento all'hover */
+.ds-list{display:flex;flex-direction:column;gap:5px;padding:2px 12px 16px;overflow-y:auto;}
+.ds-item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:none;border:none;font-family:var(--sans);padding:9px 10px;border-radius:12px;cursor:pointer;color:var(--text);transition:transform .16s cubic-bezier(.22,1,.36,1),background .15s ease;transform-origin:left center;}
+.ds-item:hover{background:var(--panel-2);transform:scale(1.035);}
+.ds-ic{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;font-size:21px;background:var(--panel);border:1.5px solid var(--border-soft);}
+.ds-tx{display:flex;flex-direction:column;gap:2px;min-width:0;}
+.ds-name{font-size:15px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ds-time{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;}
+.ds-item.done .ds-name{text-decoration:line-through;opacity:.55;}
 /* stato vuoto: nessun piano */
 .dsw-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;text-align:center;padding:24px 24px 60px;color:var(--muted);}
 .dsw-empty-t{font-size:15px;font-weight:600;color:var(--text);}

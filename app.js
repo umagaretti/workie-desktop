@@ -118,7 +118,7 @@ function openDaySide(force){
   const dc=document.getElementById('dayDrawerClose');if(dc)dc.addEventListener('click',e=>{e.stopPropagation();openDaySide(false);});
   const dBody=document.getElementById('dayDrawerBody');if(dBody)dBody.addEventListener('click',e=>{
     if(e.target.closest('[data-dsplan]')){openDaySide(false);if(typeof go==='function')go('planday');return;}
-    const row=e.target.closest('.dw-wi[data-dsw]');if(row){const id=+row.dataset.dsw;openDaySide(false);if(typeof openTaskPage==='function')openTaskPage(id);return;}
+    const row=e.target.closest('[data-dsw]');if(row){const id=+row.dataset.dsw;openDaySide(false);if(typeof openTaskPage==='function')openTaskPage(id);return;}
   });
   // tasti routine sotto il titolo: per ora aprono le Impostazioni generali (la voce dedicata arriva dopo)
   const dr=document.getElementById('dayDrawer');if(dr)dr.addEventListener('click',e=>{
@@ -3876,12 +3876,9 @@ function renderDaySide(){
     let time=sched[t.id];
     if(Array.isArray(time))time=fmtHM(time[0],time[1]); // computeSchedule dà [h,m]
     if(time==null||time==='')time=t.time||'';
-    return '<div class="dw-wi'+(t.done?' done':'')+'" data-dsw="'+t.id+'"><div class="dw-wi-ic">'+dwWheelEmoji(taskTitle(t))+'</div><div class="dw-wi-body"><div class="dw-wi-name">'+bdEsc(taskTitle(t))+'</div><div class="dw-wi-time">'+bdEsc(String(time))+'</div></div></div>';
+    return '<button type="button" class="ds-item'+(t.done?' done':'')+'" data-dsw="'+t.id+'"><span class="ds-ic">'+dwWheelEmoji(taskTitle(t))+'</span><span class="ds-tx"><span class="ds-name">'+bdEsc(taskTitle(t))+'</span>'+(time?'<span class="ds-time">'+bdEsc(String(time))+'</span>':'')+'</span></button>';
   }).join('');
-  body.innerHTML='<div class="dw-wheel dsw-wheel" id="dayWheel"><div class="dw-wheel-scroll" id="dayWheelScroll"><div class="dw-wheel-pad"></div>'+rows+'<div class="dw-wheel-pad"></div></div></div>';
-  dayWheelBind();
-  requestAnimationFrame(()=>{const sc=document.getElementById('dayWheelScroll');dayWheelPads(sc);dayWheelCenterNow(sc);dayWheelUpdate();requestAnimationFrame(dayWheelUpdate);});
-  setTimeout(()=>{const sc=document.getElementById('dayWheelScroll');dayWheelPads(sc);dayWheelCenterNow(sc);dayWheelUpdate();},340);
+  body.innerHTML='<div class="ds-list">'+rows+'</div>';
 }
 // La "linea di fuoco" (dove il box è più grande) è vicina all'ALTO, non al centro:
 // l'attività corrente sta subito sotto i tasti, le successive scendono e sfumano in basso.
