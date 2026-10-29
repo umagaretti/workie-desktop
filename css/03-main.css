@@ -156,12 +156,13 @@
 .ib-loadmore{display:block;width:calc(100% - 16px);margin:8px auto 10px;padding:10px;border:1px solid var(--border-soft);background:var(--panel);color:var(--text-dim);font-size:12.5px;font-weight:600;font-family:var(--sans);border-radius:10px;cursor:pointer;transition:background .15s,color .15s,border-color .15s;}
 .ib-loadmore:hover{background:var(--panel-2);color:var(--text);border-color:var(--border-strong);}
 .ib-loadmore:disabled{opacity:.6;cursor:default;}
-.ib-mail{display:flex;flex-direction:column;gap:2px;padding:8px 12px;border-radius:9px;cursor:pointer;transition:background .13s;}
+.ib-mail{position:relative;display:flex;flex-direction:column;gap:2px;padding:8px 12px 8px 18px;border-radius:9px;cursor:pointer;transition:background .13s;}
 .ib-mail:hover{background:var(--panel-2);}
-.ib-mail.sel{background:var(--panel-2);box-shadow:inset 3px 0 0 #8168e6;}
+.ib-mail.sel{background:var(--panel-2);}
+/* puntino viola a lato solo per le non lette (il nome parte a sinistra come l'oggetto) */
+.ib-mail-udot{position:absolute;left:5px;top:12px;width:7px;height:7px;border-radius:50%;background:#8168e6;}
+.ib-mail.read .ib-mail-udot{display:none;}
 .ib-mail-top{display:flex;align-items:center;gap:7px;}
-.ib-mail-dot{width:8px;height:8px;border-radius:50%;background:#8168e6;flex:none;}
-.ib-mail.read .ib-mail-dot{visibility:hidden;}
 .ib-mail-from{flex:1;min-width:0;font-size:13.5px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .ib-mail-date{flex:none;font-size:11px;color:var(--faint);}
 .ib-mail-subj{font-size:13px;color:var(--text-dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}

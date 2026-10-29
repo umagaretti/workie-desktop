@@ -2961,6 +2961,7 @@ const IB_FILTERS=[
   {k:'spam',lbl:'ib_f_spam'}
 ];
 const IB_DGROUPS=[['today','ib_g_today'],['yesterday','ib_g_yesterday'],['week','ib_g_week'],['lastweek','ib_g_lastweek'],['month','ib_g_month'],['older','ib_g_older']];
+let ibCollapse={};
 function ibDateGroup(ts){
   if(!ts)return 'older';
   const now=new Date();const sod=x=>{const y=new Date(x);y.setHours(0,0,0,0);return y;};
@@ -3017,12 +3018,14 @@ function renderInboxPage(){
   ibMarkRead(ibSel);
   const emptyMsg=(IB_FOLDER_SOON.indexOf(ibFilter)>=0)?tr('ib_folder_soon'):tr('ib_no_results');
   // item compatto (solo mittente + oggetto, niente anteprima) + raggruppamento per data stile Task
-  const itemHTML=m=>'<div class="ib-mail'+(m.id===ibSel?' sel':'')+(ibRead.has(m.id)?' read':'')+'" data-ibmail="'+m.id+'"><div class="ib-mail-top"><span class="ib-mail-dot"></span><span class="ib-mail-from">'+bdEsc(m.from)+'</span><span class="ib-mail-date">'+bdEsc(m.date||'')+'</span></div><div class="ib-mail-subj">'+bdEsc(m.subject)+'</div></div>';
+  const itemHTML=m=>'<div class="ib-mail'+(m.id===ibSel?' sel':'')+(ibRead.has(m.id)?' read':'')+'" data-ibmail="'+m.id+'"><span class="ib-mail-udot"></span><div class="ib-mail-top"><span class="ib-mail-from">'+bdEsc(m.from)+'</span><span class="ib-mail-date">'+bdEsc(m.date||'')+'</span></div><div class="ib-mail-subj">'+bdEsc(m.subject)+'</div></div>';
   if(mails.length){
     const buckets={};mails.forEach(m=>{const g=ibDateGroup(m.ts);(buckets[g]||(buckets[g]=[])).push(m);});
     let html='';
     IB_DGROUPS.forEach(([k,lbl])=>{const grp=buckets[k];if(!grp)return;
-      html+='<div class="tgroup-h tgroup-box"><span>'+tr(lbl)+'</span><span class="count">'+grp.length+'</span></div>'+grp.map(itemHTML).join('');});
+      const readN=grp.filter(m=>ibRead.has(m.id)).length,unreadN=grp.length-readN,col=!!ibCollapse[k];
+      html+='<div class="tgroup-h tgroup-box tg-toggle'+(col?' collapsed':'')+'" data-ibgroup="'+k+'"><svg class="tg-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>'+pieIcon(readN,grp.length)+'<span>'+tr(lbl)+'</span> <span class="count">'+unreadN+'</span></div>';
+      if(!col)html+=grp.map(itemHTML).join('');});
     list.innerHTML=html;
   }else list.innerHTML='<div class="ib-list-empty">'+emptyMsg+'</div>';
   if(typeof gmailConnected==='function'&&gmailConnected()&&typeof gmailPageToken!=='undefined'&&gmailPageToken){list.innerHTML+='<button class="ib-loadmore" id="ibLoadMore"'+(gmailMore?' disabled':'')+'>'+(gmailMore?tr('wf_loading'):tr('ib_load_more'))+'</button>';}
@@ -3151,6 +3154,7 @@ function ibTaskOpen(m){
   {const ac=e.target.closest('[data-ibacct]');if(ac){ibCrumbToggle(false);/* cambio casella: per ora chiude il menu */return;}}
   const prov=e.target.closest('[data-ibprov]');if(prov){ibConnectProvider(prov.dataset.ibprov);return;}
   if(e.target.closest('#ibLoadMore')){if(typeof gmailFetchMore==='function')gmailFetchMore();return;}
+  {const g=e.target.closest('[data-ibgroup]');if(g){const k=g.dataset.ibgroup;ibCollapse[k]=!ibCollapse[k];renderInboxPage();return;}}
   const mail=e.target.closest('[data-ibmail]');if(mail){ibSel=mail.dataset.ibmail;renderInboxPage();return;}
   if(e.target.closest('#ibManage')){if(typeof openSettings==='function')openSettings('caselle',tr('nav_inbox'));return;}
   if(e.target.closest('[data-ibreply]')){try{showToast(tr('coming_soon'));}catch(_){}return;}
