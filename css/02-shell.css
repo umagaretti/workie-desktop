@@ -25,8 +25,12 @@ html.is-tauri .side-nav-arrows{top:9px;z-index:400;}
 /* icona Giornata in alto a destra: stessa taglia delle iconcine di sinistra */
 html.is-tauri #daySideBtn svg{width:18px;height:18px;}
 /* Drawer "Giornata" a destra (segnaposto) */
-.day-drawer{position:fixed;top:0;right:0;height:100vh;width:340px;max-width:85vw;background:var(--panel);border-left:1px solid var(--border);box-shadow:-10px 0 40px rgba(0,0,0,.10);transform:translateX(102%);transition:transform .28s cubic-bezier(.22,.61,.36,1);z-index:120;display:flex;flex-direction:column;-webkit-app-region:no-drag;}
-.day-drawer.open{transform:translateX(0);}
+/* Giornata: sidebar a destra che SPINGE il contenuto (come la sinistra), non un layer sopra.
+   Stesso modello della ai-drawer: flex-child con larghezza animata. */
+.day-drawer{order:10;flex:none;width:0;--dd-w:340px;overflow:hidden;background:var(--panel);border-left:1px solid var(--border);display:flex;flex-direction:column;opacity:0;transition:width .3s cubic-bezier(.22,.61,.36,1),opacity .15s ease;will-change:width,opacity;position:relative;z-index:30;-webkit-app-region:no-drag;}
+.day-drawer.no-anim{transition:none!important;}
+.app.day-drawer-open .day-drawer{width:var(--dd-w);opacity:1;}
+.day-drawer .dd-head,.day-drawer .dd-body{width:var(--dd-w);box-sizing:border-box;}
 .day-drawer .dd-head{display:flex;align-items:center;justify-content:space-between;padding:46px 16px 14px;font-weight:600;font-size:15px;color:var(--text);}
 .day-drawer .dd-close{border:none;background:transparent;color:var(--muted);font-size:15px;cursor:pointer;width:28px;height:28px;border-radius:7px;line-height:1;}
 .day-drawer .dd-close:hover{background:var(--panel-2);color:var(--text);}

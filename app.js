@@ -97,15 +97,24 @@ function openAiSide(force){
   const app=document.querySelector('.app');if(!app)return;
   const open=(force===undefined)?!app.classList.contains('ai-drawer-open'):!!force;
   app.classList.toggle('ai-drawer-open',open);
+  if(open){app.classList.remove('day-drawer-open');const db=document.getElementById('daySideBtn');if(db)db.classList.remove('on');}
   if(open)renderAiDrawer();
   const ab=document.getElementById('aiSideBtn');if(ab)ab.classList.toggle('on',open);
   const ob=document.getElementById('ovAiBtn');if(ob)ob.classList.toggle('on',open);
 }
+// Drawer "Giornata" a destra: spinge il contenuto come la sidebar sinistra (non è un layer sopra).
+function openDaySide(force){
+  const app=document.querySelector('.app');if(!app)return;
+  const open=(force===undefined)?!app.classList.contains('day-drawer-open'):!!force;
+  if(open){app.classList.remove('ai-drawer-open');const ab=document.getElementById('aiSideBtn');if(ab)ab.classList.remove('on');const ob=document.getElementById('ovAiBtn');if(ob)ob.classList.remove('on');}
+  app.classList.toggle('day-drawer-open',open);
+  const db=document.getElementById('daySideBtn');if(db)db.classList.toggle('on',open);
+}
 {const oa=document.getElementById('ovAiBtn');if(oa)oa.addEventListener('click',e=>{e.stopPropagation();openAiSide();});
  const aa=document.getElementById('aiSideBtn');if(aa)aa.addEventListener('click',e=>{e.stopPropagation();openAiSide();});
  // Bottone Giornata in alto a destra: apre/chiude un drawer a destra (segnaposto; la funzione verrà rifatta)
- {const da=document.getElementById('daySideBtn');if(da)da.addEventListener('click',e=>{e.stopPropagation();const dd=document.getElementById('dayDrawer');if(dd)dd.classList.toggle('open');});
-  const dc=document.getElementById('dayDrawerClose');if(dc)dc.addEventListener('click',e=>{e.stopPropagation();const dd=document.getElementById('dayDrawer');if(dd)dd.classList.remove('open');});}
+ {const da=document.getElementById('daySideBtn');if(da)da.addEventListener('click',e=>{e.stopPropagation();openDaySide();});
+  const dc=document.getElementById('dayDrawerClose');if(dc)dc.addEventListener('click',e=>{e.stopPropagation();openDaySide(false);});}
  const ax=document.getElementById('aidClose');if(ax)ax.addEventListener('click',()=>openAiSide(false));
  const adr=document.getElementById('aiDrawer');if(adr)adr.addEventListener('click',e=>{
    const del=e.target.closest('[data-scdel]');
