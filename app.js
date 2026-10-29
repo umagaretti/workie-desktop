@@ -2349,8 +2349,8 @@ function renderTeamMain(){
       return `<div class="member-row${manage?' clickable':''}" data-mi="${idx}"><div class="m-av" style="background:${m.c}">${m.i}</div><span class="m-name">${m.name}</span>${adm}${tags?`<div class="m-tags">${tags}</div>`:''}</div>`;
     }).join('');
     const inv=(t.invites||[]).map(em=>`<div class="member-row pending"><div class="m-av invite">@</div><span class="m-name">${em}</span><span class="m-role">${tr('pending')}</span></div>`).join('');
-    const btn=manage?`<button class="btn-add" id="inviteMemberBtn">${tr('invite_email')}</button>`:'';
-    main.innerHTML=`<div class="section-h2">${tr('ql_members')} · ${t.members.length}</div><div style="max-width:600px">${rows}${inv}${btn}</div>`;
+    const btn=manage?`<button class="btn-add mbr-invite" id="inviteMemberBtn">${tr('invite_send')}</button>`:'';
+    main.innerHTML=`<div class="section-h2">${tr('ql_members')} · ${t.members.length}</div><div class="mbr-list">${rows}${inv}${btn}</div>`;
   }else if(teamSection==='chat'){
     const chats=chatList(t);
     const groups=chats.filter(c=>c.type==='group'),dms=chats.filter(c=>c.type==='dm');
