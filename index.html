@@ -46,7 +46,7 @@ try{
 <script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@2/lib/msal-browser.min.js"></script>
 <link rel="stylesheet" href="css/01-base.css">
 <link rel="stylesheet" href="css/02-shell.css?v=30">
-<link rel="stylesheet" href="css/03-main.css?v=64">
+<link rel="stylesheet" href="css/03-main.css?v=65">
 <link rel="stylesheet" href="css/04-task-detail.css?v=15">
 <link rel="stylesheet" href="css/05-home.css?v=10">
 <link rel="stylesheet" href="css/06-tasks.css">
@@ -319,7 +319,7 @@ try{
     <!-- Compositore nuova email -->
     <div class="ib-cmp-overlay" id="ibComposeOverlay">
       <div class="ib-cmp">
-        <div class="ib-cmp-head"><span class="ib-cmp-t" data-i18n="ib_cmp_title">Nuovo messaggio</span><button class="ib-cmp-x" id="ibCmpClose" aria-label="Chiudi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button></div>
+        <div class="ib-cmp-head"><span class="ib-cmp-t" data-i18n="ib_cmp_title">Nuovo messaggio</span><div class="ib-cmp-hact"><button class="ib-cmp-hb" id="ibCmpZoom" aria-label="Ingrandisci" title="Ingrandisci"><svg class="ib-cmp-zin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><path d="M10 20H4v-6"/><path d="M20 4l-7 7"/><path d="M4 20l7-7"/></svg><svg class="ib-cmp-zout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10h-6V4"/><path d="M4 14h6v6"/><path d="M20 4l-7 7"/><path d="M4 20l7-7"/></svg></button><button class="ib-cmp-hb ib-cmp-x" id="ibCmpClose" aria-label="Chiudi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button></div></div>
         <div class="ib-cmp-field"><span class="ib-cmp-lbl" data-i18n="ib_cmp_to">A</span><input id="ibCmpTo" type="text" placeholder="nome@email.com" autocomplete="off"><div class="ib-cmp-cc"><button type="button" class="ib-cmp-cctg" id="ibCmpCcToggle" data-i18n="ib_cmp_cc">Cc</button><button type="button" class="ib-cmp-cctg" id="ibCmpBccToggle" data-i18n="ib_cmp_bcc">Ccn</button></div></div>
         <div class="ib-cmp-field ib-cmp-ccrow" id="ibCmpCcRow" hidden><span class="ib-cmp-lbl" data-i18n="ib_cmp_cc_lbl">Cc</span><input id="ibCmpCc" type="text" placeholder="nome@email.com" autocomplete="off"></div>
         <div class="ib-cmp-field ib-cmp-ccrow" id="ibCmpBccRow" hidden><span class="ib-cmp-lbl" data-i18n="ib_cmp_bcc_lbl">Ccn</span><input id="ibCmpBcc" type="text" placeholder="nome@email.com" autocomplete="off"></div>
@@ -348,6 +348,13 @@ try{
         <div id="ibCmpBody" class="ib-cmp-body" contenteditable="true" data-ph="Scrivi il messaggio…" data-i18n-ph="ib_cmp_body"></div>
         <div class="ib-cmp-atts" id="ibCmpAtts"></div>
         <div class="ib-cmp-foot"><button class="ib-cmp-send" id="ibCmpSend" data-i18n="ib_cmp_send">Invia</button><button class="ib-cmp-discard" id="ibCmpDiscard" data-i18n="ib_cmp_discard">Elimina bozza</button></div>
+        <div class="ib-cmp-confirm" id="ibCmpConfirm" hidden>
+          <div class="ib-cmp-cf-box">
+            <div class="ib-cmp-cf-t" data-i18n="ib_cmp_cf_t">Chiudere il messaggio?</div>
+            <div class="ib-cmp-cf-d" data-i18n="ib_cmp_cf_d">Il messaggio non è stato inviato. Se chiudi perderai quello che hai scritto.</div>
+            <div class="ib-cmp-cf-a"><button type="button" class="ib-cmp-cf-stay" id="ibCmpCfStay" data-i18n="ib_cmp_cf_stay">Continua a scrivere</button><button type="button" class="ib-cmp-cf-close" id="ibCmpCfClose" data-i18n="ib_cmp_cf_close">Chiudi senza salvare</button></div>
+          </div>
+        </div>
       </div>
     </div>
     <!-- Overlay: gestisci caselle -->
@@ -1638,6 +1645,6 @@ try{
 <script src="themes.js"></script>
 <script src="storage.js"></script>
 <script src="sync.js"></script>
-<script src="app.js?v=64"></script>
+<script src="app.js?v=65"></script>
 </body>
 </html>
