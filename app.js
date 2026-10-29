@@ -2214,7 +2214,9 @@ function chatList(t){
   return [...groups,...dms];
 }
 function chatMsgs(t,id){t.cm=t.cm||{};t.cm[id]=t.cm[id]||[];return t.cm[id];}
-function teamLogo(t){return t.logo?`<img src="${t.logo}" alt="">`:`${t.emoji}`;}
+function teamLogo(t){if(t.logo)return `<img src="${t.logo}" alt="">`;
+  if(t.color){const ini=(teamName(t)||'?').trim().charAt(0).toUpperCase();return `<span class="team-ini" style="background:${t.color}">${bdEsc(ini)}</span>`;}
+  return `${t.emoji||'👥'}`;}
 function setTeamTitle(){if(curTeam)document.getElementById('teamDetailTitle').textContent=teamName(curTeam);}
 const TAG_COLORS={Marketing:'#b8a6f4',Social:'#6f9bf0',Redazione:'#7ed0b0',Amministrazione:'#f0c46f'};
 const BASE_TAGS=['Marketing','Social','Redazione','Amministrazione'];
@@ -2593,21 +2595,18 @@ teamGrid.addEventListener('click',e=>{
 });
 // team modal
 const tOv=document.getElementById('teamOverlay');
-const EMOJIS=['🚀','💼','🎓','🏠','🎨','📊','⚡','🌟','🧩','🔥','🎯','🍀'];
-let pickedEmoji='🚀';
-const emojiPick=document.getElementById('emojiPick');
-emojiPick.innerHTML=EMOJIS.map((e,i)=>`<div class="ep${i===0?' sel':''}" data-emoji="${e}">${e}</div>`).join('');
-emojiPick.addEventListener('click',e=>{
-  const ep=e.target.closest('.ep');if(!ep)return;
-  emojiPick.querySelectorAll('.ep').forEach(x=>x.classList.remove('sel'));
-  ep.classList.add('sel');pickedEmoji=ep.dataset.emoji;
-});
-document.getElementById('createTeamBtn').addEventListener('click',()=>{document.getElementById('newTeamName').value='';tOv.classList.add('open');});
+// Colore del team (al posto dell'emoji): swatch stile "Nuovo task/gruppo"
+let teamColor='#b8a6f4';
+function teamRenderSwatches(){const el=document.getElementById('teamColors');if(!el)return;
+  el.innerHTML=TCOLORS.map(c=>`<button type="button" class="nt-swatch${c===teamColor?' on':''}" data-swatch="${c}" style="background:${c}"></button>`).join('');}
+function teamSetColor(c){teamColor=c;teamRenderSwatches();}
+{const el=document.getElementById('teamColors');if(el)el.addEventListener('click',e=>{const b=e.target.closest('[data-swatch]');if(!b)return;teamSetColor(b.dataset.swatch);});}
+document.getElementById('createTeamBtn').addEventListener('click',()=>{document.getElementById('newTeamName').value='';teamSetColor(TCOLORS[0]);tOv.classList.add('open');setTimeout(()=>{const n=document.getElementById('newTeamName');if(n)n.focus();},30);});
 document.getElementById('teamModalX').addEventListener('click',()=>tOv.classList.remove('open'));
 tOv.addEventListener('click',e=>{if(e.target===tOv)tOv.classList.remove('open');});
 document.getElementById('doCreate').addEventListener('click',()=>{
   const name=(document.getElementById('newTeamName').value.trim())||tr('tm_new_title');
-  TEAMS.push({tid:TEAM_SEQ++,name,emoji:pickedEmoji,act:0,owner:true,desc:'',invites:[],spaces:[],members:[{i:'U',c:ACCENT,name:'Umberto',admin:true,tags:[]}],
+  TEAMS.push({tid:TEAM_SEQ++,name,color:teamColor,act:0,owner:true,desc:'',invites:[],spaces:[],members:[{i:'U',c:ACCENT,name:'Umberto',admin:true,tags:[]}],
     docs:[['📝','tile_notes','#6a4a8a','U']],events:[]});
   document.getElementById('newTeamName').value='';saveTeams();
   tOv.classList.remove('open');renderTeams();syncTaskTeams();openTeam(TEAMS.length-1);
@@ -7563,7 +7562,7 @@ function seedExampleTeams(){
   const ev=(off,title,when)=>{const dt=fut(off);return {d:dt.getDate(),mo:dt.getMonth(),title,when};};
   const addTask=(tid,title,assignee,off,done)=>{TASKS.push({id:++TID,title,scope:'team:'+tid,assignee,date:fDate(off),done:!!done});};
   // --- Team 1: Economy Group ---
-  const t1={tid:TEAM_SEQ++,name:'Economy Group',emoji:'📊',act:0,owner:true,desc:'Redazione, podcast e social',invites:[],spaces:[],
+  const t1={tid:TEAM_SEQ++,name:'Economy Group',color:'#6f9bf0',act:0,owner:true,desc:'Redazione, podcast e social',invites:[],spaces:[],
     members:[
       {i:'U',c:A,name:'Umberto',admin:true,tags:['Direzione']},
       {i:'MR',c:'#6f9bf0',name:'Marco Rossi',admin:false,tags:['Podcast']},
@@ -7583,7 +7582,7 @@ function seedExampleTeams(){
   addTask(t1.tid,'Approvare piano editoriale',0,-1,true);
   t1.act=3;
   // --- Team 2: Studio Cervino ---
-  const t2={tid:TEAM_SEQ++,name:'Studio Cervino',emoji:'🎬',act:0,owner:true,desc:'Campagna Cervino',invites:[],spaces:[],
+  const t2={tid:TEAM_SEQ++,name:'Studio Cervino',color:'#ef9a9a',act:0,owner:true,desc:'Campagna Cervino',invites:[],spaces:[],
     members:[
       {i:'U',c:A,name:'Umberto',admin:true,tags:['Regia']},
       {i:'RB',c:'#ef7a85',name:'Roberta Bianchi',admin:true,tags:['Cliente']},
