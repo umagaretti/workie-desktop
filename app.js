@@ -3880,15 +3880,23 @@ function renderDaySide(){
   }).join('');
   body.innerHTML='<div class="dw-wheel dsw-wheel" id="dayWheel"><div class="dw-wheel-scroll" id="dayWheelScroll"><div class="dw-wheel-pad"></div>'+rows+'<div class="dw-wheel-pad"></div></div></div>';
   dayWheelBind();
-  requestAnimationFrame(()=>{const sc=document.getElementById('dayWheelScroll');dwWheelPadsEl(sc);dwWheelCenterNow(sc);dayWheelUpdate();requestAnimationFrame(dayWheelUpdate);});
-  setTimeout(dayWheelUpdate,340);
+  requestAnimationFrame(()=>{const sc=document.getElementById('dayWheelScroll');dayWheelPads(sc);dayWheelCenterNow(sc);dayWheelUpdate();requestAnimationFrame(dayWheelUpdate);});
+  setTimeout(()=>{const sc=document.getElementById('dayWheelScroll');dayWheelPads(sc);dayWheelCenterNow(sc);dayWheelUpdate();},340);
 }
+// La "linea di fuoco" (dove il box è più grande) è vicina all'ALTO, non al centro:
+// l'attività corrente sta subito sotto i tasti, le successive scendono e sfumano in basso.
+const DS_FOCUS=60;      // px dall'alto della ruota
+function dsItemHalf(sc){const it=sc&&sc.querySelector('.dw-wi');return it?it.offsetHeight/2:34;}
+function dayWheelPads(sc){if(!sc||sc.clientHeight<80)return;const half=dsItemHalf(sc);const pads=sc.querySelectorAll('.dw-wheel-pad');if(pads[0])pads[0].style.height=Math.max(0,DS_FOCUS-half)+'px';if(pads[1])pads[1].style.height=Math.max(0,sc.clientHeight-DS_FOCUS-half)+'px';}
+function dayWheelCenterNow(sc){if(!sc)return;const items=sc.querySelectorAll('.dw-wi');if(!items.length)return;let target=items[0];
+  if(typeof dwIsToday==='function'&&dwIsToday()&&typeof dwNowMin==='function'){const now=dwNowMin();for(const el of items){const tm=el.querySelector('.dw-wi-time');const v=tm?tm.textContent.trim():'';if(v&&typeof dwMins==='function'&&dwMins(v)>=now){target=el;break;}}}
+  sc.scrollTop=target.offsetTop+target.offsetHeight/2-DS_FOCUS;}
 function dayWheelBind(){const sc=document.getElementById('dayWheelScroll');if(!sc||sc.dataset.bound)return;sc.dataset.bound='1';let ticking=false;sc.addEventListener('scroll',()=>{if(ticking)return;ticking=true;requestAnimationFrame(()=>{dayWheelUpdate();ticking=false;});});}
 function dayWheelUpdate(){
   const sc=document.getElementById('dayWheelScroll');if(!sc)return;const items=sc.querySelectorAll('.dw-wi');if(!items.length)return;
-  const wr=sc.getBoundingClientRect(),cy=wr.top+wr.height/2,half=wr.height/2||1;let best=null,bestD=1e9;
+  const wr=sc.getBoundingClientRect(),cy=wr.top+DS_FOCUS,half=wr.height/2||1;let best=null,bestD=1e9;
   items.forEach(el=>{const r=el.getBoundingClientRect(),ic=r.top+r.height/2,dy=ic-cy;let nd=dy/half;if(nd>1.5)nd=1.5;if(nd<-1.5)nd=-1.5;const an=Math.min(1,Math.abs(nd));
-    el.style.transform='scale('+(1-an*0.28).toFixed(3)+')';el.style.opacity=(1-an*0.72).toFixed(2);
+    el.style.transform='scale('+(1-an*0.26).toFixed(3)+')';el.style.opacity=(1-an*0.74).toFixed(2);
     const ad=Math.abs(dy);if(ad<bestD){bestD=ad;best=el;}});
   items.forEach(el=>el.classList.toggle('sel',el===best));
 }

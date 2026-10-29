@@ -38,7 +38,7 @@ html.is-tauri #daySideBtn svg{width:18px;height:18px;}
 #daySideBtn .dsb-clock{width:19px;height:19px;}
 #daySideBtn .dsb-x{width:17px;height:17px;}
 .day-drawer .dd-head,.day-drawer .dd-tools,.day-drawer .dd-body{width:var(--dd-w);box-sizing:border-box;}
-.day-drawer .dd-head{display:flex;align-items:center;justify-content:flex-start;padding:17px 16px 10px;font-weight:600;font-size:15px;color:var(--text);}
+.day-drawer .dd-head{display:flex;align-items:center;justify-content:flex-start;padding:24px 16px 10px;font-weight:600;font-size:15px;color:var(--text);}
 /* tasti routine sotto il titolo */
 .dd-tools{display:flex;flex-wrap:wrap;gap:8px;padding:2px 16px 14px;}
 .dd-tool{display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 12px;border:1px solid var(--border);background:var(--panel);color:var(--text-dim);border-radius:9px;font-size:12.5px;font-weight:500;font-family:var(--sans);cursor:pointer;transition:background .15s,color .15s,border-color .15s;}
@@ -49,7 +49,10 @@ html.is-tauri #daySideBtn svg{width:18px;height:18px;}
 .day-drawer .dd-body{flex:1;min-height:0;padding:0;color:var(--muted);font-size:13.5px;line-height:1.5;display:flex;flex-direction:column;}
 /* ruota del piano: subito sotto i tasti, in alto, con spazio libero sotto
    (specificità alta per battere .dw-wheel base che è flex:1;height:100%) */
-.day-drawer .dsw-wheel{flex:none;height:min(52vh,440px);min-height:260px;}
+.day-drawer .dsw-wheel{flex:none;height:min(58vh,520px);min-height:260px;}
+/* niente sfumatura in alto (l'attività corrente sta in cima, deve restare piena);
+   sfuma solo in basso, dove scorrono le prossime attività */
+.day-drawer .dw-wheel-scroll{-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 70%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0,#000 70%,transparent 100%);}
 .day-drawer .dw-wi{padding:0 18px;gap:13px;min-height:68px;transform-origin:left center;}
 .day-drawer .dw-wi-ic{width:46px;height:46px;font-size:22px;border-radius:14px;}
 .day-drawer .dw-wi-name{font-size:18px;}
