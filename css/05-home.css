@@ -40,8 +40,8 @@
 .ovc-collapsed:hover{border-color:var(--border-strong);}
 .ov-chatbox.expanded .ovc-collapsed{max-height:0;opacity:0;border-width:0;border-color:transparent;box-shadow:none;pointer-events:none;}
 .ovc-ph{flex:1;min-width:0;color:var(--muted);font-size:15px;font-family:var(--sans);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.ovc-taskbtn{flex:none;display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 12px;border-radius:999px;background:var(--panel-2);border:1px solid var(--border);color:var(--text-dim);font-size:13px;font-weight:500;font-family:var(--sans);cursor:pointer;transition:background .15s,color .15s;}
-.ovc-taskbtn:hover{background:var(--inset);color:var(--text);}
+.ovc-taskbtn{flex:none;display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 10px;border-radius:10px;background:transparent;border:none;color:var(--muted);font-size:13px;font-weight:500;font-family:var(--sans);cursor:pointer;transition:background .2s ease,color .2s ease;}
+.ovc-taskbtn:hover{background:var(--panel-2);color:var(--text);}
 .ovc-slash{flex:none;display:grid;place-items:center;width:18px;height:18px;border-radius:5px;background:rgba(129,104,230,.16);color:#8168e6;font-weight:700;font-size:12px;font-style:italic;}
 .ovc-tlbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:170px;}
 /* × per rimuovere la task scelta — visibile solo con una task selezionata */
@@ -62,8 +62,8 @@
 .ovc-expanded{overflow:hidden;min-height:0;position:relative;background:var(--panel);border:1px solid var(--border);border-radius:22px;padding:10px 10px 8px;box-shadow:0 18px 50px -26px rgba(0,0,0,.55);opacity:0;transform:translateY(4px);transition:opacity .34s cubic-bezier(.4,0,.2,1),transform .46s cubic-bezier(.4,0,.2,1);}
 .ov-chatbox.expanded .ovc-expanded{opacity:1;transform:none;}
 .ovc-top{display:flex;align-items:center;gap:8px;padding:1px 2px 7px;}
-.ovc-scope{display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 11px;border-radius:999px;background:var(--panel-2);border:1px solid var(--border);color:var(--text-dim);font-size:13px;font-weight:500;font-family:var(--sans);cursor:pointer;transition:background .15s,color .15s;max-width:100%;}
-.ovc-scope:hover{background:var(--inset);color:var(--text);}
+.ovc-scope{display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 10px;border-radius:10px;background:transparent;border:none;color:var(--muted);font-size:13px;font-weight:500;font-family:var(--sans);cursor:pointer;transition:background .2s ease,color .2s ease;max-width:100%;}
+.ovc-scope:hover{background:var(--panel-2);color:var(--text);}
 .ovc-cv{width:13px;height:13px;flex:none;opacity:.7;transition:transform .18s;}
 .ov-chatbox.listopen .ovc-cv{transform:rotate(180deg);}
 .ovc-inputrow{display:flex;align-items:flex-end;gap:8px;}
