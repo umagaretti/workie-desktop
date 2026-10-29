@@ -50,7 +50,24 @@
 .tt-list .task.done .check{background:#8168e6;border-color:#8168e6;}
 .tt-list .task-del{opacity:0;width:0;overflow:hidden;transition:.15s;}
 .tt-row:hover .task-del{width:26px;opacity:1;margin-left:4px;}
-.tt-filters{margin:2px 0 14px;}
+.tt-filters{margin:0 0 16px;}
+/* Board "Task del team": persone in griglia (4 per riga) con le task sotto */
+.tpb-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;align-items:start;margin-bottom:14px;}
+.tpb-col{background:var(--panel-2);border-radius:12px;padding:10px;min-width:0;}
+.tpb-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:0 2px;}
+.tpb-av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:11px;flex:none;}
+.tpb-name{flex:1;min-width:0;font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tpb-n{flex:none;font-size:11px;color:var(--muted);background:var(--panel);border-radius:999px;padding:1px 7px;}
+.tpb-tasks{display:flex;flex-direction:column;gap:2px;max-height:170px;overflow-y:auto;}
+.tpb-task{display:flex;align-items:center;gap:7px;padding:5px 6px;border-radius:7px;transition:background .12s;}
+.tpb-task:hover{background:var(--panel-3);}
+.tpb-task .check{width:16px;height:16px;flex:none;}
+.tpb-task .check svg{width:10px;height:10px;}
+.tpb-task.done .check{background:#8168e6;border-color:#8168e6;}
+.tpb-t{flex:1;min-width:0;font-size:12.5px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tpb-task.done .tpb-t{color:var(--faint);text-decoration:line-through;}
+.tpb-date{flex:none;font-size:10.5px;color:var(--faint);white-space:nowrap;}
+.tpb-empty{font-size:12px;color:var(--faint);padding:8px 6px;}
 .tt-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:12px;flex:none;cursor:pointer;transition:.12s;}
 .tt-av:hover{transform:scale(1.08);}
 .tt-av.tt-none{background:var(--inset);border:1.5px dashed var(--border-strong);color:var(--muted);font-weight:400;}
