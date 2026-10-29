@@ -36,7 +36,7 @@
 /* La chatbox, aprendosi, cresce verso l'alto e passa SOPRA al saluto (sfondo pieno),
    senza spostare né la base né i bottoni. Il saluto resta dov'è, coperto dal box. */
 /* LIVELLO 1 — pill compatta (max-height animata per morphing fluido) */
-.ovc-collapsed{display:flex;align-items:center;gap:10px;width:100%;height:52px;max-height:52px;overflow:hidden;background:var(--panel);border:1px solid var(--border);border-radius:999px;padding:0 8px 0 20px;box-shadow:0 10px 34px -22px rgba(0,0,0,.4);cursor:text;transition:max-height .42s cubic-bezier(.22,1,.36,1),opacity .22s ease,border-width .3s ease,border-color .16s,box-shadow .16s;}
+.ovc-collapsed{display:flex;align-items:center;gap:10px;width:100%;height:52px;max-height:52px;overflow:hidden;background:var(--panel);border:1px solid var(--border);border-radius:999px;padding:0 8px 0 20px;box-shadow:0 10px 34px -22px rgba(0,0,0,.4);cursor:text;transition:max-height .46s cubic-bezier(.4,0,.2,1),opacity .3s cubic-bezier(.4,0,.2,1),border-width .3s ease,border-color .16s,box-shadow .16s;}
 .ovc-collapsed:hover{border-color:var(--border-strong);}
 .ov-chatbox.expanded .ovc-collapsed{max-height:0;opacity:0;border-width:0;border-color:transparent;box-shadow:none;pointer-events:none;}
 .ovc-ph{flex:1;min-width:0;color:var(--muted);font-size:15px;font-family:var(--sans);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -57,9 +57,9 @@
 .ovc-mini-h{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding:7px 9px 6px;}
 /* LIVELLO 2 — box espansa (grid-rows per animare l'altezza fino ad auto) */
 /* fondo ancorato (bottom:0): aumentando l'altezza il box si allunga verso l'ALTO */
-.ovc-exp-wrap{position:absolute;left:0;right:0;bottom:0;display:grid;grid-template-rows:0fr;transition:grid-template-rows .42s cubic-bezier(.22,1,.36,1);pointer-events:none;}
+.ovc-exp-wrap{position:absolute;left:0;right:0;bottom:0;display:grid;grid-template-rows:0fr;transition:grid-template-rows .46s cubic-bezier(.4,0,.2,1);pointer-events:none;}
 .ov-chatbox.expanded .ovc-exp-wrap{grid-template-rows:1fr;pointer-events:auto;}
-.ovc-expanded{overflow:hidden;min-height:0;position:relative;background:var(--panel);border:1px solid var(--border);border-radius:22px;padding:10px 10px 8px;box-shadow:0 18px 50px -26px rgba(0,0,0,.55);opacity:0;transform:translateY(6px);transition:opacity .3s ease,transform .36s cubic-bezier(.22,1,.36,1);}
+.ovc-expanded{overflow:hidden;min-height:0;position:relative;background:var(--panel);border:1px solid var(--border);border-radius:22px;padding:10px 10px 8px;box-shadow:0 18px 50px -26px rgba(0,0,0,.55);opacity:0;transform:translateY(4px);transition:opacity .34s cubic-bezier(.4,0,.2,1),transform .46s cubic-bezier(.4,0,.2,1);}
 .ov-chatbox.expanded .ovc-expanded{opacity:1;transform:none;}
 .ovc-top{display:flex;align-items:center;gap:8px;padding:1px 2px 7px;}
 .ovc-scope{display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 11px;border-radius:999px;background:var(--panel-2);border:1px solid var(--border);color:var(--text-dim);font-size:13px;font-weight:500;font-family:var(--sans);cursor:pointer;transition:background .15s,color .15s;max-width:100%;}
@@ -70,17 +70,19 @@
 #ovcInput{flex:1;min-width:0;background:none;border:none;outline:none;color:var(--text);font-size:15px;font-family:var(--sans);line-height:1.5;padding:8px;resize:none;max-height:160px;overflow-y:auto;}
 #ovcInput::placeholder{color:var(--muted);}
 /* Invia: GRIGIO e non attivo finché non è selezionata una task; viola e cliccabile quando c'è. */
-.ovc-send{position:relative;flex:none;width:38px;height:38px;border-radius:50%;border:none;background:var(--panel-2);color:var(--muted);display:grid;place-items:center;cursor:not-allowed;transition:filter .15s,background .15s,color .15s;}
-.ov-chatbox.has-task .ovc-send{background:#8168e6;color:#fff;cursor:pointer;}
+/* Tasto invio con lo stesso stile del composer della chat (.rsv-sendbtn):
+   quadratino arrotondato, grigio da spento, accent da attivo. */
+.ovc-send{position:relative;flex:none;width:34px;height:34px;border-radius:10px;border:none;background:var(--panel-2);color:var(--muted);display:grid;place-items:center;cursor:not-allowed;transition:filter .18s,background .18s,color .18s;}
+.ov-chatbox.has-task .ovc-send{background:var(--accent);color:#fff;cursor:pointer;}
 .ov-chatbox.has-task .ovc-send:hover{filter:brightness(1.08);}
-.ovc-send svg{width:18px;height:18px;}
+.ovc-send svg{width:17px;height:17px;}
 /* overlay "Seleziona task" al passaggio del mouse, solo quando è disattivato */
 .ovc-send::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 9px);right:-2px;left:auto;transform:translateY(4px);background:var(--text);color:var(--bg);font-size:12px;font-weight:500;font-family:var(--sans);padding:5px 10px;border-radius:8px;white-space:nowrap;box-shadow:0 8px 24px -10px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .15s ease,transform .15s ease;z-index:30;}
 .ovc-send::before{content:'';position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%) translateY(4px);border:5px solid transparent;border-top-color:var(--text);opacity:0;pointer-events:none;transition:opacity .15s ease,transform .15s ease;z-index:30;}
 .ov-chatbox:not(.has-task) .ovc-send:hover::after{opacity:1;transform:translateY(0);}
 .ov-chatbox:not(.has-task) .ovc-send:hover::before{opacity:1;transform:translateX(-50%) translateY(0);}
 /* LIVELLO 3 — lista task INLINE dentro il box (si apre verso l'alto, niente ombra separata) */
-.ovc-listwrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.22,1,.36,1);}
+.ovc-listwrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .46s cubic-bezier(.4,0,.2,1);}
 .ov-chatbox.listopen .ovc-listwrap{grid-template-rows:1fr;}
 .ovc-list{min-height:0;overflow:hidden;padding:0 2px;}
 .ov-chatbox.listopen .ovc-list{overflow-y:auto;max-height:240px;margin-bottom:7px;padding-bottom:7px;border-bottom:1px solid var(--border-soft);}
@@ -108,7 +110,7 @@ html.theme-chiaro .ov,html.theme-custom .ov{--gc:rgba(24,18,45,.06);}
 .ov-greet-hl{color:var(--accent);display:inline-block;transition:opacity .24s ease,transform .24s ease;}
 .ov-greet-hl.rot-out{opacity:0;transform:translateY(-8px);}
 .ov-date{font-size:14px;color:var(--muted);text-transform:capitalize;margin-bottom:10px;}
-.ov-greet{font-family:var(--serif);font-weight:500;font-size:28px;line-height:1.08;color:var(--text);letter-spacing:-.02em;transition:transform .42s cubic-bezier(.22,1,.36,1);will-change:transform;}
+.ov-greet{font-family:var(--serif);font-weight:500;font-size:28px;line-height:1.08;color:var(--text);letter-spacing:-.02em;transition:transform .46s cubic-bezier(.4,0,.2,1);will-change:transform;}
 .ov-help-row{display:flex;flex-direction:column;align-items:center;gap:18px;margin-top:22px;}
 .ov-help{font-family:var(--sans);font-weight:500;font-size:17px;line-height:1.15;letter-spacing:-.01em;background:linear-gradient(92deg,var(--accent),#a892f2 55%,#c4a0e8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;}
 .ov-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
