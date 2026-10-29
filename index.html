@@ -46,7 +46,7 @@ try{
 <script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@2/lib/msal-browser.min.js"></script>
 <link rel="stylesheet" href="css/01-base.css">
 <link rel="stylesheet" href="css/02-shell.css?v=30">
-<link rel="stylesheet" href="css/03-main.css?v=63">
+<link rel="stylesheet" href="css/03-main.css?v=64">
 <link rel="stylesheet" href="css/04-task-detail.css?v=15">
 <link rel="stylesheet" href="css/05-home.css?v=10">
 <link rel="stylesheet" href="css/06-tasks.css">
@@ -304,6 +304,11 @@ try{
             <input id="ibSearch" type="text" placeholder="Cerca…" data-i18n-ph="um_search" autocomplete="off">
           </div>
         </div>
+      </div>
+      <div class="ib-demobar" id="ibDemoBanner" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="2.6"/></svg>
+        <span class="ib-demobar-t" data-i18n="ib_demo_banner">Stai esplorando una demo con email di esempio.</span>
+        <button type="button" class="ib-demobar-x" id="ibDemoExit" data-i18n="ib_demo_exit">Collega la tua email</button>
       </div>
       <div class="ib-body" id="ibBody">
         <div class="ib-list" id="ibList"></div>
@@ -1633,6 +1638,6 @@ try{
 <script src="themes.js"></script>
 <script src="storage.js"></script>
 <script src="sync.js"></script>
-<script src="app.js?v=63"></script>
+<script src="app.js?v=64"></script>
 </body>
 </html>
