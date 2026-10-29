@@ -2282,9 +2282,13 @@ function renderProposal(mm,i){
   else b+=`<div class="prop-actions"><button class="pa-acc" data-prop="${i}" data-pa="acc">${tr('accept')}</button><button data-prop="${i}" data-pa="mod">${tr('prop_modify')}</button><button class="pa-rej" data-prop="${i}" data-pa="rej">${tr('decline')}</button></div>`;
   return `<div class="msg"><div class="av">${SVG.av}</div><div class="prop">${b}</div></div>`;
 }
+// Sezioni mostrate nel menu (per ora quelle comuni a tutti i team).
+// Eventi e Database restano pagine valide: diventeranno selezionabili alla creazione del team.
+const TEAM_MENU=['overview','members','chat','tasks','calendar','settings'];
 function renderTeamQuickLinks(){
   const el=document.getElementById('teamQuickLinks');if(!el)return;
-  el.innerHTML=TEAM_QL.map(q=>`<button class="um-item tm-item${q.k===teamSection?' active':''}" data-ql="${q.k}">${SVG[q.ic]}<span>${tr(q.ik)}</span></button>`).join('');
+  el.innerHTML=TEAM_MENU.map(k=>TEAM_QL.find(q=>q.k===k)).filter(Boolean)
+    .map(q=>`<button class="um-item tm-item${q.k===teamSection?' active':''}" data-ql="${q.k}">${SVG[q.ic]}<span>${tr(q.ik)}</span></button>`).join('');
 }
 function teamSectionLabel(){const q=TEAM_QL.find(x=>x.k===teamSection);if(q)return tr(q.ik);
   if(teamSection==='space')return tr('shared_space');
