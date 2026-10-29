@@ -2954,8 +2954,17 @@ function ibMsgHTML(msg,idx,open,mailId){
   const av='<div class="ib-rd-av" style="background:'+ibAvatarColor(msg.from)+'">'+bdEsc(initial)+'</div>';
   const atts=(open&&msg.attachments&&msg.attachments.length)?'<div class="ib-rd-atts">'+msg.attachments.map(a=>'<span class="ib-rd-att">'+IB_IC_CLIP+'<span class="ib-rd-att-n">'+bdEsc(a.name)+'</span>'+(a.size?'<span class="ib-rd-att-s">'+bdEsc(a.size)+'</span>':'')+'</span>').join('')+'</div>':'';
   const acts='<div class="ib-rd-acts"><button class="ib-rd-aic" data-ibreplyone title="'+tr('ib_reply')+'">'+IB_IC_REPLY+'</button><button class="ib-rd-aic" data-ibreplyall title="'+tr('ib_reply_all')+'">'+IB_IC_REPLYALL+'</button><button class="ib-rd-aic" data-ibforward title="'+tr('ib_forward')+'">'+IB_IC_FWD+'</button><button class="ib-rd-aic" data-ibtask="'+mailId+'" title="'+tr('ib_make_task')+'">'+IB_IC_TASK+'</button></div>';
-  const recips=open?('<div class="ib-rd-l2">'+(msg.to?'<span><b>A:</b> '+bdEsc(msg.to)+'</span>':'')+(msg.cc?'<span><b>Cc:</b> '+bdEsc(msg.cc)+'</span>':'')+'</div>'):('<div class="ib-rd-snip">'+bdEsc((msg.body||'').replace(/\s+/g,' ').trim().slice(0,110))+'</div>');
-  const head='<div class="ib-rd-mhead">'+av+'<div class="ib-rd-minfo"><div class="ib-rd-l1"><span class="ib-rd-name">'+bdEsc(msg.from)+'</span>'+((open&&msg.fromEmail)?'<span class="ib-rd-email">'+bdEsc(msg.fromEmail)+'</span>':'')+'<span class="ib-rd-date">'+bdEsc(ibFmtDate(msg.date))+'</span></div>'+recips+'</div>'+(open?acts:'')+'</div>';
+  const dateHTML='<span class="ib-rd-date">'+bdEsc(ibFmtDate(msg.date))+'</span>';
+  let minfo,right;
+  if(open){
+    minfo='<div class="ib-rd-minfo"><div class="ib-rd-name">'+bdEsc(msg.from)+'</div>'+(msg.fromEmail?'<div class="ib-rd-email">'+bdEsc(msg.fromEmail)+'</div>':'')
+      +'<div class="ib-rd-l2">'+(msg.to?'<span><b>A:</b> '+bdEsc(msg.to)+'</span>':'')+(msg.cc?'<span><b>Cc:</b> '+bdEsc(msg.cc)+'</span>':'')+'</div></div>';
+    right='<div class="ib-rd-right">'+acts+dateHTML+'</div>';
+  }else{
+    minfo='<div class="ib-rd-minfo"><div class="ib-rd-name">'+bdEsc(msg.from)+'</div><div class="ib-rd-snip">'+bdEsc((msg.body||'').replace(/\s+/g,' ').trim().slice(0,110))+'</div></div>';
+    right='<div class="ib-rd-right">'+dateHTML+'</div>';
+  }
+  const head='<div class="ib-rd-mhead">'+av+minfo+right+'</div>';
   const body=open?(atts+'<div class="ib-rd-body">'+ibBodyHTML(msg.body)+'</div>'+ibReplyBar()):'';
   return '<div class="ib-rd-msg'+(open?' open':' collapsed')+'" data-ibmsg="'+idx+'">'+head+body+'</div>';
 }
