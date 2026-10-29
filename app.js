@@ -3498,8 +3498,11 @@ function renderOvPlan(){
    if(!cb||!cb.classList.contains('expanded')){gr.style.transform='';return;}
    const exp=document.getElementById('ovcExpanded');const h=exp?exp.scrollHeight:52;
    gr.style.transform='translateY(-'+Math.max(0,h-52+16)+'px)';}
+ /* Colore della task: categoria → gruppo → viola di default (pronto per le categorie colorate). */
+ function ovcTaskColor(t){try{if(t&&t.catId!=null&&typeof catById==='function'){const c=catById(t.catId);if(c&&c.color)return c.color;}if(t&&t.gid!=null&&typeof GROUPS!=='undefined'){const g=GROUPS.find(x=>x.id===t.gid);if(g&&g.color)return g.color;}}catch(e){}return '#8168e6';}
  function ovcItemHTML(t){const sb=[];if(t.gid!=null&&typeof GROUPS!=='undefined'){const g=GROUPS.find(x=>x.id===t.gid);if(g)sb.push(g.name);}const d=taskDue(t);if(d){const months=MONTHS[LANG]||MONTHS.it;sb.push(d[2]+' '+(months[d[1]]||''));}
-   return '<button type="button" class="ovc-item'+(ovcTaskSel===t.id?' sel':'')+'" data-ovctask="'+t.id+'"><span class="ovc-item-ic">'+RSV_SC_IC.task+'</span><span class="ovc-item-tt">'+bdEsc(taskTitle(t))+'</span>'+(sb.length?'<span class="ovc-item-meta">'+bdEsc(sb.join(' · '))+'</span>':'')+'</button>';}
+   const col=ovcTaskColor(t);
+   return '<button type="button" class="ovc-item'+(ovcTaskSel===t.id?' sel':'')+'" data-ovctask="'+t.id+'"><span class="ovc-item-ic" style="background:'+col+'26;color:'+col+'">/</span><span class="ovc-item-tt">'+bdEsc(taskTitle(t))+'</span>'+(sb.length?'<span class="ovc-item-meta">'+bdEsc(sb.join(' · '))+'</span>':'')+'</button>';}
  function ovcRecentTasks(){return (typeof TASKS!=='undefined'?TASKS:[]).filter(x=>!x.done).slice().sort((a,b)=>(b.id||0)-(a.id||0)).slice(0,5);}
  function ovcMiniOpen(open){const cb=document.getElementById('ovChatbox');if(!cb)return;if(open){const box=document.getElementById('ovcMini');if(box){const list=ovcRecentTasks();box.innerHTML='<div class="ovc-mini-h">'+tr('ovc_recent')+'</div>'+(list.length?list.map(ovcItemHTML).join(''):'<div class="ovc-empty">'+tr('ovc_none')+'</div>');}}cb.classList.toggle('miniopen',open);}
  function ovcListOpen(open){const cb=document.getElementById('ovChatbox');if(!cb)return;if(open)ovcRenderList();cb.classList.toggle('listopen',open);ovcLift();}
