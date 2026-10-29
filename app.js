@@ -3558,7 +3558,7 @@ function renderOvPlan(){
    const r1=startEl?startEl.getBoundingClientRect():null;
    ta.value='';ovcAutoGrow();ovcExpand(false);
    ovcDraft.task=null;ovcDraft.text='';            // inviato → nessuna bozza
-   ovcMorphFrom=r1;                                // il box si TRASFORMA in quello della chat (rsvPlayMorph), non sparisce
+   // Passaggio ISTANTANEO: niente animazione, la chat appare già pronta col box sotto.
    try{openResolveChat(id);}catch(_){}
    setTimeout(()=>{try{if(typeof rsvSend==='function')rsvSend(text);}catch(_){}},160);}
  {const cb=document.getElementById('ovChatbox');
