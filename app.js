@@ -496,7 +496,7 @@ function startGreetRotator(){
 }
 // Preferenze Overview (chatbox sotto il saluto + sfondo gradient) — persistite
 let ovPrefs=(()=>{try{return JSON.parse(localStorage.getItem('workie_ov_prefs'))||{};}catch(e){return {};}})();
-if(ovPrefs.gradient===undefined)ovPrefs.gradient=true;
+if(ovPrefs.gradient===undefined)ovPrefs.gradient=false;
 if(ovPrefs.chatbox===undefined)ovPrefs.chatbox=true;
 function saveOvPrefs(){try{localStorage.setItem('workie_ov_prefs',JSON.stringify(ovPrefs));}catch(e){}}
 // Account Pro di default (badge "· Pro"). Solo workie_premium==='0' simula un utente free (per testare il gate).
