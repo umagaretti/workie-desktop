@@ -48,6 +48,7 @@ function go(page){
   // La sidebar sinistra mostra le CHAT delle task (non più le viste task). Su ogni pagina normale
   // forziamo la vista "chat"; in taskdetail resta la chat della task corrente.
   if(page!=='taskdetail'&&typeof setSideView==='function'){try{setSideView('chat');}catch(e){}}
+  else if(typeof renderSideChat==='function'){try{renderSideChat();}catch(e){}} // in chat: evidenzia la chat corrente nella sidebar
   // Bottone chat AI fisso: su tasks/day/project (non su home dove c'è l'icona accanto alla matita, né in taskdetail)
   {const ab=document.getElementById('aiSideBtn');if(ab)ab.style.display='';}
   try{navRecord(page);}catch(e){}
@@ -2822,7 +2823,7 @@ function renderSideChat(){
   const chats=Object.keys(store).map(k=>({id:+k,e:store[k]})).filter(x=>x.e&&x.e.msgs&&x.e.msgs.length&&TASKS.some(t=>t.id===x.id));
   const ttl='<div class="sc-secttl">Chat</div>';
   if(!chats.length){el.innerHTML=ttl+'<div class="sc-empty">'+tr('side_chat_empty')+'</div>';return;}
-  const onChat=!!document.querySelector('.tdw.chat-open');
+  const onChat=!!document.querySelector('.page[data-page="taskdetail"].active')&&!!document.querySelector('.tdw.chat-open');
   // Riga sottile: solo titolo + pallino viola quando l'ultimo messaggio è dell'AI (= da leggere) e non sei dentro quella chat.
   el.innerHTML=ttl+'<div class="sc-list">'+chats.map(({id,e})=>{
     const t=TASKS.find(x=>x.id===id);const title=t?taskTitle(t):('#'+id);
