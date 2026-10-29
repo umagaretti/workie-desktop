@@ -52,7 +52,7 @@ try{
 <link rel="stylesheet" href="css/06-tasks.css">
 <link rel="stylesheet" href="css/07-team-projects.css?v=73">
 <link rel="stylesheet" href="css/08-modals-connections.css">
-<link rel="stylesheet" href="css/09-tasks-rework.css?v=73">
+<link rel="stylesheet" href="css/09-tasks-rework.css?v=74">
 <link rel="stylesheet" href="css/10-desktop-os.css">
 <link rel="stylesheet" href="css/11-mobile.css">
 <link rel="stylesheet" href="css/12-themes.css">
@@ -554,12 +554,12 @@ try{
     <!-- TEAM DETAIL -->
     <section class="page" data-page="teamdetail">
       <div class="scroll td-scroll">
-      <div class="tk-page tk-page-wide">
-        <!-- Breadcrumb "Tutti i team" (stile Tasks/Teams) -->
-        <div class="tdw-crumb tk-crumb"><span class="tdw-cloud"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 0 0 .5-8.97A6 6 0 0 0 6.1 9.2 4 4 0 0 0 6.5 19z"/></svg></span><span class="tdw-crumb-link" data-go="team">Tutti i team</span></div>
-        <!-- Titolo grande con logo colorato del team -->
+      <div class="tk-page">
+        <!-- Breadcrumb "Tutti i team / nome del team" (stile Tasks/Teams) -->
+        <div class="tdw-crumb tk-crumb"><span class="tdw-cloud"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 0 0 .5-8.97A6 6 0 0 0 6.1 9.2 4 4 0 0 0 6.5 19z"/></svg></span><span class="tdw-crumb-link" data-go="team">Tutti i team</span><span class="tdw-crumb-sep">/</span><span class="tdw-crumb-cur" id="teamCrumbCur"></span></div>
+        <!-- Titolo grande con icona del team nel suo colore -->
         <div class="tk-head">
-          <span class="team-emoji tk-headlogo" id="teamDetailIcon"></span>
+          <span class="tk-headic" id="teamDetailIcon"></span>
           <div class="page-title tk-bigtitle" id="teamDetailTitle">Team</div>
         </div>
         <div class="tdetail-cols">
@@ -1660,6 +1660,6 @@ try{
 <script src="themes.js"></script>
 <script src="storage.js"></script>
 <script src="sync.js"></script>
-<script src="app.js?v=73"></script>
+<script src="app.js?v=74"></script>
 </body>
 </html>
