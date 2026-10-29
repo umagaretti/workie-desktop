@@ -104,7 +104,7 @@
 .ib-connect:hover{background:var(--panel-2);color:var(--text);}
 .ib-connect svg{width:16px;height:16px;}
 .ib-body{flex:1;min-height:0;display:flex;overflow:hidden;margin-bottom:8px;}
-.ib-list{width:300px;flex:none;border-right:1px solid var(--border-soft);overflow-y:auto;background:none;padding-right:10px;}
+.ib-list{width:264px;flex:none;border-right:1px solid var(--border-soft);overflow-y:auto;background:none;padding-right:10px;}
 /* Toolbar inbox: ricerca + filtri + aggiorna */
 /* due bottoni tondi a destra del titolo (come le azioni di Tasks) */
 .ib-actions{display:flex;align-items:center;gap:10px;flex:none;margin-left:auto;}
@@ -132,10 +132,31 @@
 .ib-search.open{width:240px;background:var(--inset);border-color:var(--border-soft);}
 .ib-search.open input{opacity:1;padding:0 10px 0 2px;}
 .ib-list-empty{padding:30px 14px;text-align:center;color:var(--muted);font-size:13px;}
+/* intestazioni data stile Task nella lista mail */
+.ib-list .tgroup-h.tgroup-box{margin:14px 0 7px;}
+.ib-list .tgroup-h.tgroup-box:first-child{margin-top:2px;}
+/* compositore nuova email */
+.ib-cmp-overlay{position:fixed;inset:0;background:rgba(0,0,0,.28);display:none;align-items:center;justify-content:center;z-index:200;padding:20px;}
+.ib-cmp-overlay.open{display:flex;animation:fade .2s ease;}
+.ib-cmp{width:min(560px,96vw);max-height:90vh;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--border);border-radius:16px;box-shadow:0 30px 80px -20px rgba(0,0,0,.4);overflow:hidden;}
+.ib-cmp-head{display:flex;align-items:center;justify-content:space-between;padding:15px 18px;border-bottom:1px solid var(--border-soft);}
+.ib-cmp-t{font-size:15px;font-weight:600;color:var(--text);}
+.ib-cmp-x{width:30px;height:30px;border:none;background:none;color:var(--muted);border-radius:8px;cursor:pointer;display:grid;place-items:center;}
+.ib-cmp-x:hover{background:var(--panel-2);color:var(--text);}
+.ib-cmp-x svg{width:17px;height:17px;}
+.ib-cmp-field{display:flex;align-items:center;gap:10px;padding:0 18px;border-bottom:1px solid var(--border-soft);}
+.ib-cmp-lbl{flex:none;width:58px;font-size:13px;color:var(--muted);}
+.ib-cmp-field input{flex:1;min-width:0;border:none;background:none;outline:none;color:var(--text);font-size:14px;font-family:var(--sans);padding:13px 0;}
+.ib-cmp-body{min-height:200px;border:none;outline:none;resize:none;background:none;color:var(--text);font-size:14px;line-height:1.55;font-family:var(--sans);padding:16px 18px;}
+.ib-cmp-foot{display:flex;align-items:center;gap:10px;padding:14px 18px;border-top:1px solid var(--border-soft);}
+.ib-cmp-send{display:inline-flex;align-items:center;gap:7px;border:none;background:var(--accent);color:#fff;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;transition:filter .15s;}
+.ib-cmp-send:hover{filter:brightness(1.07);}
+.ib-cmp-discard{border:none;background:none;color:var(--muted);font-size:13px;font-family:var(--sans);cursor:pointer;padding:8px 10px;border-radius:8px;}
+.ib-cmp-discard:hover{background:var(--panel-2);color:var(--text);}
 .ib-loadmore{display:block;width:calc(100% - 16px);margin:8px auto 10px;padding:10px;border:1px solid var(--border-soft);background:var(--panel);color:var(--text-dim);font-size:12.5px;font-weight:600;font-family:var(--sans);border-radius:10px;cursor:pointer;transition:background .15s,color .15s,border-color .15s;}
 .ib-loadmore:hover{background:var(--panel-2);color:var(--text);border-color:var(--border-strong);}
 .ib-loadmore:disabled{opacity:.6;cursor:default;}
-.ib-mail{display:flex;flex-direction:column;gap:3px;padding:12px 15px;border-bottom:1px solid var(--border-soft);cursor:pointer;transition:background .13s;}
+.ib-mail{display:flex;flex-direction:column;gap:2px;padding:8px 12px;border-radius:9px;cursor:pointer;transition:background .13s;}
 .ib-mail:hover{background:var(--panel-2);}
 .ib-mail.sel{background:var(--panel-2);box-shadow:inset 3px 0 0 #8168e6;}
 .ib-mail-top{display:flex;align-items:center;gap:7px;}
