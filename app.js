@@ -2200,7 +2200,7 @@ function assigneeAv(t,task){
   const m=t.members[task.assignee];return `<div class="tt-av" style="background:${m.c}" data-assign="${task.id}" title="${bdEsc(m.name)}">${m.i}</div>`;
 }
 function relTime(ts){const d=Math.floor((nowTs()-ts)/1000);if(d<60)return tr('t_now');if(d<3600)return Math.floor(d/60)+tr('t_min');if(d<86400)return Math.floor(d/3600)+tr('t_hr');return Math.floor(d/86400)+tr('t_day');}
-let curTeam=null,teamSection='overview',delConfirm=false,curSpaceName=null,curEventIdx=-1,curChatId=null,GROUP_SEQ=1,chatOpen={groups:true,members:true},teamTaskView='team',teamTaskDay=null;
+let curTeam=null,teamSection='overview',delConfirm=false,curSpaceName=null,curEventIdx=-1,curChatId=null,GROUP_SEQ=1,chatOpen={groups:true,members:true},teamTaskView='team',teamTaskDay=null,teamCalCur=null;
 function chatRowHTML(t,c){
   const last=chatMsgs(t,c.id).slice(-1)[0];
   const prev=last?(last.proposal?(last.mine?tr('you_proposed'):tr('proposed_task')):last.text):'';
@@ -2301,6 +2301,22 @@ function renderTeamNotif(){const el=document.getElementById('teamNotif');if(!el|
   if(!feed.length)body+=`<div class="team-notif-empty">${tr('tn_empty')}</div>`;
   else body+=feed.map(f=>`<div class="team-notif-item"><span class="team-notif-dot2"></span><div class="team-notif-tx">${bdEsc(f.text||'')}<div class="team-notif-time">${relTime(f.ts||nowTs())}</div></div></div>`).join('');
   el.innerHTML=body;}
+// Calendario del team (mensile, stile pagina Task) con le task di tutti colorate per persona
+function teamCalendarHTML(t){
+  if(!teamCalCur)teamCalCur=new Date();
+  const months=MONTHS[LANG]||MONTHS.it,dows=DOWS[LANG]||DOWS.it,now=new Date();
+  const y=teamCalCur.getFullYear(),m=teamCalCur.getMonth();
+  const first=new Date(y,m,1).getDay(),start=(first+6)%7,days=new Date(y,m+1,0).getDate(),prev=new Date(y,m,0).getDate();
+  const tasksOn=(dd)=>TASKS.filter(x=>x.scope==='team:'+t.tid&&taskOnDay(x,y,m,dd));
+  let cells='';
+  for(let i=0;i<start;i++)cells+=`<div class="mcal-cell out"><div class="mcal-daynum">${prev-start+i+1}</div></div>`;
+  for(let d=1;d<=days;d++){const isT=now.getFullYear()===y&&now.getMonth()===m&&now.getDate()===d;
+    const chips=tasksOn(d).map(x=>{const mem=t.members[x.assignee],c=mem?mem.c:'#8a8f98',tt=bdEsc(taskTitle(x)).replace(/"/g,'&quot;');return `<div class="chip${x.done?' dn':''}" style="background:${c}" data-tip="${tt}">${bdEsc(taskTitle(x))}</div>`;}).join('');
+    cells+=`<div class="mcal-cell${isT?' today':''}" data-tcd="${y}-${m}-${d}"><div class="mcal-daynum">${d}</div>${chips}</div>`;}
+  const rem=(7-(start+days)%7)%7;for(let i=1;i<=rem;i++)cells+=`<div class="mcal-cell out"><div class="mcal-daynum">${i}</div></div>`;
+  const head=`<div class="tcal-head"><div class="tcal-title">${months[m]} ${y}</div><div class="tcal-nav"><button type="button" class="dw-nav" id="tcalPrev">‹</button><button type="button" class="dw-nav tcal-today" id="tcalToday">${tr('al_today_word')}</button><button type="button" class="dw-nav" id="tcalNext">›</button></div></div>`;
+  return `${head}<div class="tcal bigcal plain"><div class="mcal-head">${dows.map(d=>`<div>${d}</div>`).join('')}</div><div class="mcal-grid">${cells}</div></div>`;
+}
 // Lista task "classica" (vista Oggi: In ritardo / Oggi / In arrivo con pie) per il team
 function teamTaskDateList(t,pool){
   const overdue=pool.filter(x=>!x.done&&taskPast(x)).sort(taskByDue);
@@ -2341,7 +2357,7 @@ function renderTeamMain(){
         <div class="section-h2" style="margin-top:24px">${tr('upcoming_events')}</div>${evHTML}
       </div>`;
   }else if(teamSection==='calendar'){
-    main.innerHTML=`<div class="section-h2">${tr('view_calendar')}</div><div class="cal" style="max-width:440px;padding:18px">${teamMiniCal(t)}</div>`;
+    main.innerHTML=teamCalendarHTML(t);
   }else if(teamSection==='events'){
     const evs=t.events||[];
     const list=evs.length?evs.map((e,idx)=>`<div class="event clickable" data-evi="${idx}"><div class="event-date"><div class="event-day">${e.d}</div><div class="event-mon">${evMon(e)}</div></div><div class="event-info"><div class="event-title">${evTitle(e)}</div><div class="event-time">${evTime(e)}</div></div><span class="ev-arrow">${SVG.next}</span></div>`).join(''):`<div class="task-empty">${tr('no_events')}</div>`;
@@ -2516,6 +2532,10 @@ document.getElementById('teamDetailMain').addEventListener('click',e=>{
   if(e.target.closest('#newGroupBtn')){openGroupModal();return;}
   {const ttv=e.target.closest('[data-ttv]');if(ttv){teamTaskView=ttv.dataset.ttv;renderTeamMain();return;}}
   {const td=e.target.closest('[data-ttday]');if(td){const p=td.dataset.ttday.split('-').map(Number);teamTaskDay=[p[0],p[1]-1,p[2]];renderTeamMain();return;}}
+  if(e.target.closest('#tcalPrev')){if(!teamCalCur)teamCalCur=new Date();teamCalCur=new Date(teamCalCur.getFullYear(),teamCalCur.getMonth()-1,1);renderTeamMain();return;}
+  if(e.target.closest('#tcalNext')){if(!teamCalCur)teamCalCur=new Date();teamCalCur=new Date(teamCalCur.getFullYear(),teamCalCur.getMonth()+1,1);renderTeamMain();return;}
+  if(e.target.closest('#tcalToday')){teamCalCur=new Date();renderTeamMain();return;}
+  {const cd=e.target.closest('[data-tcd]');if(cd){const p=cd.dataset.tcd.split('-').map(Number);openNewTask(curTeam);const de=document.getElementById('ntDate');if(de)de.value=p[0]+'-'+String(p[1]+1).padStart(2,'0')+'-'+String(p[2]).padStart(2,'0');return;}}
   if(e.target.closest('#ttPrev')){const b=teamTaskDay||realToday();const d=new Date(b[0],b[1],b[2]);d.setDate(d.getDate()-7);teamTaskDay=[d.getFullYear(),d.getMonth(),d.getDate()];renderTeamMain();return;}
   if(e.target.closest('#ttNext')){const b=teamTaskDay||realToday();const d=new Date(b[0],b[1],b[2]);d.setDate(d.getDate()+7);teamTaskDay=[d.getFullYear(),d.getMonth(),d.getDate()];renderTeamMain();return;}
   {const tg=e.target.closest('[data-tgroup]');if(tg){const k=tg.dataset.tgroup;if(k.indexOf('ttg_')===0){taskCollapse[k]=!taskCollapse[k];renderTeamMain();return;}}}
@@ -6165,7 +6185,7 @@ document.getElementById('ntCreate').addEventListener('click',()=>{
 // ---------- Big calendar ----------
 let calMode='month',calCur=new Date();
 function calMatch(t){const q=((document.getElementById('calSearch')||{}).value||'').toLowerCase();return !q||taskTitle(t).toLowerCase().includes(q);}
-function calTasksFor(y,m,d){return TASKS.filter(t=>(taskFilter==='all'||t.scope===taskFilter)&&(catFilter==null||t.catId===catFilter)&&calMatch(t)&&taskOnDay(t,y,m,d));}
+function calTasksFor(y,m,d){return TASKS.filter(t=>(taskFilter==='all'||t.scope===taskFilter)&&(catFilter==null||t.catId===catFilter)&&calMatch(t)&&taskMine(t)&&taskOnDay(t,y,m,d));}
 function chipHTML(t){return `<div class="chip ${t.done?'dn':''}" style="background:${t.tag?t.tag.c:'#8a8f98'}">${taskTitle(t)}</div>`;}
 function renderCalendar(){
   const box=document.getElementById('bigcal');if(!box)return;
