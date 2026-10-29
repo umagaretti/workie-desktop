@@ -10,6 +10,13 @@
 .tdetail-cols{display:grid;grid-template-columns:1fr 218px;gap:18px;align-items:start;}
 .tdetail-main{min-width:0;}
 .tdetail-side{display:flex;flex-direction:column;gap:3px;background:var(--panel);border:1px solid var(--border-soft);border-radius:12px;padding:8px;}
+/* Menu sezioni a tendina (al posto del pannello laterale) */
+.team-menu-wrap{position:relative;}
+.team-menu{position:absolute;top:46px;right:0;width:224px;display:none;flex-direction:column;gap:3px;background:var(--panel);border:1px solid var(--border-soft);border-radius:12px;padding:8px;box-shadow:0 18px 50px -16px rgba(0,0,0,.42);z-index:60;}
+.team-menu.open{display:flex;animation:fade .14s ease;}
+/* Pallino notifiche sulla campanella */
+.team-bell{position:relative;}
+.team-bell-dot{position:absolute;top:8px;right:9px;width:8px;height:8px;border-radius:50%;background:#8168e6;border:2px solid var(--panel);}
 .ql-item{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:9px;cursor:pointer;color:var(--text-dim);font-size:13.5px;border:1px solid transparent;transition:.15s;user-select:none;}
 .ql-item:hover{background:var(--panel-2);color:var(--text);}
 .ql-item.active{background:var(--active-bg);color:var(--text);border-color:rgba(255,255,255,.06);}

@@ -2222,7 +2222,8 @@ function setTeamTitle(){if(!curTeam)return;
   const nm=teamName(curTeam);
   const tt=document.getElementById('teamDetailTitle');if(tt)tt.textContent=nm;
   const cr=document.getElementById('teamCrumbCur');if(cr)cr.textContent=nm;
-  const ic=document.getElementById('teamDetailIcon');if(ic){ic.innerHTML=TEAM_USERS_SVG;ic.style.color=curTeam.color||'#8168e6';}}
+  const ic=document.getElementById('teamDetailIcon');if(ic){ic.innerHTML=TEAM_USERS_SVG;ic.style.color=curTeam.color||'#8168e6';}
+  const dot=document.getElementById('teamBellDot');if(dot)dot.style.display=(curTeam.feed&&curTeam.feed.length)?'block':'none';}
 const TAG_COLORS={Marketing:'#b8a6f4',Social:'#6f9bf0',Redazione:'#7ed0b0',Amministrazione:'#f0c46f'};
 const BASE_TAGS=['Marketing','Social','Redazione','Amministrazione'];
 function tagColor(tg){return TAG_COLORS[tg]||'#9a8fd6';}
@@ -2393,7 +2394,11 @@ function openTeam(i){
   syncRoleSpaces(t);setTeamTitle();renderTeamQuickLinks();renderTeamMain();
   go('teamdetail');
 }
-document.getElementById('teamQuickLinks').addEventListener('click',e=>{const q=e.target.closest('[data-ql]');if(!q)return;teamSection=q.dataset.ql;delConfirm=false;renderTeamQuickLinks();renderTeamMain();});
+document.getElementById('teamQuickLinks').addEventListener('click',e=>{const q=e.target.closest('[data-ql]');if(!q)return;teamSection=q.dataset.ql;delConfirm=false;renderTeamQuickLinks();renderTeamMain();const m=document.getElementById('teamQuickLinks');if(m)m.classList.remove('open');});
+// Menu sezioni (hamburger) + campanella notifiche nell'header del dettaglio
+{const mb=document.getElementById('teamMenuBtn');if(mb)mb.addEventListener('click',e=>{e.stopPropagation();const m=document.getElementById('teamQuickLinks');if(m)m.classList.toggle('open');});}
+document.addEventListener('click',e=>{const m=document.getElementById('teamQuickLinks');if(m&&m.classList.contains('open')&&!e.target.closest('#teamQuickLinks')&&!e.target.closest('#teamMenuBtn'))m.classList.remove('open');});
+{const bl=document.getElementById('teamBell');if(bl)bl.addEventListener('click',()=>{if(!curTeam)return;teamSection='feed';delConfirm=false;renderTeamQuickLinks();renderTeamMain();const d=document.getElementById('teamBellDot');if(d)d.style.display='none';});}
 document.getElementById('teamDetailMain').addEventListener('click',e=>{
   if(!curTeam)return;
   const sc=e.target.closest('.space-card[data-spi]');if(sc){const sp=userSpaces(curTeam)[+sc.dataset.spi];if(sp){curSpaceName=sp.name;teamSection='space';renderTeamMain();}return;}
