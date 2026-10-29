@@ -2370,7 +2370,14 @@ function renderTeamMain(){
   }else if(teamSection==='tasks'){
     const tt=TASKS.filter(x=>x.scope==='team:'+t.tid);
     const rowsHTML=tt.map(task=>`<div class="tt-row">${taskRow(task)}${assigneeAv(t,task)}</div>`).join('');
-    main.innerHTML=`<div class="section-h2">${tr('nav_tasks')} · ${tt.length}</div><div style="max-width:600px">${tt.length?rowsHTML:`<div class="task-empty">${tr('no_tasks')}</div>`}<button class="btn-add" id="teamTaskBtn">${tr('new_task')}</button></div>`;
+    // Striscia "task per persona" (vista stilizzata del carico)
+    const maxLoad=Math.max(1,...t.members.map((m,i)=>memberOpenTasks(t,i)));
+    const strip=t.members.map((m,idx)=>{const n=memberOpenTasks(t,idx);
+      return `<div class="tbm-card" data-mi="${idx}"><div class="tbm-av" style="background:${m.c}">${m.i}</div><div class="tbm-info"><div class="tbm-name">${firstName(m.name)}</div><div class="tbm-bar"><i style="width:${Math.round(n/maxLoad*100)}%;background:${m.c}"></i></div></div><div class="tbm-num">${n}</div></div>`;
+    }).join('');
+    main.innerHTML=`<div class="section-h2">${tr('nav_tasks')} · ${tt.length}</div>
+      <div class="tbm-strip">${strip}</div>
+      <div class="mbr-list">${tt.length?rowsHTML:`<div class="task-empty">${tr('no_tasks')}</div>`}<button class="btn-add" id="teamTaskBtn">${tr('new_task')}</button></div>`;
   }else if(teamSection==='feed'){
     const feed=Array.isArray(t.feed)?t.feed.slice().reverse():[];
     const body=feed.length?feed.map(f=>`<div class="feed-row"><span class="feed-dot"></span><div class="feed-main"><div class="feed-t">${bdEsc(f.text)}</div><div class="feed-time">${relTime(f.ts)}</div></div></div>`).join(''):`<div class="task-empty">${tr('feed_empty')}</div>`;
