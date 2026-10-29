@@ -333,6 +333,11 @@
 .stc-del{width:28px;height:28px;flex:none;border:none;background:none;color:var(--muted);border-radius:7px;display:grid;place-items:center;cursor:pointer;transition:.15s;}
 .stc-del:hover{background:rgba(229,104,107,.14);color:#e5686b;}
 .stc-del svg{width:15px;height:15px;}
+/* categoria legata al team: non modificabile/cancellabile */
+.stc-dot.nodot{cursor:default;border-color:rgba(255,255,255,.18);}
+.stc-name.ro{flex:1;color:var(--text);font-size:14px;}
+.stc-team{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#8168e6;background:rgba(129,104,230,.12);border-radius:999px;padding:3px 9px 3px 7px;flex:none;}
+.stc-team svg{width:12px;height:12px;}
 .stc-add{display:flex;align-items:center;gap:10px;background:var(--inset);border:1px solid var(--border-soft);border-radius:11px;padding:8px 10px;margin-bottom:14px;}
 .stc-newdot{width:20px;height:20px;border-radius:50%;flex:none;}
 .stc-newname{flex:1;}
