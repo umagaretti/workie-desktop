@@ -51,6 +51,8 @@
 .tt-list .task-del{opacity:0;width:0;overflow:hidden;transition:.15s;}
 .tt-row:hover .task-del{width:26px;opacity:1;margin-left:4px;}
 .tt-filters{margin:0 0 16px;}
+.tt-week{margin-bottom:14px;}
+.tt-week .dw-day{background:var(--panel-2);}
 /* Board "Task del team": persone in griglia (4 per riga) con le task sotto */
 .tpb-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;align-items:start;margin-bottom:14px;}
 .tpb-col{background:var(--panel-2);border-radius:12px;padding:10px;min-width:0;}

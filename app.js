@@ -2200,7 +2200,7 @@ function assigneeAv(t,task){
   const m=t.members[task.assignee];return `<div class="tt-av" style="background:${m.c}" data-assign="${task.id}" title="${bdEsc(m.name)}">${m.i}</div>`;
 }
 function relTime(ts){const d=Math.floor((nowTs()-ts)/1000);if(d<60)return tr('t_now');if(d<3600)return Math.floor(d/60)+tr('t_min');if(d<86400)return Math.floor(d/3600)+tr('t_hr');return Math.floor(d/86400)+tr('t_day');}
-let curTeam=null,teamSection='overview',delConfirm=false,curSpaceName=null,curEventIdx=-1,curChatId=null,GROUP_SEQ=1,chatOpen={groups:true,members:true},teamTaskView='team';
+let curTeam=null,teamSection='overview',delConfirm=false,curSpaceName=null,curEventIdx=-1,curChatId=null,GROUP_SEQ=1,chatOpen={groups:true,members:true},teamTaskView='team',teamTaskDay=null;
 function chatRowHTML(t,c){
   const last=chatMsgs(t,c.id).slice(-1)[0];
   const prev=last?(last.proposal?(last.mine?tr('you_proposed'):tr('proposed_task')):last.text):'';
@@ -2403,8 +2403,19 @@ function renderTeamMain(){
       const pool=allTT.filter(x=>x.assignee===meIdx);
       body=`<div class="tt-list">${teamTaskDateList(t,pool)}</div>`;
     }else{
-      // Task del team: board per persona (4 per riga), task sotto, max visibili con scroll
-      body=`<div class="tpb-grid">${t.members.map((m,idx)=>teamPersonCol(t,m,idx,allTT)).join('')}</div>`;
+      // Task del team: calendarino settimanale + box persone del giorno + lista del giorno
+      if(!teamTaskDay)teamTaskDay=realToday();
+      const day=teamTaskDay,sameDue=x=>{const d=taskDue(x);return d&&dwSameDay(d,day);};
+      const dows=DOWS[LANG]||DOWS.it,base=new Date(day[0],day[1],day[2]),off=(base.getDay()+6)%7,mon=new Date(base);mon.setDate(base.getDate()-off);
+      let wk='';for(let i=0;i<7;i++){const d=new Date(mon);d.setDate(mon.getDate()+i);const dd=[d.getFullYear(),d.getMonth(),d.getDate()];const sel=dwSameDay(dd,day),tod=dwSameDay(dd,realToday());wk+=`<div class="dw-day${sel?' sel':''}${tod?' today':''}" data-ttday="${dwKey(dd)}"><div class="dw-dow">${dows[i]}</div><div class="dw-num">${dd[2]}</div></div>`;}
+      const strip=`<div class="dw-strip tt-week"><button class="dw-nav" id="ttPrev">‹</button><div class="dw-days">${wk}</div><button class="dw-nav" id="ttNext">›</button></div>`;
+      const cnt=idx=>allTT.filter(x=>x.assignee===idx&&!x.done&&sameDue(x)).length;
+      const maxLoad=Math.max(1,...t.members.map((m,i)=>cnt(i)));
+      const boxes=t.members.map((m,idx)=>{const n=cnt(idx);return `<div class="tbm-card" data-mi="${idx}"><div class="tbm-av" style="background:${m.c}">${m.i}</div><div class="tbm-info"><div class="tbm-name">${firstName(m.name)}</div><div class="tbm-bar"><i style="width:${Math.round(n/maxLoad*100)}%;background:${m.c}"></i></div></div><div class="tbm-num">${n}</div></div>`;}).join('');
+      const dayTT=allTT.filter(sameDue),nd=dayTT.filter(x=>!x.done).sort(taskByDue),dn=dayTT.filter(x=>x.done);
+      const rowW=task=>`<div class="tt-row">${taskRow(task,true,true)}${assigneeAv(t,task)}</div>`;
+      const list=(nd.length+dn.length)?(nd.map(rowW).join('')+dn.map(rowW).join('')):`<div class="task-empty">${tr('tpb_none')}</div>`;
+      body=`${strip}<div class="tbm-strip">${boxes}</div><div class="tt-list">${list}</div>`;
     }
     main.innerHTML=`<div class="tk-filters tt-filters">${chips}</div>
       ${body}
@@ -2475,6 +2486,9 @@ document.getElementById('teamDetailMain').addEventListener('click',e=>{
   if(e.target.closest('#crumbChat')){teamSection='chat';renderTeamMain();return;}
   if(e.target.closest('#newGroupBtn')){openGroupModal();return;}
   {const ttv=e.target.closest('[data-ttv]');if(ttv){teamTaskView=ttv.dataset.ttv;renderTeamMain();return;}}
+  {const td=e.target.closest('[data-ttday]');if(td){const p=td.dataset.ttday.split('-').map(Number);teamTaskDay=[p[0],p[1]-1,p[2]];renderTeamMain();return;}}
+  if(e.target.closest('#ttPrev')){const b=teamTaskDay||realToday();const d=new Date(b[0],b[1],b[2]);d.setDate(d.getDate()-7);teamTaskDay=[d.getFullYear(),d.getMonth(),d.getDate()];renderTeamMain();return;}
+  if(e.target.closest('#ttNext')){const b=teamTaskDay||realToday();const d=new Date(b[0],b[1],b[2]);d.setDate(d.getDate()+7);teamTaskDay=[d.getFullYear(),d.getMonth(),d.getDate()];renderTeamMain();return;}
   {const tg=e.target.closest('[data-tgroup]');if(tg){const k=tg.dataset.tgroup;if(k.indexOf('ttg_')===0){taskCollapse[k]=!taskCollapse[k];renderTeamMain();return;}}}
   if(e.target.closest('#teamTaskBtn')){openNewTask(curTeam);return;}
   if(e.target.closest('#tchatSend')){sendChatMsg();return;}
