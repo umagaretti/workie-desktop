@@ -65,10 +65,38 @@
 /* ===== Pagina Inbox: due pannelli (lista mail + lettura) ===== */
 [data-page="inbox"].page.active{display:flex;flex-direction:column;padding:0 18px 0 30px;}
 /* breadcrumb cloud + email (come "Tutte le task") */
-.ib-crumb{padding-top:62px;margin-bottom:16px;}
+.ib-crumb{position:relative;padding-top:62px;margin-bottom:16px;}
 .ib-crumb-mail{display:inline-flex;align-items:center;gap:6px;background:none;border:none;color:var(--text-dim);font-size:14px;font-family:var(--sans);cursor:pointer;padding:3px 8px;border-radius:7px;margin-left:-6px;transition:background .15s,color .15s;}
 .ib-crumb-mail:hover{background:var(--panel-2);color:var(--text);}
-.ib-crumb-cv{width:13px;height:13px;flex:none;opacity:.55;}
+.ib-crumb-cv{width:13px;height:13px;flex:none;opacity:.55;transition:transform .18s;}
+.ib-crumb.menuopen .ib-crumb-cv{transform:rotate(180deg);}
+/* menu a tendina caselle */
+.ib-crumb-menu{display:none;position:absolute;top:calc(100% + 4px);left:8px;min-width:244px;background:var(--panel);border:1px solid var(--border);border-radius:13px;box-shadow:0 18px 50px -10px rgba(0,0,0,.22);padding:5px;z-index:40;}
+.ib-crumb.menuopen .ib-crumb-menu{display:block;animation:ovcMiniIn .16s cubic-bezier(.22,1,.36,1);}
+.ibcm-h{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding:7px 10px 5px;}
+.ibcm-item{display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;text-align:left;color:var(--text);font-family:var(--sans);font-size:13.5px;padding:8px 10px;border-radius:9px;cursor:pointer;transition:background .14s;}
+.ibcm-item:hover{background:var(--panel-2);}
+.ibcm-ic{flex:none;width:20px;height:20px;display:grid;place-items:center;}
+.ibcm-ic svg{width:18px;height:18px;}
+.ibcm-ic img{width:18px;height:18px;object-fit:contain;}
+.ibcm-tx{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ibcm-chk{flex:none;width:16px;height:16px;color:var(--accent);}
+.ibcm-chk svg{width:16px;height:16px;}
+.ibcm-sep{height:1px;background:var(--border-soft);margin:5px 6px;}
+.ibcm-manage{color:var(--text-dim);}
+/* Impostazioni → Caselle di posta */
+.stm-acct-list{display:flex;flex-direction:column;gap:8px;margin:16px 0 6px;}
+.stm-acct{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1px solid var(--border);border-radius:12px;background:var(--panel);}
+.stm-acct-ic{flex:none;width:26px;height:26px;display:grid;place-items:center;}
+.stm-acct-ic svg{width:22px;height:22px;}
+.stm-acct-ic img{height:20px;width:auto;}
+.stm-acct-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px;}
+.stm-acct-tx b{font-size:14px;color:var(--text);font-weight:600;}
+.stm-acct-tx span{font-size:12.5px;color:var(--muted);}
+.stm-acct-x{flex:none;background:none;border:1px solid var(--border);color:var(--text-dim);font-size:12.5px;font-family:var(--sans);padding:5px 11px;border-radius:8px;cursor:pointer;transition:background .15s,color .15s;}
+.stm-acct-x:hover{background:var(--panel-2);color:var(--text);}
+.stm-subh{font-size:12.5px;font-weight:600;color:var(--text-dim);margin:20px 0 10px;}
+.stm-provs{display:flex;flex-direction:column;gap:10px;max-width:360px;}
 .ib-head{display:flex;align-items:center;gap:12px;padding:0 0 16px;}
 .ib-headic{color:#8168e6;}
 .ib-title{flex:1;min-width:0;font-family:var(--serif);font-size:26px;font-weight:600;letter-spacing:-.02em;color:var(--text);}

@@ -466,8 +466,8 @@ Object.assign(STR.ja,{nav_home:`ホーム`,nav_desktop:`Daily`,nav_tasks:`タス
 Object.assign(STR.ko,{nav_home:`홈`,nav_desktop:`Daily`,nav_tasks:`작업`,nav_team:`팀`,nav_projects:`프로젝트`,nav_connections:`연결`,nav_settings:`설정`,nav_social:`소셜`,nav_workflow:`Workflow`,nav_resolve:`Resolve`,nav_soon:`곧 출시`,g_morning:`좋은 아침이에요`,g_afternoon:`안녕하세요`,g_evening:`좋은 저녁이에요`,home_watch:`살펴볼 만한`,dw_upcoming:`예정`,new_task:`+ 새 작업`,new_project:`+ 새 프로젝트`,team_create:`+ 팀 만들기`,team_join:`참여`,back:`뒤로`,al_all_clear:`모두 완료, 마감된 항목이 없어요.`,g_overdue:`기한 초과`,g_today:`오늘`,connect:`연결`,nt_group:`그룹`,grp_all:`전체`,grp_none:`없음`,grp_new:`새 그룹`,grp_manage:`그룹 관리`,grp_link:`프로젝트에 연결`,grp_link_none:`프로젝트 없음`,proj_link_group:`연결된 그룹`,proj_link_none:`그룹 없음`,gm_title:`그룹 관리`,gm_add:`추가`,gm_active:`활성`,set_language:`언어`,set_appearance:`화면`,stm_prefs:`환경설정`,stm_home:`홈`,stm_notif:`알림`,stm_notif_push:`푸시 알림`,stm_notif_push_d:`메시지, 초대, 작업 알림에 대한 알림입니다.`,stm_generale:`일반`,stm_privacy:`개인정보`,stm_billing:`결제`,stm_features:`기능`,stm_profile:`프로필`,set_account:`계정`,stm_home_daily:`홈에 Daily 표시`,stm_home_tasks:`홈에 작업 표시`,stm_g_settings:`설정`,stm_g_desktop:`데스크톱 앱`,stm_g_custom:`사용자 지정`,mcs_title:`만들기`,mcs_task:`새 작업`,mcs_project:`새 프로젝트`,dw_setup:`하루 설정`,dw_setup_title:`하루를 설정하세요`,soc_tab_recent:`최근 채팅`,soc_tab_conn:`연결`,soc_tab_team:`팀`,soc_add:`+ 추가`,soc_sub:`내 네트워크: 채팅, 연결, 팀`,pd_board:`보드`,pd_files:`파일`,members_word:`멤버`,pd_task_ph:`프로젝트에 작업 추가…`,add:`추가`,requests:`요청`,no_requests:`요청 없음`,accept:`수락`,decline:`거절`,invited_you:`님이 초대했습니다:`,grp_save:`저장`,grp_create:`그룹 만들기`,grp_delete:`그룹 삭제`,grp_name:`그룹 이름`,stm_save:`저장`,coming_soon:`곧 출시`,splash_lang:`언어 선택`});
 
 // Etichette impostazioni interfaccia (sfondo animato). tr() fa fallback en→it per le altre lingue.
-Object.assign(STR.it,{set_interface:`Interfaccia`,set_gradient:`Sfondo animato`,set_gradient_d:`La luce viola che si muove dietro l'app.`,ds_noplan_t:`Nessun piano per oggi`,ds_noplan_d:`Crea il piano della giornata e lo vedrai qui, con gli orari.`,ds_make_plan:`Pianifica la giornata`,ds_edit_routine:`Modifica la routine`,ds_day_settings:`Impostazioni giornata`,ib_connect_t:`Collega la tua email a Workie`,ib_connect_sub:`Trasforma le email in task, direttamente da Workie.`,ib_b1_t:`I permessi si apriranno in una nuova scheda`,ib_b1_d:`Accetta i permessi per continuare.`,ib_b2_t:`I tuoi dati, al sicuro`,ib_b2_d:`Workie non usa la tua posta per addestrare modelli.`,ib_b3_t:`Sei tu ad avere il controllo`,ib_b3_d:`Vengono usati solo i permessi che approvi.`,ib_cont:`Continua con %s`,ib_terms:`Continuando accetti i %tos e la %pp.`,ib_tos:`Termini di servizio`,ib_pp:`Privacy`});
-Object.assign(STR.en,{set_interface:`Interface`,set_gradient:`Animated background`,set_gradient_d:`The purple light drifting behind the app.`,ds_noplan_t:`No plan for today`,ds_noplan_d:`Create your day plan and it shows up here, with times.`,ds_make_plan:`Plan my day`,ds_edit_routine:`Edit routine`,ds_day_settings:`Day settings`,ib_connect_t:`Connect your email to Workie`,ib_connect_sub:`Turn emails into tasks, right from Workie.`,ib_b1_t:`Permissions open in a new tab`,ib_b1_d:`Accept the permissions to continue.`,ib_b2_t:`Your data stays safe`,ib_b2_d:`Workie never uses your mailbox to train models.`,ib_b3_t:`You stay in control`,ib_b3_d:`Only the permissions you approve are used.`,ib_cont:`Continue with %s`,ib_terms:`By continuing you accept our %tos and %pp.`,ib_tos:`Terms of Service`,ib_pp:`Privacy Policy`});
+Object.assign(STR.it,{set_interface:`Interfaccia`,set_gradient:`Sfondo animato`,set_gradient_d:`La luce viola che si muove dietro l'app.`,ds_noplan_t:`Nessun piano per oggi`,ds_noplan_d:`Crea il piano della giornata e lo vedrai qui, con gli orari.`,ds_make_plan:`Pianifica la giornata`,ds_edit_routine:`Modifica la routine`,ds_day_settings:`Impostazioni giornata`,ib_connect_t:`Collega la tua email a Workie`,ib_connect_sub:`Trasforma le email in task, direttamente da Workie.`,ib_b1_t:`I permessi si apriranno in una nuova scheda`,ib_b1_d:`Accetta i permessi per continuare.`,ib_b2_t:`I tuoi dati, al sicuro`,ib_b2_d:`Workie non usa la tua posta per addestrare modelli.`,ib_b3_t:`Sei tu ad avere il controllo`,ib_b3_d:`Vengono usati solo i permessi che approvi.`,ib_cont:`Continua con %s`,ib_terms:`Continuando accetti i %tos e la %pp.`,ib_tos:`Termini di servizio`,ib_pp:`Privacy`,set_mailboxes:`Caselle di posta`,ib_mail_sub:`Gestisci le email collegate a Workie.`,ib_your_mailboxes:`Le tue caselle`,ib_no_accounts:`Nessuna casella collegata.`});
+Object.assign(STR.en,{set_interface:`Interface`,set_gradient:`Animated background`,set_gradient_d:`The purple light drifting behind the app.`,ds_noplan_t:`No plan for today`,ds_noplan_d:`Create your day plan and it shows up here, with times.`,ds_make_plan:`Plan my day`,ds_edit_routine:`Edit routine`,ds_day_settings:`Day settings`,ib_connect_t:`Connect your email to Workie`,ib_connect_sub:`Turn emails into tasks, right from Workie.`,ib_b1_t:`Permissions open in a new tab`,ib_b1_d:`Accept the permissions to continue.`,ib_b2_t:`Your data stays safe`,ib_b2_d:`Workie never uses your mailbox to train models.`,ib_b3_t:`You stay in control`,ib_b3_d:`Only the permissions you approve are used.`,ib_cont:`Continue with %s`,ib_terms:`By continuing you accept our %tos and %pp.`,ib_tos:`Terms of Service`,ib_pp:`Privacy Policy`,set_mailboxes:`Mailboxes`,ib_mail_sub:`Manage the mailboxes connected to Workie.`,ib_your_mailboxes:`Your mailboxes`,ib_no_accounts:`No mailbox connected yet.`});
 
 let LANG=(function(){try{return localStorage.getItem('workie_lang')||'en';}catch(e){return 'en';}})();
 function tr(k){const o=STR[LANG];if(o&&o[k]!=null)return o[k];if(STR.en&&STR.en[k]!=null)return STR.en[k];if(STR.it&&STR.it[k]!=null)return STR.it[k];return k;}
@@ -2897,6 +2897,12 @@ function ibAccounts(){
   return list;
 }
 function ibConnected(){return ibAccounts().length>0;}
+// Logo del provider (SVG trasparente) per bottoni/caselle
+function ibProvBrand(id){
+  if(id==='gmail')return '<svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C42.9 35.8 44 30.5 44 24c0-1.3-.1-2.7-.4-3.5z"/></svg>';
+  if(id==='outlook')return '<img src="img/outlook.svg" alt="Outlook" class="ib-oico">';
+  const p=(typeof IB_PROVIDERS!=='undefined')?IB_PROVIDERS.find(x=>x.id===id):null;return p?ibProvIcon(p):'';
+}
 function ibOnMail(){try{const pg=document.querySelector('.page[data-page="inbox"].active');if(pg)renderInboxPage();}catch(_){}try{const mo=document.getElementById('ibManageOverlay');if(mo&&mo.classList.contains('open'))ibManageRender();}catch(_){}}
 function ibProvIcon(p){if(p.domain)return '<img src="https://www.google.com/s2/favicons?domain='+p.domain+'&sz=128" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'grid\'"><span class="ib-prov-fallback" style="display:none;background:'+p.color+'">'+(p.name||'?').charAt(0)+'</span>';return '<span class="ib-prov-fallback" style="display:grid;background:'+p.color+'">@</span>';}
 function ibConnectProvider(pid){
@@ -2988,6 +2994,18 @@ function ibManageRender(){
   el.innerHTML=(connected?'<div class="ib-mng-list">'+connected+'</div>':'')+add;
 }
 function ibManageOpen(){ibManageRender();const ov=document.getElementById('ibManageOverlay');if(ov)ov.classList.add('open');}
+// Menu a tendina sul crumb: elenco caselle salvate + "Gestione inbox"
+function ibCrumbMenuRender(){
+  const el=document.getElementById('ibCrumbMenu');if(!el)return;
+  const accts=(typeof ibAccounts==='function')?ibAccounts():[];const cur=accts[0];
+  const CHK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  const GEAR='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>';
+  let html='<div class="ibcm-h">'+tr('ib_your_mailboxes')+'</div>';
+  html+=accts.map(a=>'<button type="button" class="ibcm-item'+(cur&&a.id===cur.id?' on':'')+'" data-ibacct="'+a.id+'"><span class="ibcm-ic">'+ibProvIcon(a)+'</span><span class="ibcm-tx">'+bdEsc(a.email||a.name)+'</span>'+((cur&&a.id===cur.id)?'<span class="ibcm-chk">'+CHK+'</span>':'')+'</button>').join('');
+  html+='<div class="ibcm-sep"></div><button type="button" class="ibcm-item ibcm-manage" data-ibmanage><span class="ibcm-ic">'+GEAR+'</span><span class="ibcm-tx">'+tr('ib_manage')+'</span></button>';
+  el.innerHTML=html;
+}
+function ibCrumbToggle(open){const cb=document.getElementById('ibCrumb');if(!cb)return;const willOpen=(open===undefined)?!cb.classList.contains('menuopen'):!!open;if(willOpen)ibCrumbMenuRender();cb.classList.toggle('menuopen',willOpen);}
 // ---- Crea task dall'email (AI semplifica + conferma) ----
 let ibTaskMail=null;
 function ibHeuristicTitle(m){let s=(m.subject||'').replace(/^\s*(re|fwd|fw|r|i)\s*:\s*/gi,'').trim();return (s||tr('ib_make_task')).slice(0,90);}
@@ -3081,13 +3099,18 @@ function ibTaskOpen(m){
 }
 // ---- Handler pagina Inbox ----
 {const ip=document.querySelector('[data-page="inbox"]');if(ip)ip.addEventListener('click',e=>{
+  if(e.target.closest('#ibCrumbMail')){e.stopPropagation();ibCrumbToggle();return;}
+  if(e.target.closest('[data-ibmanage]')){ibCrumbToggle(false);if(typeof openSettings==='function')openSettings('caselle',tr('nav_inbox'));return;}
+  {const ac=e.target.closest('[data-ibacct]');if(ac){ibCrumbToggle(false);/* cambio casella: per ora chiude il menu */return;}}
   const prov=e.target.closest('[data-ibprov]');if(prov){ibConnectProvider(prov.dataset.ibprov);return;}
   if(e.target.closest('#ibLoadMore')){if(typeof gmailFetchMore==='function')gmailFetchMore();return;}
   const mail=e.target.closest('[data-ibmail]');if(mail){ibSel=mail.dataset.ibmail;renderInboxPage();return;}
-  if(e.target.closest('#ibManage')){ibManageOpen();return;}
+  if(e.target.closest('#ibManage')){if(typeof openSettings==='function')openSettings('caselle',tr('nav_inbox'));return;}
   if(e.target.closest('[data-ibreply]')){try{showToast(tr('coming_soon'));}catch(_){}return;}
   const mk=e.target.closest('[data-ibtask]');if(mk){const m=ibMails().find(x=>x.id===mk.dataset.ibtask);if(m)ibTaskOpen(m);return;}
 });}
+// Chiude il menu caselle cliccando fuori
+document.addEventListener('click',e=>{if(!e.target.closest('#ibCrumb'))ibCrumbToggle(false);});
 // Toolbar: ricerca a comparsa, filtri, aggiorna
 {const wrap=document.getElementById('ibSearchWrap'),tog=document.getElementById('ibSearchToggle'),inp=document.getElementById('ibSearch');
  if(wrap&&tog&&inp){
@@ -6931,7 +6954,7 @@ document.getElementById('cuSaveBtn').addEventListener('click',saveCurrentTheme);
 // ================= SETTINGS MODAL (finestra impostazioni) =================
 let stTab='generale';
 const ST_NAV=[
-  {t:'stm_g_settings',items:[['generale','stm_generale','set'],['categorie','stm_categories','grid'],['profilo','stm_profile','person'],['account','set_account','team'],['privacy','stm_privacy','conn'],['fatturazione','stm_billing','file'],['funzionalita','stm_features','grid']]},
+  {t:'stm_g_settings',items:[['generale','stm_generale','set'],['categorie','stm_categories','grid'],['caselle','set_mailboxes','conn'],['profilo','stm_profile','person'],['account','set_account','team'],['privacy','stm_privacy','conn'],['fatturazione','stm_billing','file'],['funzionalita','stm_features','grid']]},
   {t:'stm_g_desktop',items:[['dkgenerale','stm_generale','daily'],['estensioni','stm_extensions','conn'],['sviluppatore','stm_developer','agent']]},
   {t:'stm_g_custom',items:[['connettori','stm_connectors','conn'],['plugin','stm_plugins','grid']]}
 ];
@@ -7019,6 +7042,16 @@ function stPrivacyDocHTML(which){
     +'<div class="stm-sec-t">'+title+'</div>'
     +'<div class="stm-doc"><ul>'+pts.map(p=>'<li>'+p+'</li>').join('')+'</ul></div>';
 }
+function stMailHTML(){
+  const accts=(typeof ibAccounts==='function')?ibAccounts():[];
+  const rows=accts.length?accts.map(a=>'<div class="stm-acct"><span class="stm-acct-ic">'+ibProvBrand(a.id)+'</span><div class="stm-acct-tx"><b>'+bdEsc(a.email||a.name)+'</b><span>'+bdEsc(a.name)+'</span></div><button class="stm-acct-x" data-ibdisc="'+a.id+'">'+tr('ib_disconnect')+'</button></div>').join(''):'<div class="stm-para">'+tr('ib_no_accounts')+'</div>';
+  const avail=IB_PROVIDERS.filter(p=>!accts.some(a=>a.id===p.id));
+  const labelMap={gmail:'Google',outlook:'Outlook'};
+  const add=avail.length?'<div class="stm-subh">'+tr('ib_add_mailbox')+'</div><div class="stm-provs">'+avail.map(p=>'<button type="button" class="ib-cs-prov" data-ibprov="'+p.id+'"><span class="ib-cs-prov-ic">'+ibProvBrand(p.id)+'</span><span>'+tr('ib_cont').replace('%s',labelMap[p.id]||p.name)+'</span></button>').join('')+'</div>':'';
+  return '<div class="stm-sec-t">'+tr('set_mailboxes')+'</div>'
+    +'<div class="stm-para">'+tr('ib_mail_sub')+'</div>'
+    +'<div class="stm-acct-list">'+rows+'</div>'+add;
+}
 function stBillingHTML(){
   return '<div class="stm-sec-t">'+tr('stm_billing')+'</div>'
     +'<div class="stm-beta"><div class="stm-beta-badge">BETA</div><div class="stm-beta-t">'+tr('bill_beta_t')+'</div><div class="stm-beta-s">'+tr('bill_beta_s')+'</div></div>';
@@ -7043,6 +7076,11 @@ function stCategorieHTML(){
 function stcSave(){if(typeof saveCategories==='function')saveCategories();try{renderTkFilters();}catch(e){}try{renderTasks();}catch(e){}}
 {const c=document.getElementById('stmContent');
  if(c){c.addEventListener('click',e=>{
+   if(stTab==='caselle'){
+     const prov=e.target.closest('[data-ibprov]');if(prov){ibConnectProvider(prov.dataset.ibprov);renderStTab('caselle');try{if(document.querySelector('.page[data-page="inbox"].active'))renderInboxPage();}catch(_){}return;}
+     const dc=e.target.closest('[data-ibdisc]');if(dc){ibDisconnectProvider(dc.dataset.ibdisc);renderStTab('caselle');try{if(document.querySelector('.page[data-page="inbox"].active'))renderInboxPage();}catch(_){}return;}
+     return;
+   }
    if(stTab!=='categorie')return;
    const del=e.target.closest('[data-stgdel]');if(del){const id=+del.dataset.stgdel;askConfirm(tr('cat_confirm_del'),()=>{CATEGORIES=CATEGORIES.filter(g=>g.id!==id);TASKS.forEach(t=>{if(t.catId===id)delete t.catId;});if(typeof saveTasks==='function')saveTasks();stcSave();renderStTab('categorie');});return;}
    const dot=e.target.closest('[data-stcolor]');if(dot){const id=+dot.dataset.stcolor;const g=CATEGORIES.find(x=>x.id===id);if(g){const i=TCOLORS.indexOf(g.color);g.color=TCOLORS[(i+1)%TCOLORS.length];stcSave();renderStTab('categorie');}return;}
@@ -7057,6 +7095,7 @@ function renderStTab(tab){
   const c=document.getElementById('stmContent');if(!c)return;
   if(stTab==='generale'){c.innerHTML=stGeneraleHTML();renderStThemes();if(typeof pushSyncToggle==='function')pushSyncToggle();}
   else if(stTab==='categorie'){c.innerHTML=stCategorieHTML();}
+  else if(stTab==='caselle'){c.innerHTML=stMailHTML();}
   else if(stTab==='profilo'){c.innerHTML=stProfileHTML();}
   else if(stTab==='account'){c.innerHTML=stAccountHTML();}
   else if(stTab==='privacy'){c.innerHTML=stPrivacyHTML();}
