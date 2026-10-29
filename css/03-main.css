@@ -99,7 +99,7 @@
 .stm-provs{display:flex;flex-direction:column;gap:10px;max-width:360px;}
 .ib-head{display:flex;align-items:center;gap:12px;padding:0 0 16px;}
 .ib-headic{color:#8168e6;}
-.ib-title{flex:1;min-width:0;font-family:var(--serif);font-size:26px;font-weight:600;letter-spacing:-.02em;color:var(--text);}
+.ib-title{flex:none;min-width:0;font-family:var(--serif);font-size:26px;font-weight:600;letter-spacing:-.02em;color:var(--text);}
 .ib-connect{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--border);background:var(--panel);color:var(--text-dim);font-size:13px;font-weight:500;font-family:var(--sans);cursor:pointer;transition:background .15s,color .15s;}
 .ib-connect:hover{background:var(--panel-2);color:var(--text);}
 .ib-connect svg{width:16px;height:16px;}
@@ -129,7 +129,7 @@
 /* Ricerca a comparsa (icona → barra) */
 .ib-search{display:flex;align-items:center;height:34px;width:34px;border-radius:9px;border:1px solid transparent;background:none;overflow:hidden;transition:width .32s cubic-bezier(.22,.61,.36,1),background .18s,border-color .18s;}
 .ib-search input{width:0;min-width:0;flex:1;opacity:0;border:none;background:none;outline:none;color:var(--text);font-size:13.5px;font-family:var(--sans);padding:0;transition:opacity .18s ease;}
-.ib-search.open{width:240px;background:var(--inset);border-color:var(--border-soft);}
+.ib-search.open{width:240px;background:var(--panel-2);border-color:transparent;}
 .ib-search.open input{opacity:1;padding:0 10px 0 2px;}
 .ib-list-empty{padding:30px 14px;text-align:center;color:var(--muted);font-size:13px;}
 /* intestazioni data stile Task nella lista mail */
@@ -160,7 +160,7 @@
 .ib-mail:hover{background:var(--panel-2);}
 .ib-mail.sel{background:var(--panel-2);}
 /* puntino viola a lato solo per le non lette (il nome parte a sinistra come l'oggetto) */
-.ib-mail-udot{position:absolute;left:5px;top:12px;width:7px;height:7px;border-radius:50%;background:#8168e6;}
+.ib-mail-udot{position:absolute;left:5px;top:50%;transform:translateY(-50%);width:7px;height:7px;border-radius:50%;background:#8168e6;}
 .ib-mail.read .ib-mail-udot{display:none;}
 .ib-mail-top{display:flex;align-items:center;gap:7px;}
 .ib-mail-from{flex:1;min-width:0;font-size:13.5px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
