@@ -16,6 +16,7 @@
 #taskList .task-end{display:flex;align-items:center;gap:10px;flex:none;margin-left:auto;padding-left:12px;}
 #taskList .task-date{font-size:12px;color:var(--muted);white-space:nowrap;min-width:44px;text-align:right;}
 #taskList .tk-pers{display:none;}
+#taskList .tk-team{display:none;} /* nelle mie task basta il pill categoria (gruppo col quadratino) */
 #taskList .tk-grp{cursor:pointer;font-weight:400;}
 #taskList .tk-grp:hover{filter:brightness(1.15);}
 .tk-gfold{display:inline-flex;align-items:center;flex:none;}

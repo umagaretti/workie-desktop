@@ -50,7 +50,8 @@
 .tt-list .task.done .check{background:#8168e6;border-color:#8168e6;}
 .tt-list .task-del{opacity:0;width:0;overflow:hidden;transition:.15s;}
 .tt-row:hover .task-del{width:26px;opacity:1;margin-left:4px;}
-.tk-filters.tt-filters{margin:0 0 16px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;}
+.tk-filters.tt-filters{margin:0 0 16px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;cursor:grab;user-select:none;}
+.tk-filters.tt-filters.dragging{cursor:grabbing;}
 .tt-filters::-webkit-scrollbar{display:none;}
 .tt-filters .tk-fil{flex:none;}
 .tt-week{margin-bottom:26px;}
@@ -78,8 +79,17 @@
 .tpb-task.done .tpb-t{color:var(--faint);text-decoration:line-through;}
 .tpb-empty{font-size:12px;color:var(--faint);padding:7px;}
 /* Tooltip custom istantaneo */
-.wk-tip{position:fixed;z-index:9999;max-width:280px;background:#1f1f23;color:#fff;font-size:12.5px;line-height:1.4;padding:7px 11px;border-radius:9px;box-shadow:0 10px 30px -8px rgba(0,0,0,.55);pointer-events:none;opacity:0;transition:opacity .1s;white-space:normal;}
+.wk-tip{position:fixed;z-index:9999;max-width:280px;background:#2d2d33;color:#fff;border:1px solid rgba(255,255,255,.14);font-size:12.5px;line-height:1.4;padding:7px 11px;border-radius:9px;box-shadow:0 10px 30px -8px rgba(0,0,0,.55);pointer-events:none;opacity:0;transition:opacity .1s;white-space:normal;}
 .wk-tip.show{opacity:1;}
+/* Assegna a: tondini con nome sotto, scroll orizzontale */
+.ntas-row{display:flex;gap:12px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;cursor:grab;user-select:none;padding:2px 0;margin-bottom:4px;}
+.ntas-row::-webkit-scrollbar{display:none;}
+.ntas-row.dragging{cursor:grabbing;}
+.ntas-p{flex:none;display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:none;cursor:pointer;padding:2px;width:54px;}
+.ntas-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:14px;border:2px solid transparent;transition:box-shadow .12s;}
+.ntas-p.on .ntas-av{box-shadow:0 0 0 2px var(--panel),0 0 0 4px #8168e6;}
+.ntas-n{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:54px;}
+.ntas-p.on .ntas-n{color:var(--text);font-weight:600;}
 .tt-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:12px;flex:none;cursor:pointer;transition:.12s;}
 .tt-av:hover{transform:scale(1.08);}
 .tt-av.tt-none{background:var(--inset);border:1.5px dashed var(--border-strong);color:var(--muted);font-weight:400;}

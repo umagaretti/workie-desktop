@@ -49,8 +49,8 @@ try{
 <link rel="stylesheet" href="css/03-main.css?v=71">
 <link rel="stylesheet" href="css/04-task-detail.css?v=15">
 <link rel="stylesheet" href="css/05-home.css?v=10">
-<link rel="stylesheet" href="css/06-tasks.css">
-<link rel="stylesheet" href="css/07-team-projects.css?v=91">
+<link rel="stylesheet" href="css/06-tasks.css?v=92">
+<link rel="stylesheet" href="css/07-team-projects.css?v=93">
 <link rel="stylesheet" href="css/08-modals-connections.css">
 <link rel="stylesheet" href="css/09-tasks-rework.css?v=74">
 <link rel="stylesheet" href="css/10-desktop-os.css">
@@ -1387,6 +1387,11 @@ try{
         </div>
       </div>
     </div>
+    <!-- ASSEGNA A (solo task di team) -->
+    <div class="nt-block" id="ntAssignBlock" style="display:none">
+      <span class="nt-block-l"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span data-i18n="assign_to">Assegna a</span></span>
+      <div class="ntas-row js-dragscroll" id="ntAssign"></div>
+    </div>
     <!-- GRUPPO + CATEGORIA sulla stessa riga -->
     <div class="nt-row2">
       <div class="nt-col">
@@ -1672,6 +1677,6 @@ try{
 <script src="themes.js"></script>
 <script src="storage.js"></script>
 <script src="sync.js"></script>
-<script src="app.js?v=91"></script>
+<script src="app.js?v=93"></script>
 </body>
 </html>

@@ -2427,7 +2427,7 @@ function renderTeamMain(){
       const grid=memList.length?memList.map(o=>col(o.m,o.idx)).join(''):`<div class="task-empty">${tr('tpb_none')}</div>`;
       body=`${strip}<div class="tpb-grid">${grid}</div>`;
     }
-    main.innerHTML=`<div class="tk-filters tt-filters">${chips}</div>
+    main.innerHTML=`<div class="tk-filters tt-filters js-dragscroll">${chips}</div>
       ${body}`;
   }else if(teamSection==='feed'){
     const feed=Array.isArray(t.feed)?t.feed.slice().reverse():[];
@@ -2480,9 +2480,18 @@ document.getElementById('teamQuickLinks').addEventListener('click',e=>{const q=e
   function place(el){const t=ensure();const r=el.getBoundingClientRect(),tr=t.getBoundingClientRect();
     let x=r.left+r.width/2-tr.width/2;x=Math.max(8,Math.min(x,window.innerWidth-tr.width-8));
     let y=r.top-tr.height-8;if(y<8)y=r.bottom+8;t.style.left=x+'px';t.style.top=y+'px';}
-  document.addEventListener('mouseover',e=>{const el=e.target.closest('[data-tip]');if(!el)return;const txt=el.getAttribute('data-tip');if(!txt){if(tip)tip.classList.remove('show');return;}const t=ensure();t.innerHTML=txt;t.classList.add('show');place(el);});
+  document.addEventListener('mouseover',e=>{const el=e.target.closest('[data-tip]');if(!el)return;const txt=el.getAttribute('data-tip');if(!txt){if(tip)tip.classList.remove('show');return;}
+    // mostra solo se il testo è davvero troncato (ci sono i puntini)
+    const tx=el.querySelector('.tpb-t')||el;if(tx.scrollWidth<=tx.clientWidth+1){if(tip)tip.classList.remove('show');return;}
+    const t=ensure();t.innerHTML=txt;t.classList.add('show');place(el);});
   document.addEventListener('mouseout',e=>{const el=e.target.closest('[data-tip]');if(el&&tip)tip.classList.remove('show');});
   document.addEventListener('mousedown',()=>{if(tip)tip.classList.remove('show');});
+})();
+// Scroll dei filtri (team) trascinando col mouse
+(function(){let el=null,sx=0,ss=0,moved=false;
+  document.addEventListener('mousedown',e=>{const f=e.target.closest('.js-dragscroll');if(!f)return;el=f;sx=e.clientX;ss=f.scrollLeft;moved=false;f.classList.add('dragging');});
+  document.addEventListener('mousemove',e=>{if(!el)return;const dx=e.clientX-sx;if(Math.abs(dx)>3)moved=true;el.scrollLeft=ss-dx;});
+  document.addEventListener('mouseup',()=>{if(el){el.classList.remove('dragging');if(moved){const f=el,kill=ev=>{ev.stopPropagation();ev.preventDefault();f.removeEventListener('click',kill,true);};f.addEventListener('click',kill,true);}}el=null;});
 })();
 document.addEventListener('click',e=>{
   const m=document.getElementById('teamQuickLinks');if(m&&m.classList.contains('open')&&!e.target.closest('#teamQuickLinks')&&!e.target.closest('#teamMenuBtn'))m.classList.remove('open');
@@ -4775,6 +4784,8 @@ function taskSideTags(t,teamView){
   if(t.gid!=null&&typeof GROUPS!=='undefined'){const g=GROUPS.find(x=>x.id===t.gid);if(g)grpPill='<span class="tk-tag tk-grp" data-grpopen="'+g.id+'" title="'+bdEsc(g.name)+'"><span class="tk-gfold" style="color:'+g.color+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span>'+bdEsc(g.name)+'</span>';}
   return scopePill+catPill+grpPill;
 }
+// Una task è "mia" se personale, o se di team ma assegnata a me (Umberto)
+function taskMine(t){if(typeof t.scope!=='string'||t.scope.indexOf('team:')!==0)return true;const tid=+t.scope.split(':')[1];const tm=(typeof TEAMS!=='undefined')?TEAMS.find(x=>x.tid===tid):null;if(!tm||!tm.members)return true;const meIdx=tm.members.indexOf(meMember(tm));return t.assignee===meIdx;}
 function taskRow(t,showDate,teamView){
   const lvl=t.level?`<div class="lvl"><button class="lvl-btn" data-id="${t.id}" data-act="dec">−</button><span class="lvl-num">${t.level.cur}/${t.level.tgt}</span><button class="lvl-btn" data-id="${t.id}" data-act="inc">+</button></div>`:'';
   const chk=t.level?'':`<div class="check" data-id="${t.id}">${SVG.check}</div>`;
@@ -4827,7 +4838,7 @@ function renderTasks(){
   // Se la vista è "agganciata a oggi" ma è passato un giorno (PWA tenuta aperta oltre la mezzanotte),
   // ri-sincronizza lo scope a oggi così le task in ritardo restano sempre visibili.
   if(ovScope.mode==='day'&&ovScope.today&&ovScope.d&&cmpDate(ovScope.d,realToday())!==0){ovScope.d=realToday();}
-  const ff=TASKS.filter(t=>(taskFilter==='all'||t.scope===taskFilter)&&(catFilter==null||t.catId===catFilter));
+  const ff=TASKS.filter(t=>(taskFilter==='all'||t.scope===taskFilter)&&(catFilter==null||t.catId===catFilter)&&taskMine(t));
   const gv=(groupView!=null)?GROUPS.find(g=>g.id===groupView):null;
   const today0=realToday();
   // Vista "Oggi": mostra In ritardo (passate non completate) / Oggi / In arrivo
@@ -5240,16 +5251,17 @@ tkOv.addEventListener('click',e=>{if(!e.target.closest('.due-wrap')){ntCloseCal(
 function renderNtAssign(){
   if(!ntTeamCtx)return;
   const me=meMember(ntTeamCtx),mi=ntTeamCtx.members.indexOf(me);
-  let html=`<div class="s${ntAssignee==='me'?' active':''}" data-asg="me">${tr('assignee_me')}</div>`;
-  ntTeamCtx.members.forEach((m,idx)=>{if(idx!==mi)html+=`<div class="s${ntAssignee==='m'+idx?' active':''}" data-asg="m${idx}">${m.name}</div>`;});
+  const chip=(asg,c,ini,name)=>`<button type="button" class="ntas-p${ntAssignee===asg?' on':''}" data-asg="${asg}"><span class="ntas-av" style="background:${c}">${ini}</span><span class="ntas-n">${bdEsc(name)}</span></button>`;
+  let html=chip('me',me.c,me.i,tr('assignee_me'));
+  ntTeamCtx.members.forEach((m,idx)=>{if(idx!==mi)html+=chip('m'+idx,m.c,m.i,firstName(m.name));});
   const as=document.getElementById('ntAssign');if(as)as.innerHTML=html;
 }
 {const as=document.getElementById('ntAssign');if(as)as.addEventListener('click',e=>{const s=e.target.closest('[data-asg]');if(!s)return;ntAssignee=s.dataset.asg;renderNtAssign();});}
 function ntUpdateColorDot(){const d=document.getElementById('ntColorDot');if(d)d.style.background=ntColor;}
 {const cd=document.getElementById('ntColorDot');if(cd)cd.addEventListener('click',()=>{const i=TCOLORS.indexOf(ntColor);ntColor=TCOLORS[(i+1)%TCOLORS.length];ntUpdateColorDot();});}
 // switch Task / Gruppo
-try{Object.assign(STR.it,{nt_pick_title:'Crea',nt_pick_sub:'Cosa vuoi creare?',nt_type_task:'Task singola',nt_type_task_d:'Aggiungi una singola task.',nt_type_group:'Gruppo di task',nt_type_group_d:'Raggruppa più task insieme.',nt_type_dictate:'Detta le task',nt_type_dictate_d:'Scrivi o detta più task.',nt_dictate_hint:'Scrivi (o detta) una task per riga.',nt_dictate_create:'Crea le task',nt_dictate_done:'task create',nt_sub_edit:'Modifica i dettagli della task.',grp_name_ph2:'Nome del gruppo'});
-Object.assign(STR.en,{nt_pick_title:'Create',nt_pick_sub:'What do you want to create?',nt_type_task:'Single task',nt_type_task_d:'Add a single task.',nt_type_group:'Group of tasks',nt_type_group_d:'Group several tasks together.',nt_type_dictate:'Dictate tasks',nt_type_dictate_d:'Write or dictate several tasks.',nt_dictate_hint:'Write (or dictate) one task per line.',nt_dictate_create:'Create tasks',nt_dictate_done:'tasks created',nt_sub_edit:'Edit the task details.',grp_name_ph2:'Group name'});}catch(e){}
+try{Object.assign(STR.it,{nt_pick_title:'Crea',nt_pick_sub:'Cosa vuoi creare?',nt_type_task:'Task singola',nt_type_task_d:'Aggiungi una singola task.',nt_type_group:'Gruppo di task',nt_type_group_d:'Raggruppa più task insieme.',nt_type_dictate:'Detta le task',nt_type_dictate_d:'Scrivi o detta più task.',nt_dictate_hint:'Scrivi (o detta) una task per riga.',nt_dictate_create:'Crea le task',nt_dictate_done:'task create',nt_sub_edit:'Modifica i dettagli della task.',grp_name_ph2:'Nome del gruppo',nt_pick_team:'Crea task di gruppo'});
+Object.assign(STR.en,{nt_pick_title:'Create',nt_pick_sub:'What do you want to create?',nt_type_task:'Single task',nt_type_task_d:'Add a single task.',nt_type_group:'Group of tasks',nt_type_group_d:'Group several tasks together.',nt_type_dictate:'Dictate tasks',nt_type_dictate_d:'Write or dictate several tasks.',nt_dictate_hint:'Write (or dictate) one task per line.',nt_dictate_create:'Create tasks',nt_dictate_done:'tasks created',nt_sub_edit:'Edit the task details.',grp_name_ph2:'Group name',nt_pick_team:'Create group task'});}catch(e){}
 let ntType='task';
 const NT_TYPES={
   task:{ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6h10M10 12h10M10 18h10"/><path d="M3.5 6l1.2 1.2L7 5M3.5 12l1.2 1.2L7 11M3.5 18l1.2 1.2L7 17"/></svg>'},
@@ -5263,6 +5275,7 @@ function ntShowFormFor(type){
   if(tf)tf.style.display=(type==='task')?'':'none';
   if(gf)gf.style.display=(type==='group')?'':'none';
   if(df)df.style.display=(type==='dictate')?'':'none';
+  {const ab=document.getElementById('ntAssignBlock');if(ab)ab.style.display=(type==='task'&&ntTeamCtx)?'':'none';if(type==='task'&&ntTeamCtx)renderNtAssign();}
   if(type==='group')renderNtGrpList();
 }
 function ntSetMode(m){ntMode=m;ntShowFormFor(m);}
@@ -5393,7 +5406,7 @@ function openNewTask(teamCtx){
   document.querySelectorAll('#ntDueType .s').forEach(x=>x.classList.toggle('active',x.dataset.due==='date'));
   document.querySelectorAll('#ntDateQuick .nt-dchip').forEach(x=>x.classList.toggle('active',x.dataset.day==='0'));
   document.getElementById('ntDateBtn').style.display='flex';document.getElementById('ntMonthBtn').style.display='none';document.getElementById('ntDateQuick').style.display='flex';ntCloseCal();ntCloseMonth();ntUpdateDateLabel();ntUpdateMonthLabel();
-  {const mt=document.getElementById('ntModalTitle');if(mt)mt.textContent=tr('nt_pick_title');}
+  {const mt=document.getElementById('ntModalTitle');if(mt)mt.textContent=ntTeamCtx?tr('nt_pick_team'):tr('nt_pick_title');}
   document.getElementById('ntCreate').textContent=tr('nt_create');
   document.getElementById('ntDelete').style.display='none';
   // advanced chiuso, switch su Task
@@ -6135,14 +6148,11 @@ document.getElementById('ntCreate').addEventListener('click',()=>{
   if(ntCatId!=null)task.catId=ntCatId;
   if(ntTeamCtx){
     task.scope='team:'+ntTeamCtx.tid;
-    if(ntAssignee==='me'){TASKS.push(task);tasksTodayInc();logFeed(ntTeamCtx,firstName(USER.name)+' '+tr('feed_created')+' "'+task.title+'"');}
-    else{
-      const mi=+ntAssignee.slice(1);let dl='';
-      if(task.date)dl=`${task.date[0]}-${String(task.date[1]+1).padStart(2,'0')}-${String(task.date[2]).padStart(2,'0')}`;
-      else if(task.month)dl=`${task.month[0]}-${String(task.month[1]+1).padStart(2,'0')}`;
-      chatMsgs(ntTeamCtx,'dm:'+mi).push({proposal:true,mine:true,title:task.title,deadline:dl,status:'pending',draft:task});
-      showToast(tr('proposal_sent'));
-    }
+    const meI=ntTeamCtx.members.indexOf(meMember(ntTeamCtx));
+    task.assignee=(ntAssignee==='me')?meI:+ntAssignee.slice(1);
+    if(typeof ensureTeamCategory==='function'){const c=ensureTeamCategory(ntTeamCtx);if(c&&task.catId==null)task.catId=c.id;}
+    TASKS.push(task);tasksTodayInc();saveTasks();
+    logFeed(ntTeamCtx,firstName(USER.name)+' '+tr('feed_created')+' "'+task.title+'"');
     tkOv.classList.remove('open');if(typeof renderTeamMain==='function')renderTeamMain();
     return;
   }
