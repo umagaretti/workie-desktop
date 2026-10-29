@@ -2326,6 +2326,7 @@ function teamPersonCol(t,m,idx,allTT){
 function renderTeamMain(){
   const main=document.getElementById('teamDetailMain');if(!main||!curTeam)return;
   teamUpdateSecCrumb();
+  {const addB=document.getElementById('teamAddTask');if(addB)addB.style.display=(teamSection==='tasks')?'':'none';}
   const t=curTeam,owner=!!t.owner;
   if(teamSection==='overview'){
     const spaces=userSpaces(t);
@@ -2419,7 +2420,7 @@ function renderTeamMain(){
         const tasks=allTT.filter(x=>x.assignee===idx&&sameDue(x)).sort((a,b)=>(a.done?1:0)-(b.done?1:0));
         const rows=tasks.length?tasks.map(x=>{const tt=bdEsc(taskTitle(x)).replace(/"/g,'&quot;');
           const chk=isMe?`<div class="check" data-id="${x.id}">${SVG.check}</div>`:`<div class="check ro">${SVG.check}</div>`;
-          return `<div class="tpb-task${x.done?' done':''}" title="${tt}">${chk}<span class="tpb-t">${bdEsc(taskTitle(x))}</span></div>`;}).join(''):`<div class="tpb-empty">${tr('tpb_none')}</div>`;
+          return `<div class="tpb-task${x.done?' done':''}" data-tip="${tt}">${chk}<span class="tpb-t">${bdEsc(taskTitle(x))}</span></div>`;}).join(''):`<div class="tpb-empty">${tr('tpb_none')}</div>`;
         return `<div class="tpb-col"><div class="tpb-head"><div class="tpb-av" style="background:${m.c}">${m.i}</div><div class="tpb-hinfo"><div class="tpb-name">${firstName(m.name)}</div><div class="tpb-bar"><i style="width:${Math.round(n/maxLoad*100)}%;background:${m.c}"></i></div></div><div class="tpb-n">${n}</div></div><div class="tpb-tasks">${rows}</div></div>`;};
       const roleF=teamTaskView.indexOf('role:')===0?teamTaskView.slice(5):null;
       const memList=t.members.map((m,idx)=>({m,idx})).filter(o=>!roleF||(o.m.tags||[]).includes(roleF));
@@ -2473,6 +2474,16 @@ document.getElementById('teamQuickLinks').addEventListener('click',e=>{const q=e
   renderTeamNotif();n.classList.add('open');const d=document.getElementById('teamBellDot');if(d)d.style.display='none';});}
 {const ct=document.getElementById('teamCrumbTeam');if(ct)ct.addEventListener('click',()=>{if(!curTeam)return;teamSection='overview';delConfirm=false;renderTeamQuickLinks();renderTeamMain();});}
 {const at=document.getElementById('teamAddTask');if(at)at.addEventListener('click',()=>{if(curTeam)openNewTask(curTeam);});}
+// Tooltip custom istantaneo (elementi con data-tip)
+(function(){let tip=null;
+  function ensure(){if(!tip){tip=document.createElement('div');tip.className='wk-tip';document.body.appendChild(tip);}return tip;}
+  function place(el){const t=ensure();const r=el.getBoundingClientRect(),tr=t.getBoundingClientRect();
+    let x=r.left+r.width/2-tr.width/2;x=Math.max(8,Math.min(x,window.innerWidth-tr.width-8));
+    let y=r.top-tr.height-8;if(y<8)y=r.bottom+8;t.style.left=x+'px';t.style.top=y+'px';}
+  document.addEventListener('mouseover',e=>{const el=e.target.closest('[data-tip]');if(!el)return;const txt=el.getAttribute('data-tip');if(!txt){if(tip)tip.classList.remove('show');return;}const t=ensure();t.innerHTML=txt;t.classList.add('show');place(el);});
+  document.addEventListener('mouseout',e=>{const el=e.target.closest('[data-tip]');if(el&&tip)tip.classList.remove('show');});
+  document.addEventListener('mousedown',()=>{if(tip)tip.classList.remove('show');});
+})();
 document.addEventListener('click',e=>{
   const m=document.getElementById('teamQuickLinks');if(m&&m.classList.contains('open')&&!e.target.closest('#teamQuickLinks')&&!e.target.closest('#teamMenuBtn'))m.classList.remove('open');
   const n=document.getElementById('teamNotif');if(n&&n.classList.contains('open')&&!e.target.closest('#teamNotif')&&!e.target.closest('#teamBell'))n.classList.remove('open');
@@ -7701,21 +7712,18 @@ function seedExampleTeams(){
     cm:{'dm:1':[{self:false,text:'Ciao! A che punto siamo con l\'episodio 4?'},{self:true,text:'Scaletta pronta per domani 👍'}],
         'grp:1':[{self:false,text:'Ho programmato i post per questa settimana'},{self:true,text:'Perfetto, grazie Giulia!'}]}
   };
-  addTask(t1.tid,'Preparare scaletta episodio 4',1,2,false);
-  addTask(t1.tid,'Programmare post Instagram',2,1,false);
-  addTask(t1.tid,'Revisione articolo economia',3,4,false);
-  addTask(t1.tid,'Approvare piano editoriale',0,-1,true);
-  addTask(t1.tid,'Call con il cliente',0,0,false);        // Umberto oggi
-  addTask(t1.tid,'Registrare episodio 5',1,0,false);       // Marco oggi
-  addTask(t1.tid,'Storie Instagram',2,0,false);            // Giulia oggi
-  addTask(t1.tid,'Montaggio reel',4,0,false);              // Luca oggi
-  addTask(t1.tid,'Copertina podcast',5,0,false);           // Anna oggi
-  addTask(t1.tid,'Ottimizzare articolo SEO',6,0,false);    // Paolo oggi
-  addTask(t1.tid,'Newsletter settimanale',3,0,false);      // Sara oggi
-  addTask(t1.tid,'Intervista ospite',1,3,false);           // Marco +3
-  addTask(t1.tid,'Rivedere grafiche social',5,1,false);    // Anna domani
-  addTask(t1.tid,'Keyword research',6,2,false);            // Paolo +2
-  t1.act=12;
+  // 5-7 task a persona, tutte per oggi (per vedere lo scroll nelle colonne)
+  const T1TASKS=[
+    ['Call con il cliente','Approvare piano editoriale','Revisione budget','Riunione team','Firmare il contratto','Feedback al team','Pianificare la settimana'], // Umberto 7
+    ['Registrare episodio 5','Montare episodio 4','Scaletta episodio 6','Intervista ospite','Caricare podcast','Promo episodio','Note di montaggio'], // Marco 7
+    ['Storie Instagram','Programmare i post','Rispondere ai DM','Reel della settimana','Analisi engagement','Calendario social'], // Giulia 6
+    ['Articolo economia','Newsletter settimanale','Revisione bozza','Intervista scritta','Titoli SEO','Correzione bozze'], // Sara 6
+    ['Montaggio reel','Color grading','Export video','Sottotitoli','Sigla nuova'], // Luca 5
+    ['Copertina podcast','Grafiche social','Template storie','Logo cliente','Banner sito'], // Anna 5
+    ['Keyword research','Ottimizzare articolo','Audit SEO','Link building','Report posizioni'] // Paolo 5
+  ];
+  T1TASKS.forEach((list,idx)=>list.forEach((title,k)=>addTask(t1.tid,title,idx,0,(idx===0&&k===1))));
+  t1.act=T1TASKS.reduce((s,l)=>s+l.length,0)-1;
   // --- Team 2: Studio Cervino ---
   const t2={tid:TEAM_SEQ++,name:'Studio Cervino',color:'#ef9a9a',act:0,owner:true,desc:'Campagna Cervino',invites:[],spaces:[],
     members:[
