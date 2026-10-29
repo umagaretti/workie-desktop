@@ -2343,15 +2343,12 @@ function renderTeamMain(){
       <div class="section-h2" style="margin-top:24px">${tr('nav_projects')}</div>${projGrid}`;
   }else if(teamSection==='members'){
     const manage=canManage(t);
-    const maxLoad=Math.max(1,...t.members.map((m,idx)=>memberOpenTasks(t,idx)));
     const rows=t.members.map((m,idx)=>{
       const adm=m.admin?`<span class="m-admin">Admin</span>`:'';
       const tags=(m.tags||[]).map(tg=>`<span class="m-tag" style="background:${tagColor(tg)}22;color:${tagColor(tg)}">${tg}</span>`).join('');
-      const load=memberOpenTasks(t,idx);const over=load>=4;
-      const wl=`<div class="m-load" title="${load} ${tr('open_tasks')}"><div class="m-load-bar"><i style="width:${Math.round(load/maxLoad*100)}%;background:${over?'#e0675a':'var(--accent)'}"></i></div><span class="m-load-n${over?' over':''}">${load}</span></div>`;
-      return `<div class="member-row${manage?' clickable':''}" data-mi="${idx}"><div class="m-av" style="background:${m.c}">${m.i}</div><div class="m-main"><div class="m-nameline"><span class="m-name">${m.name}</span>${adm}</div>${tags?`<div class="m-tags">${tags}</div>`:''}</div>${wl}</div>`;
+      return `<div class="member-row${manage?' clickable':''}" data-mi="${idx}"><div class="m-av" style="background:${m.c}">${m.i}</div><span class="m-name">${m.name}</span>${adm}${tags?`<div class="m-tags">${tags}</div>`:''}</div>`;
     }).join('');
-    const inv=(t.invites||[]).map(em=>`<div class="member-row pending"><div class="m-av invite">@</div><div class="m-name">${em}</div><div class="m-role">${tr('pending')}</div></div>`).join('');
+    const inv=(t.invites||[]).map(em=>`<div class="member-row pending"><div class="m-av invite">@</div><span class="m-name">${em}</span><span class="m-role">${tr('pending')}</span></div>`).join('');
     const btn=manage?`<button class="btn-add" id="inviteMemberBtn">${tr('invite_email')}</button>`:'';
     main.innerHTML=`<div class="section-h2">${tr('ql_members')} · ${t.members.length}</div><div style="max-width:600px">${rows}${inv}${btn}</div>`;
   }else if(teamSection==='chat'){
