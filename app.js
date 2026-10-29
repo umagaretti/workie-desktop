@@ -2947,13 +2947,16 @@ function ibRenderReader(){
 function renderInboxPage(){
   const body=document.getElementById('ibBody'),cs=document.getElementById('ibConnectScreen'),mng=document.getElementById('ibManage'),badge=document.getElementById('ibUnreadBadge');
   const head=document.querySelector('[data-page="inbox"] .ib-head');
+  const crumb=document.getElementById('ibCrumb');
   if(!ibConnected()){
     if(head)head.style.display='none'; // la connect screen ha il suo header (stile Tasks)
+    if(crumb)crumb.style.display='none';
     {const tb=document.getElementById('ibToolbar');if(tb)tb.style.display='none';}
     if(body)body.style.display='none';if(cs)cs.style.display='flex';if(mng)mng.style.display='none';if(badge)badge.style.display='none';
     renderInboxConnect();return;
   }
   if(head)head.style.display='';
+  if(crumb){crumb.style.display='';const em=document.getElementById('ibCrumbEmail');if(em){const a=(typeof ibAccounts==='function')?ibAccounts()[0]:null;em.textContent=(a&&a.email)||'umberto@work.app';}}
   if(cs)cs.style.display='none';if(body)body.style.display='flex';if(mng)mng.style.display='';
   {const tb=document.getElementById('ibToolbar');if(tb)tb.style.display='flex';}
   if(typeof gmailConnected==='function'&&gmailConnected()&&!GMAIL_MSGS.length&&!gmailLoading&&typeof gmailFetch==='function')gmailFetch();
