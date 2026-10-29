@@ -3490,13 +3490,22 @@ function renderOvPlan(){
  let ovcTaskSel=ovcDraft.task;
  function ovcSelTask(){return ovcTaskSel!=null?TASKS.find(x=>x.id===ovcTaskSel):null;}
  function ovcTaskLabel(){const t=ovcSelTask();return t?taskTitle(t):tr('ovc_pick');}
- function ovcSyncLabels(){const lbl=ovcTaskLabel();['ovcTaskLbl1','ovcTaskLbl2'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=lbl;});const cb=document.getElementById('ovChatbox');if(cb)cb.classList.toggle('has-task',ovcTaskSel!=null);const sd=document.getElementById('ovcSend');if(sd)sd.setAttribute('data-tip',tr('ovc_pick'));}
+ function ovcSyncLabels(){const lbl=ovcTaskLabel();['ovcTaskLbl1','ovcTaskLbl2'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=lbl;});const cb=document.getElementById('ovChatbox');if(cb)cb.classList.toggle('has-task',ovcTaskSel!=null);const sd=document.getElementById('ovcSend');if(sd)sd.setAttribute('data-tip',tr('ovc_pick'));
+   // Slash della pill/scope: prende il colore della task selezionata (default viola quando vuoto).
+   const col=ovcTaskSel!=null?ovcTaskColor(ovcSelTask()):null;
+   document.querySelectorAll('#ovChatbox .ovc-slash').forEach(s=>{s.style.background=col?col+'26':'';s.style.color=col||'';});
+   document.querySelectorAll('#ovChatbox .ovc-taskbtn,#ovChatbox .ovc-scope').forEach(b=>{if(col){b.style.borderColor=col+'66';b.style.background=col+'14';}else{b.style.borderColor='';b.style.background='';}});}
  function ovcAutoGrow(){const ta=document.getElementById('ovcInput');if(!ta)return;ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,160)+'px';ovcLift();}
  /* Fa SALIRE il saluto "Ready to tackle…" quando il box si espande, così non viene coperto.
     Alza il saluto esattamente di quanto il box cresce verso l'alto (misura in tempo reale). */
  function ovcLift(){const cb=document.getElementById('ovChatbox');const gr=document.getElementById('greet');if(!gr)return;
    if(!cb||!cb.classList.contains('expanded')){gr.style.transform='';return;}
-   const exp=document.getElementById('ovcExpanded');const h=exp?exp.scrollHeight:52;
+   // Altezza FINALE del box calcolata dai pezzi stabili (non da scrollHeight del grid,
+   // che è inaffidabile mentre la lista sta animando → causava lo scatto del saluto).
+   const exp=document.getElementById('ovcExpanded');
+   const top=exp?exp.querySelector('.ovc-top'):null;const row=exp?exp.querySelector('.ovc-inputrow'):null;
+   let h=18;if(top)h+=top.offsetHeight;if(row)h+=row.offsetHeight;
+   if(cb.classList.contains('listopen')){const list=document.getElementById('ovcList');const lh=list?Math.min(list.scrollHeight,240):0;if(lh)h+=lh+15;}
    gr.style.transform='translateY(-'+Math.max(0,h-52+16)+'px)';}
  /* Colore della task: categoria → gruppo → viola di default (pronto per le categorie colorate). */
  function ovcTaskColor(t){try{if(t&&t.catId!=null&&typeof catById==='function'){const c=catById(t.catId);if(c&&c.color)return c.color;}if(t&&t.gid!=null&&typeof GROUPS!=='undefined'){const g=GROUPS.find(x=>x.id===t.gid);if(g&&g.color)return g.color;}}catch(e){}return '#8168e6';}

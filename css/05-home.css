@@ -84,7 +84,7 @@
 .ov-chatbox.listopen .ovc-listwrap{grid-template-rows:1fr;}
 .ovc-list{min-height:0;overflow:hidden;padding:0 2px;}
 .ov-chatbox.listopen .ovc-list{overflow-y:auto;max-height:240px;margin-bottom:7px;padding-bottom:7px;border-bottom:1px solid var(--border-soft);}
-.ovc-list-h{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding:8px 10px 6px;}
+.ovc-list-h{font-size:11px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding:8px 10px 6px;}
 /* item compatto su UNA riga: icona piccola · titolo a sinistra · data a destra */
 .ovc-item{display:flex;align-items:center;gap:9px;width:100%;background:none;border:none;text-align:left;color:var(--text);font-family:var(--sans);padding:6px 10px;border-radius:9px;cursor:pointer;transition:background .12s;}
 .ovc-item:hover{background:var(--panel-2);}
