@@ -132,10 +132,10 @@
 /* connect screen: header "Inbox" in alto a sinistra (colonna stile Tasks) + card centrale */
 .ib-connect-screen{flex:1;min-height:0;display:flex;flex-direction:column;padding:0;}
 .ib-cs-head{display:flex;align-items:center;gap:12px;max-width:720px;width:100%;margin:0 auto;padding:20px 0 0;}
-.ib-cs-center{flex:1;display:flex;align-items:center;justify-content:center;padding:96px 20px 48px;}
+.ib-cs-center{flex:1;display:flex;align-items:center;justify-content:center;padding:36px 20px 92px;}
 .ib-cs-card{width:100%;max-width:420px;text-align:center;background:none;border:none;border-radius:0;padding:0;box-shadow:none;}
 .ib-cs-logos{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:22px;}
-.ib-cs-logos{margin-bottom:20px;}
+.ib-cs-logos{margin:46px 0 20px;}
 .ib-cs-logo{flex:none;width:34px;height:34px;display:grid;place-items:center;background:none;border:none;color:var(--accent);}
 .ib-cs-logo svg{width:26px;height:26px;}
 .ib-cs-logo.solo{width:52px;height:52px;}
