@@ -64,7 +64,7 @@
 .app.ai-drawer-open .aid-x{display:none;}
 /* ===== Pagina Inbox: due pannelli (lista mail + lettura) ===== */
 [data-page="inbox"].page.active{display:flex;flex-direction:column;}
-.ib-head{display:flex;align-items:center;gap:12px;padding:20px 2px 16px;}
+.ib-head{display:flex;align-items:center;gap:12px;padding:100px 2px 16px;}
 .ib-headic{color:#8168e6;}
 .ib-title{flex:1;min-width:0;font-family:var(--serif);font-size:26px;font-weight:600;letter-spacing:-.02em;color:var(--text);}
 .ib-connect{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--border);background:var(--panel);color:var(--text-dim);font-size:13px;font-weight:500;font-family:var(--sans);cursor:pointer;transition:background .15s,color .15s;}
