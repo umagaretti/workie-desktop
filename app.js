@@ -119,6 +119,10 @@ function openDaySide(force){
   const dBody=document.getElementById('dayDrawerBody');if(dBody)dBody.addEventListener('click',e=>{
     if(e.target.closest('[data-dsplan]')){openDaySide(false);if(typeof go==='function')go('planday');return;}
     const row=e.target.closest('.dw-wi[data-dsw]');if(row){const id=+row.dataset.dsw;openDaySide(false);if(typeof openTaskPage==='function')openTaskPage(id);return;}
+  });
+  // tasti routine sotto il titolo: per ora aprono le Impostazioni generali (la voce dedicata arriva dopo)
+  const dr=document.getElementById('dayDrawer');if(dr)dr.addEventListener('click',e=>{
+    if(e.target.closest('[data-dsroutine]')||e.target.closest('[data-dssettings]')){openDaySide(false);if(typeof go==='function')go('settings');return;}
   });}
  const ax=document.getElementById('aidClose');if(ax)ax.addEventListener('click',()=>openAiSide(false));
  const adr=document.getElementById('aiDrawer');if(adr)adr.addEventListener('click',e=>{
@@ -462,8 +466,8 @@ Object.assign(STR.ja,{nav_home:`ホーム`,nav_desktop:`Daily`,nav_tasks:`タス
 Object.assign(STR.ko,{nav_home:`홈`,nav_desktop:`Daily`,nav_tasks:`작업`,nav_team:`팀`,nav_projects:`프로젝트`,nav_connections:`연결`,nav_settings:`설정`,nav_social:`소셜`,nav_workflow:`Workflow`,nav_resolve:`Resolve`,nav_soon:`곧 출시`,g_morning:`좋은 아침이에요`,g_afternoon:`안녕하세요`,g_evening:`좋은 저녁이에요`,home_watch:`살펴볼 만한`,dw_upcoming:`예정`,new_task:`+ 새 작업`,new_project:`+ 새 프로젝트`,team_create:`+ 팀 만들기`,team_join:`참여`,back:`뒤로`,al_all_clear:`모두 완료, 마감된 항목이 없어요.`,g_overdue:`기한 초과`,g_today:`오늘`,connect:`연결`,nt_group:`그룹`,grp_all:`전체`,grp_none:`없음`,grp_new:`새 그룹`,grp_manage:`그룹 관리`,grp_link:`프로젝트에 연결`,grp_link_none:`프로젝트 없음`,proj_link_group:`연결된 그룹`,proj_link_none:`그룹 없음`,gm_title:`그룹 관리`,gm_add:`추가`,gm_active:`활성`,set_language:`언어`,set_appearance:`화면`,stm_prefs:`환경설정`,stm_home:`홈`,stm_notif:`알림`,stm_notif_push:`푸시 알림`,stm_notif_push_d:`메시지, 초대, 작업 알림에 대한 알림입니다.`,stm_generale:`일반`,stm_privacy:`개인정보`,stm_billing:`결제`,stm_features:`기능`,stm_profile:`프로필`,set_account:`계정`,stm_home_daily:`홈에 Daily 표시`,stm_home_tasks:`홈에 작업 표시`,stm_g_settings:`설정`,stm_g_desktop:`데스크톱 앱`,stm_g_custom:`사용자 지정`,mcs_title:`만들기`,mcs_task:`새 작업`,mcs_project:`새 프로젝트`,dw_setup:`하루 설정`,dw_setup_title:`하루를 설정하세요`,soc_tab_recent:`최근 채팅`,soc_tab_conn:`연결`,soc_tab_team:`팀`,soc_add:`+ 추가`,soc_sub:`내 네트워크: 채팅, 연결, 팀`,pd_board:`보드`,pd_files:`파일`,members_word:`멤버`,pd_task_ph:`프로젝트에 작업 추가…`,add:`추가`,requests:`요청`,no_requests:`요청 없음`,accept:`수락`,decline:`거절`,invited_you:`님이 초대했습니다:`,grp_save:`저장`,grp_create:`그룹 만들기`,grp_delete:`그룹 삭제`,grp_name:`그룹 이름`,stm_save:`저장`,coming_soon:`곧 출시`,splash_lang:`언어 선택`});
 
 // Etichette impostazioni interfaccia (sfondo animato). tr() fa fallback en→it per le altre lingue.
-Object.assign(STR.it,{set_interface:`Interfaccia`,set_gradient:`Sfondo animato`,set_gradient_d:`La luce viola che si muove dietro l'app.`,ds_noplan_t:`Nessun piano per oggi`,ds_noplan_d:`Crea il piano della giornata e lo vedrai qui, con gli orari.`,ds_make_plan:`Pianifica la giornata`});
-Object.assign(STR.en,{set_interface:`Interface`,set_gradient:`Animated background`,set_gradient_d:`The purple light drifting behind the app.`,ds_noplan_t:`No plan for today`,ds_noplan_d:`Create your day plan and it shows up here, with times.`,ds_make_plan:`Plan my day`});
+Object.assign(STR.it,{set_interface:`Interfaccia`,set_gradient:`Sfondo animato`,set_gradient_d:`La luce viola che si muove dietro l'app.`,ds_noplan_t:`Nessun piano per oggi`,ds_noplan_d:`Crea il piano della giornata e lo vedrai qui, con gli orari.`,ds_make_plan:`Pianifica la giornata`,ds_edit_routine:`Modifica la routine`,ds_day_settings:`Impostazioni giornata`});
+Object.assign(STR.en,{set_interface:`Interface`,set_gradient:`Animated background`,set_gradient_d:`The purple light drifting behind the app.`,ds_noplan_t:`No plan for today`,ds_noplan_d:`Create your day plan and it shows up here, with times.`,ds_make_plan:`Plan my day`,ds_edit_routine:`Edit routine`,ds_day_settings:`Day settings`});
 
 let LANG=(function(){try{return localStorage.getItem('workie_lang')||'en';}catch(e){return 'en';}})();
 function tr(k){const o=STR[LANG];if(o&&o[k]!=null)return o[k];if(STR.en&&STR.en[k]!=null)return STR.en[k];if(STR.it&&STR.it[k]!=null)return STR.it[k];return k;}
