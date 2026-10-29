@@ -5421,27 +5421,10 @@ function renderTaskPage(){
           <div class="tdw-chat" id="rsvMsgs"></div>
           <div class="rsv-composer" id="rsvComposer">
             <div class="rsv-box" id="rsvBox">
-              <div class="rsv-att" id="rsvAtt"></div>
-              <div class="rsv-quiz" id="rsvQuiz"></div>
-              <div class="rsv-cta" id="rsvCta">
-                <button type="button" class="rsv-cta-btn" id="rsvRoadmapCTA"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.2"/><circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="12" r="2.2"/><path d="M8.2 6H14a2 2 0 0 1 2 2v2M8.2 18H14a2 2 0 0 0 2-2v-2"/></svg><span>${tr('rsv_cta_roadmap')}</span></button>
-              </div>
               <div class="rsv-inrow">
-                <textarea id="rsvInput" class="rsv-ta" rows="1" placeholder="${tr('tdw_ph')}"></textarea>
+                <textarea id="rsvInput" class="rsv-ta" rows="1" placeholder="${tr('ov_chat_ph')}"></textarea>
                 <button type="button" class="rsv-sendbtn" id="rsvSend" title="${tr('pib_send')}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/></svg></button>
               </div>
-            </div>
-            <div class="rsv-below">
-              <button type="button" class="rsv-tbtn" id="rsvPlus" title="${tr('rsv_add')}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
-              <button type="button" class="rsv-tbtn" id="rsvMic" title="${tr('rsv_voice')}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 11a6 6 0 0 0 12 0"/><line x1="12" y1="17" x2="12" y2="21"/></svg></button>
-              <button type="button" class="rsv-scopechip" id="rsvScopeBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h3.5l2 2H19a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span id="rsvScopeLbl">${rsvScopeLabel(t)}</span><svg class="pib-scope-cv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
-              <div class="pib-scopemenu" id="rsvScopeMenu"></div>
-              <div class="rsv-plusmenu" id="rsvPlusMenu">
-                <button type="button" class="rsv-pm-item" id="rsvMakeRoadmap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.2"/><circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="12" r="2.2"/><path d="M8.2 6H14a2 2 0 0 1 2 2v2M8.2 18H14a2 2 0 0 0 2-2v-2"/></svg><span>${tr('rsv_fn_roadmap')}</span></button>
-                <button type="button" class="rsv-pm-item" id="rsvAnalyze"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 6 3.8 9S14.5 18.3 12 21C9.5 18.3 8.2 15 8.2 12S9.5 5.7 12 3z"/></svg><span>${tr('rsv_analyze')}</span></button>
-                <button type="button" class="rsv-pm-item" id="rsvAddImg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.6"/><path d="m21 15-5-5L5 21"/></svg><span>${tr('rsv_add_img')}</span></button>
-              </div>
-              <input type="file" id="rsvFile" accept="image/*" hidden>
             </div>
           </div>
         </div>

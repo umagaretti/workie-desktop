@@ -308,7 +308,8 @@
 .rsv-cta-btn:hover{filter:brightness(1.08);}
 .rsv-cta-btn:active{transform:scale(.99);}
 .rsv-cta-btn svg{width:17px;height:17px;}
-.rsv-box{position:relative;background:var(--inset);border:1px solid var(--border-soft);border-radius:18px;padding:5px 6px 5px 14px;transition:border-color .18s,box-shadow .18s;}
+/* box della chat identico alla home (sfondo panel, bordi 16px, ombra morbida) */
+.rsv-box{position:relative;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:5px 6px 5px 16px;box-shadow:0 10px 34px -22px rgba(0,0,0,.4);transition:border-color .18s,box-shadow .18s;}
 .rsv-box:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(129,104,230,.12);}
 .rsv-att{display:none;margin:4px 0 6px;}
 .rsv-att.on{display:block;}
@@ -317,7 +318,7 @@
 .rsv-inrow{display:flex;align-items:flex-end;gap:8px;}
 .rsv-ta{display:block;flex:1;min-width:0;box-sizing:border-box;background:none;border:none;outline:none;resize:none;color:var(--text);font-size:14.5px;line-height:1.5;font-family:var(--sans);max-height:160px;overflow-y:auto;padding:6px 0;}
 .rsv-ta::placeholder{color:var(--muted);}
-.rsv-sendbtn{flex:none;width:32px;height:32px;border-radius:9px;border:none;background:var(--panel-2);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:background .18s,color .18s;}
+.rsv-sendbtn{flex:none;width:30px;height:30px;border-radius:9px;border:none;background:var(--panel-2);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:background .18s,color .18s;}
 .rsv-sendbtn.on{background:var(--accent);color:#fff;}
 .rsv-sendbtn.on:hover{filter:brightness(1.08);}
 .rsv-sendbtn svg{width:17px;height:17px;}
