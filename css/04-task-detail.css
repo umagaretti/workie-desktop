@@ -287,7 +287,7 @@
 .rm-tasksbtn svg{width:15px;height:15px;}
 .rm-exported{margin:16px 0 2px;text-align:center;font-size:12px;color:var(--muted);font-weight:500;padding:9px;border-radius:11px;background:var(--panel-2);}
 /* Chatbox Resolve (nuova, pulita e integrata) */
-.rsv-composer{flex:none;margin-top:12px;margin-bottom:16px;will-change:transform;}
+.rsv-composer{flex:none;margin-top:12px;margin-bottom:28px;will-change:transform;}
 /* microfono accanto all'invio, stessa misura */
 .rsv-micbtn{width:30px;height:30px;}
 .rsv-micbtn svg{width:17px;height:17px;}
