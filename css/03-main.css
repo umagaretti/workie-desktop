@@ -135,9 +135,9 @@
 .ib-cs-center{flex:1;display:flex;align-items:center;justify-content:center;padding:16px 20px 120px;}
 .ib-cs-card{width:100%;max-width:420px;text-align:center;background:none;border:none;border-radius:0;padding:0;box-shadow:none;}
 .ib-cs-logos{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:22px;}
-.ib-cs-logo{flex:none;width:34px;height:34px;display:grid;place-items:center;background:none;border:none;color:var(--text-dim);}
+.ib-cs-logo{flex:none;width:34px;height:34px;display:grid;place-items:center;background:none;border:none;color:var(--accent);}
 .ib-cs-logo svg{width:26px;height:26px;}
-.ib-cs-logo.brand svg,.ib-cs-logo.brand img{width:30px;height:30px;}
+.ib-cs-logo.brand svg,.ib-cs-logo.brand img{width:24px;height:24px;}
 .ib-cs-swap{display:grid;place-items:center;color:var(--muted);}
 .ib-cs-swap svg{width:18px;height:18px;}
 .ib-cs-title{font-size:23px;font-weight:700;letter-spacing:-.02em;color:var(--text);margin-bottom:8px;}
