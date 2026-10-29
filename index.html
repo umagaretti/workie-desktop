@@ -46,7 +46,7 @@ try{
 <script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@2/lib/msal-browser.min.js"></script>
 <link rel="stylesheet" href="css/01-base.css">
 <link rel="stylesheet" href="css/02-shell.css?v=30">
-<link rel="stylesheet" href="css/03-main.css?v=65">
+<link rel="stylesheet" href="css/03-main.css?v=66">
 <link rel="stylesheet" href="css/04-task-detail.css?v=15">
 <link rel="stylesheet" href="css/05-home.css?v=10">
 <link rel="stylesheet" href="css/06-tasks.css">
@@ -355,6 +355,20 @@ try{
             <div class="ib-cmp-cf-a"><button type="button" class="ib-cmp-cf-stay" id="ibCmpCfStay" data-i18n="ib_cmp_cf_stay">Continua a scrivere</button><button type="button" class="ib-cmp-cf-close" id="ibCmpCfClose" data-i18n="ib_cmp_cf_close">Chiudi senza salvare</button></div>
           </div>
         </div>
+      </div>
+    </div>
+    <!-- Anteprima allegato -->
+    <div class="ib-att-overlay" id="ibAttOverlay">
+      <div class="ib-att">
+        <div class="ib-att-head">
+          <span class="ib-att-clip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.4 11.05 12.2 20.2a5 5 0 0 1-7.1-7.1l9.2-9.2a3.3 3.3 0 1 1 4.7 4.7l-9.2 9.2a1.7 1.7 0 0 1-2.4-2.4l8.5-8.5"/></svg></span>
+          <div class="ib-att-meta"><div class="ib-att-name" id="ibAttName"></div><div class="ib-att-size" id="ibAttSize"></div></div>
+          <div class="ib-att-hact">
+            <button type="button" class="ib-att-dl" id="ibAttDl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span data-i18n="ib_att_dl">Scarica</span></button>
+            <button type="button" class="ib-att-x" id="ibAttClose" aria-label="Chiudi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
+          </div>
+        </div>
+        <div class="ib-att-body" id="ibAttBody"></div>
       </div>
     </div>
     <!-- Overlay: gestisci caselle -->
@@ -1645,6 +1659,6 @@ try{
 <script src="themes.js"></script>
 <script src="storage.js"></script>
 <script src="sync.js"></script>
-<script src="app.js?v=65"></script>
+<script src="app.js?v=66"></script>
 </body>
 </html>
