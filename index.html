@@ -50,7 +50,7 @@ try{
 <link rel="stylesheet" href="css/04-task-detail.css?v=15">
 <link rel="stylesheet" href="css/05-home.css?v=10">
 <link rel="stylesheet" href="css/06-tasks.css">
-<link rel="stylesheet" href="css/07-team-projects.css?v=80">
+<link rel="stylesheet" href="css/07-team-projects.css?v=82">
 <link rel="stylesheet" href="css/08-modals-connections.css">
 <link rel="stylesheet" href="css/09-tasks-rework.css?v=74">
 <link rel="stylesheet" href="css/10-desktop-os.css">
@@ -1482,9 +1482,11 @@ try{
     <div class="modal-h"><div class="modal-title" id="memberModalName">Membro</div><div class="modal-x" id="memberModalX">__X__</div></div>
     <label class="field-label" data-i18n="m_roles">Ruoli</label>
     <div class="tag-pick" id="memberTags"></div>
-    <input id="newTagInput" class="modal-search" placeholder="Nuovo ruolo..." data-i18n-ph="add_tag_ph" style="margin-bottom:6px">
-    <div class="chk-row"><span>Admin</span><div class="chk" id="memberAdminChk"></div></div>
+    <input id="newTagInput" class="modal-search" placeholder="Nuovo ruolo..." data-i18n-ph="add_tag_ph" style="margin-bottom:14px">
+    <label class="field-label" data-i18n="m_permissions">Permessi</label>
+    <div class="chk-row"><div class="mm-chk-tx"><span data-i18n="m_admin_t">Amministratore</span><small data-i18n="m_admin_d">Può gestire membri, ruoli e impostazioni del team.</small></div><div class="chk" id="memberAdminChk"></div></div>
     <button class="primary-btn" id="memberSave" data-i18n="save" style="margin-top:16px">Salva</button>
+    <button class="danger-btn" id="memberRemove" data-i18n="m_remove" style="margin-top:8px;display:none">Rimuovi dal team</button>
   </div>
 </div>
 
@@ -1669,6 +1671,6 @@ try{
 <script src="themes.js"></script>
 <script src="storage.js"></script>
 <script src="sync.js"></script>
-<script src="app.js?v=81"></script>
+<script src="app.js?v=82"></script>
 </body>
 </html>
