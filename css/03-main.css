@@ -326,16 +326,6 @@
 .ib-cs-terms{font-size:12px;color:var(--faint);margin-top:16px;line-height:1.5;}
 .ib-cs-link{color:var(--muted);text-decoration:underline;text-underline-offset:2px;cursor:pointer;}
 .ib-cs-link:hover{color:var(--text);}
-/* Link "guarda una demo" sotto i terms */
-.ib-cs-demo{margin-top:20px;border:none;background:none;color:#8168e6;font-size:13px;font-weight:600;font-family:var(--sans);cursor:pointer;padding:6px 10px;border-radius:8px;transition:background .12s;}
-.ib-cs-demo:hover{background:var(--panel-2);}
-/* Banner modalità demo in cima all'inbox */
-.ib-demobar{display:flex;align-items:center;gap:9px;margin:0 0 12px;padding:9px 13px;background:rgba(129,104,230,.1);border:1px solid rgba(129,104,230,.25);border-radius:11px;font-size:12.5px;color:var(--text);}
-.ib-demobar[hidden]{display:none;}
-.ib-demobar svg{width:16px;height:16px;color:#8168e6;flex:none;}
-.ib-demobar-t{flex:1;min-width:0;color:var(--muted);}
-.ib-demobar-x{flex:none;border:none;background:#8168e6;color:#fff;font-size:12px;font-weight:600;font-family:var(--sans);cursor:pointer;padding:6px 12px;border-radius:8px;transition:filter .15s;}
-.ib-demobar-x:hover{filter:brightness(1.08);}
 .ib-cs-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
 .ib-cs-grid.sm{margin-top:6px;}
 .ib-prov{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:12px;border:1px solid var(--border-soft);background:var(--inset);cursor:pointer;font-family:var(--sans);transition:background .15s,border-color .15s,transform .1s;text-align:left;}

@@ -2864,7 +2864,7 @@ function renderSideInbox(){
 }
 {const si=document.getElementById('sideInbox');if(si)si.addEventListener('click',e=>{if(e.target.closest('[data-siconnect]')){if(typeof go==='function')go('connections');}});}
 // ===== Pagina Inbox (due pannelli) =====
-let ibSel=null,ibQuery='',ibFilter='all',ibDemo=false;
+let ibSel=null,ibQuery='',ibFilter='all';
 let ibRead=(()=>{try{return new Set(JSON.parse(localStorage.getItem(ukey('workie_inbox_read')))||[]);}catch(e){return new Set();}})();
 function ibSaveRead(){try{localStorage.setItem(ukey('workie_inbox_read'),JSON.stringify([...ibRead]));}catch(e){}}
 function ibMarkRead(id){if(id&&!ibRead.has(id)){ibRead.add(id);ibSaveRead();}}
@@ -2957,7 +2957,6 @@ function renderInboxConnect(){
    +'<div class="ib-cs-benefits">'+bene(IC_LINK,tr('ib_b1_t'),tr('ib_b1_d'))+bene(IC_LOCK,tr('ib_b2_t'),tr('ib_b2_d'))+bene(IC_SHIELD,tr('ib_b3_t'),tr('ib_b3_d'))+'</div>'
    +'<div class="ib-cs-actions">'+btn('gmail','Google')+btn('outlook','Outlook')+'</div>'
    +'<div class="ib-cs-terms">'+terms+'</div>'
-   +'<button type="button" class="ib-cs-demo" data-ibdemo>'+tr('ib_demo_see')+'</button>'
    +'</div></div>';
 }
 const IB_IC_REPLY='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>';
@@ -3068,19 +3067,15 @@ function renderInboxPage(){
   const body=document.getElementById('ibBody'),cs=document.getElementById('ibConnectScreen'),mng=document.getElementById('ibManage'),badge=document.getElementById('ibUnreadBadge');
   const head=document.querySelector('[data-page="inbox"] .ib-head');
   const crumb=document.getElementById('ibCrumb');
-  const demobar=document.getElementById('ibDemoBanner');
-  if(!ibConnected()&&!ibDemo){
+  if(!ibConnected()){
     if(head)head.style.display='none'; // la connect screen ha il suo header (stile Tasks)
     if(crumb)crumb.style.display='none';
     {const tb=document.getElementById('ibToolbar');if(tb)tb.style.display='none';}
-    if(demobar)demobar.hidden=true;
     if(body)body.style.display='none';if(cs)cs.style.display='flex';if(mng)mng.style.display='none';if(badge)badge.style.display='none';
     renderInboxConnect();return;
   }
-  const demoMode=ibDemo&&!ibConnected();
-  if(demobar)demobar.hidden=!demoMode;
   if(head)head.style.display='';
-  if(crumb){crumb.style.display='';const em=document.getElementById('ibCrumbEmail');if(em){const a=(typeof ibAccounts==='function')?ibAccounts()[0]:null;em.textContent=demoMode?tr('ib_demo_acct'):((a&&a.email)||'umberto@work.app');}}
+  if(crumb){crumb.style.display='';const em=document.getElementById('ibCrumbEmail');if(em){const a=(typeof ibAccounts==='function')?ibAccounts()[0]:null;em.textContent=(a&&a.email)||'umberto@work.app';}}
   if(cs)cs.style.display='none';if(body)body.style.display='flex';if(mng)mng.style.display='';
   {const tb=document.getElementById('ibToolbar');if(tb)tb.style.display='flex';}
   if(typeof ibRenderFilters==='function')ibRenderFilters();
@@ -3229,8 +3224,6 @@ function ibTaskOpen(m){
 }
 // ---- Handler pagina Inbox ----
 {const ip=document.querySelector('[data-page="inbox"]');if(ip)ip.addEventListener('click',e=>{
-  if(e.target.closest('[data-ibdemo]')){ibDemo=true;ibSel=null;renderInboxPage();return;}
-  if(e.target.closest('#ibDemoExit')){ibDemo=false;ibSel=null;renderInboxPage();return;}
   if(e.target.closest('#ibActA')){try{showToast(tr('ib_cal_soon'));}catch(_){}return;}
   if(e.target.closest('#ibActB')){ibComposeOpen();return;}
   if(e.target.closest('#ibCrumbMail')){e.stopPropagation();ibCrumbToggle();return;}
