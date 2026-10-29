@@ -10,13 +10,25 @@
 .tdetail-cols{display:grid;grid-template-columns:1fr 218px;gap:18px;align-items:start;}
 .tdetail-main{min-width:0;}
 .tdetail-side{display:flex;flex-direction:column;gap:3px;background:var(--panel);border:1px solid var(--border-soft);border-radius:12px;padding:8px;}
-/* Menu sezioni a tendina (al posto del pannello laterale) */
-.team-menu-wrap{position:relative;}
-.team-menu{position:absolute;top:46px;right:0;width:224px;display:none;flex-direction:column;gap:3px;background:var(--panel);border:1px solid var(--border-soft);border-radius:12px;padding:8px;box-shadow:0 18px 50px -16px rgba(0,0,0,.42);z-index:60;}
-.team-menu.open{display:flex;animation:fade .14s ease;}
+/* Popover dell'header dettaglio (sezioni + notifiche), stile menu profilo */
+.team-menu-wrap,.team-bell-wrap{position:relative;}
+.team-pop{position:absolute;top:46px;right:0;background:var(--panel);border:1px solid var(--border);border-radius:12px;box-shadow:0 14px 44px rgba(0,0,0,.28);padding:6px;display:none;z-index:200;}
+.team-pop.open{display:block;animation:umUp .16s ease;}
+.team-menu{width:224px;}
+.tm-item.active{background:rgba(129,104,230,.12);color:#8168e6;}
+.tm-item.active svg{color:#8168e6;}
 /* Pallino notifiche sulla campanella */
 .team-bell{position:relative;}
 .team-bell-dot{position:absolute;top:8px;right:9px;width:8px;height:8px;border-radius:50%;background:#8168e6;border:2px solid var(--panel);}
+/* Box notifiche */
+.team-notif{width:300px;max-height:360px;overflow:auto;}
+.team-notif-h{font-size:12px;color:var(--muted);font-weight:600;padding:7px 10px 8px;}
+.team-notif-item{display:flex;gap:10px;padding:9px 10px;border-radius:8px;}
+.team-notif-item:hover{background:rgba(130,130,150,.1);}
+.team-notif-dot2{flex:none;width:8px;height:8px;border-radius:50%;background:#8168e6;margin-top:5px;}
+.team-notif-tx{flex:1;min-width:0;font-size:13px;color:var(--text);line-height:1.4;}
+.team-notif-time{font-size:11px;color:var(--faint);margin-top:2px;}
+.team-notif-empty{padding:22px 14px;text-align:center;color:var(--muted);font-size:13px;}
 .ql-item{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:9px;cursor:pointer;color:var(--text-dim);font-size:13.5px;border:1px solid transparent;transition:.15s;user-select:none;}
 .ql-item:hover{background:var(--panel-2);color:var(--text);}
 .ql-item.active{background:var(--active-bg);color:var(--text);border-color:rgba(255,255,255,.06);}

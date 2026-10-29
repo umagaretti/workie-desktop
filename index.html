@@ -50,7 +50,7 @@ try{
 <link rel="stylesheet" href="css/04-task-detail.css?v=15">
 <link rel="stylesheet" href="css/05-home.css?v=10">
 <link rel="stylesheet" href="css/06-tasks.css">
-<link rel="stylesheet" href="css/07-team-projects.css?v=75">
+<link rel="stylesheet" href="css/07-team-projects.css?v=76">
 <link rel="stylesheet" href="css/08-modals-connections.css">
 <link rel="stylesheet" href="css/09-tasks-rework.css?v=74">
 <link rel="stylesheet" href="css/10-desktop-os.css">
@@ -556,16 +556,19 @@ try{
       <div class="scroll td-scroll">
       <div class="tk-page">
         <!-- Breadcrumb "Tutti i team / nome del team" (stile Tasks/Teams) -->
-        <div class="tdw-crumb tk-crumb"><span class="tdw-cloud"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 0 0 .5-8.97A6 6 0 0 0 6.1 9.2 4 4 0 0 0 6.5 19z"/></svg></span><span class="tdw-crumb-link" data-go="team">Tutti i team</span><span class="tdw-crumb-sep">/</span><span class="tdw-crumb-cur" id="teamCrumbCur"></span></div>
+        <div class="tdw-crumb tk-crumb"><span class="tdw-cloud"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 0 0 .5-8.97A6 6 0 0 0 6.1 9.2 4 4 0 0 0 6.5 19z"/></svg></span><span class="tdw-crumb-link" data-go="team">Tutti i team</span><span class="tdw-crumb-sep">/</span><span class="tdw-crumb-link" id="teamCrumbTeam"></span><span class="tdw-crumb-sep">/</span><span class="tdw-crumb-cur" id="teamCrumbSec"></span></div>
         <!-- Titolo grande con icona del team nel suo colore + azioni (notifiche, menu sezioni) -->
         <div class="tk-head">
           <span class="tk-headic" id="teamDetailIcon"></span>
           <div class="page-title tk-bigtitle" id="teamDetailTitle">Team</div>
           <div class="tasks-actions">
-            <button class="tasks-mic team-bell" id="teamBell" title="Notifiche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="team-bell-dot" id="teamBellDot"></span></button>
+            <div class="team-bell-wrap">
+              <button class="tasks-mic team-bell" id="teamBell" title="Notifiche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="team-bell-dot" id="teamBellDot"></span></button>
+              <div class="team-pop team-notif" id="teamNotif"></div>
+            </div>
             <div class="team-menu-wrap">
               <button class="tasks-add" id="teamMenuBtn" title="Sezioni" aria-label="Sezioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
-              <div class="team-menu" id="teamQuickLinks"></div>
+              <div class="team-pop team-menu" id="teamQuickLinks"></div>
             </div>
           </div>
         </div>
@@ -1666,6 +1669,6 @@ try{
 <script src="themes.js"></script>
 <script src="storage.js"></script>
 <script src="sync.js"></script>
-<script src="app.js?v=75"></script>
+<script src="app.js?v=76"></script>
 </body>
 </html>
