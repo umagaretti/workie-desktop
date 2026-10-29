@@ -7552,6 +7552,58 @@ document.getElementById('cuName').addEventListener('keydown',e=>{if(e.key==='Ent
 document.getElementById('cuImgBtn').addEventListener('click',()=>document.getElementById('cuImgFile').click());
 document.getElementById('cuImgFile').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=ev=>{customCfg.bgImg=ev.target.result;curTheme='custom';curSavedId=null;saveTheme();applyTheme();};rd.readAsDataURL(f);e.target.value='';});
 document.getElementById('cuImgClear').addEventListener('click',()=>{customCfg.bgImg='';curSavedId=null;saveTheme();applyTheme();});
+// ===== Team di esempio (una sola volta, cancellabili dalle impostazioni del team) =====
+function seedExampleTeams(){
+  try{ if(TEAMS.length) return; }catch(e){ return; }
+  try{ if(localStorage.getItem(ukey('workie_teams_seeded'))) return; }catch(e){}
+  const A=(typeof ACCENT!=='undefined')?ACCENT:'#8168e6';
+  const now=new Date();
+  const fut=off=>{const dt=new Date(now);dt.setDate(now.getDate()+off);return dt;};
+  const fDate=off=>{const dt=fut(off);return [dt.getFullYear(),dt.getMonth(),dt.getDate()];};
+  const ev=(off,title,when)=>{const dt=fut(off);return {d:dt.getDate(),mo:dt.getMonth(),title,when};};
+  const addTask=(tid,title,assignee,off,done)=>{TASKS.push({id:++TID,title,scope:'team:'+tid,assignee,date:fDate(off),done:!!done});};
+  // --- Team 1: Economy Group ---
+  const t1={tid:TEAM_SEQ++,name:'Economy Group',emoji:'📊',act:0,owner:true,desc:'Redazione, podcast e social',invites:[],spaces:[],
+    members:[
+      {i:'U',c:A,name:'Umberto',admin:true,tags:['Direzione']},
+      {i:'MR',c:'#6f9bf0',name:'Marco Rossi',admin:false,tags:['Podcast']},
+      {i:'GC',c:'#7ed0b0',name:'Giulia Conti',admin:false,tags:['Social']},
+      {i:'SN',c:'#f0a35b',name:'Sara Neri',admin:false,tags:['Redazione']}
+    ],
+    docs:[['📝','Note redazione','#6a4a8a','U'],['📅','Piano editoriale','#4a6a8a','GC']],
+    events:[ev(2,'Riunione editoriale','10:00'),ev(6,'Uscita episodio podcast','09:00')],
+    groups:[{id:1,name:'Social',members:[0,2]}],
+    feed:[{text:'Giulia ha creato il piano editoriale',ts:Date.now()-5400000},{text:'Marco ha completato la scaletta dell\'episodio 3',ts:Date.now()-1800000}],
+    cm:{'dm:1':[{self:false,text:'Ciao! A che punto siamo con l\'episodio 4?'},{self:true,text:'Scaletta pronta per domani 👍'}],
+        'grp:1':[{self:false,text:'Ho programmato i post per questa settimana'},{self:true,text:'Perfetto, grazie Giulia!'}]}
+  };
+  addTask(t1.tid,'Preparare scaletta episodio 4',1,2,false);
+  addTask(t1.tid,'Programmare post Instagram',2,1,false);
+  addTask(t1.tid,'Revisione articolo economia',3,4,false);
+  addTask(t1.tid,'Approvare piano editoriale',0,-1,true);
+  t1.act=3;
+  // --- Team 2: Studio Cervino ---
+  const t2={tid:TEAM_SEQ++,name:'Studio Cervino',emoji:'🎬',act:0,owner:true,desc:'Campagna Cervino',invites:[],spaces:[],
+    members:[
+      {i:'U',c:A,name:'Umberto',admin:true,tags:['Regia']},
+      {i:'RB',c:'#ef7a85',name:'Roberta Bianchi',admin:true,tags:['Cliente']},
+      {i:'LF',c:'#c58af0',name:'Luca Ferri',admin:false,tags:['Montaggio']}
+    ],
+    docs:[['📄','Preventivo Cervino','#8a6a4a','RB']],
+    events:[ev(3,'Kickoff Campagna Cervino','15:00')],
+    groups:[],
+    feed:[{text:'Roberta ha caricato il preventivo',ts:Date.now()-86400000}],
+    cm:{'dm:1':[{self:false,text:'Ci vediamo lunedì per il moodboard?'},{self:true,text:'Certo, porto le bozze'}]}
+  };
+  addTask(t2.tid,'Montare teaser 30s',2,4,false);
+  addTask(t2.tid,'Inviare preventivo aggiornato',0,1,false);
+  t2.act=2;
+  TEAMS.push(t1,t2);
+  try{saveTeams();}catch(e){}
+  try{saveTasks();}catch(e){}
+  try{localStorage.setItem(ukey('workie_teams_seeded'),'1');}catch(e){}
+}
+seedExampleTeams();
 applyLang();
 applyTheme();
 // ===== Notifiche push (Web Push PWA) =====
