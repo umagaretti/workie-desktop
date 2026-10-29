@@ -36,7 +36,7 @@
 /* La chatbox, aprendosi, cresce verso l'alto e passa SOPRA al saluto (sfondo pieno),
    senza spostare né la base né i bottoni. Il saluto resta dov'è, coperto dal box. */
 /* LIVELLO 1 — pill compatta (max-height animata per morphing fluido) */
-.ovc-collapsed{display:flex;align-items:center;gap:10px;width:100%;height:52px;max-height:52px;overflow:hidden;background:var(--panel);border:1px solid var(--border);border-radius:999px;padding:0 8px 0 20px;box-shadow:0 10px 34px -22px rgba(0,0,0,.4);cursor:text;transition:max-height .46s cubic-bezier(.4,0,.2,1),opacity .3s cubic-bezier(.4,0,.2,1),border-width .3s ease,border-color .16s,box-shadow .16s;}
+.ovc-collapsed{display:flex;align-items:center;gap:10px;width:100%;height:52px;max-height:52px;overflow:hidden;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:0 8px 0 20px;box-shadow:0 10px 34px -22px rgba(0,0,0,.4);cursor:text;transition:max-height .46s cubic-bezier(.4,0,.2,1),opacity .3s cubic-bezier(.4,0,.2,1),border-width .3s ease,border-color .16s,box-shadow .16s;}
 .ovc-collapsed:hover{border-color:var(--border-strong);}
 .ov-chatbox.expanded .ovc-collapsed{max-height:0;opacity:0;border-width:0;border-color:transparent;box-shadow:none;pointer-events:none;}
 .ovc-ph{flex:1;min-width:0;color:var(--muted);font-size:15px;font-family:var(--sans);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -72,10 +72,10 @@
 /* Invia: GRIGIO e non attivo finché non è selezionata una task; viola e cliccabile quando c'è. */
 /* Tasto invio con lo stesso stile del composer della chat (.rsv-sendbtn):
    quadratino arrotondato, grigio da spento, accent da attivo. */
-.ovc-send{position:relative;flex:none;width:34px;height:34px;border-radius:10px;border:none;background:var(--panel-2);color:var(--muted);display:grid;place-items:center;cursor:not-allowed;transition:filter .18s,background .18s,color .18s;}
+.ovc-send{position:relative;flex:none;width:30px;height:30px;border-radius:9px;border:none;background:var(--panel-2);color:var(--muted);display:grid;place-items:center;cursor:not-allowed;transition:filter .18s,background .18s,color .18s;}
 .ov-chatbox.has-task .ovc-send{background:var(--accent);color:#fff;cursor:pointer;}
 .ov-chatbox.has-task .ovc-send:hover{filter:brightness(1.08);}
-.ovc-send svg{width:17px;height:17px;}
+.ovc-send svg{width:16px;height:16px;}
 /* overlay "Seleziona task" al passaggio del mouse, solo quando è disattivato */
 .ovc-send::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 9px);right:-2px;left:auto;transform:translateY(4px);background:var(--text);color:var(--bg);font-size:12px;font-weight:500;font-family:var(--sans);padding:5px 10px;border-radius:8px;white-space:nowrap;box-shadow:0 8px 24px -10px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .15s ease,transform .15s ease;z-index:30;}
 .ovc-send::before{content:'';position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%) translateY(4px);border:5px solid transparent;border-top-color:var(--text);opacity:0;pointer-events:none;transition:opacity .15s ease,transform .15s ease;z-index:30;}
