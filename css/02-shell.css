@@ -47,13 +47,19 @@ html.is-tauri #daySideBtn svg{width:18px;height:18px;}
 .day-drawer .dd-close{border:none;background:transparent;color:var(--muted);font-size:15px;cursor:pointer;width:28px;height:28px;border-radius:7px;line-height:1;}
 .day-drawer .dd-close:hover{background:var(--panel-2);color:var(--text);}
 .day-drawer .dd-body{flex:1;min-height:0;padding:0;color:var(--muted);font-size:13.5px;line-height:1.5;display:flex;flex-direction:column;}
-/* attività della giornata: identiche alle voci del menu della sidebar sinistra */
+/* attività della giornata: voci come il menu di sinistra, con icona (task / orologino)
+   e ingrandimento fluido all'hover */
 .ds-list{display:flex;flex-direction:column;gap:2px;padding:4px 10px 16px;overflow-y:auto;}
-.ds-item{display:flex;align-items:center;gap:9px;width:100%;text-align:left;background:none;border:1px solid transparent;font-family:var(--sans);padding:6px 9px;border-radius:7px;cursor:pointer;color:var(--text-dim);font-size:13.5px;line-height:1;transition:background .15s,color .15s;user-select:none;}
-.ds-item:hover{background:var(--panel-2);color:var(--text);}
+.ds-item{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:1px solid transparent;font-family:var(--sans);padding:7px 9px;border-radius:9px;cursor:pointer;color:var(--text-dim);font-size:13.5px;line-height:1;transition:background .18s ease,color .18s ease,transform .24s cubic-bezier(.22,1,.36,1);transform-origin:left center;user-select:none;}
+.ds-item:hover{background:var(--panel-2);color:var(--text);transform:scale(1.055) translateX(3px);}
+.ds-ic{flex:none;width:17px;height:17px;display:grid;place-items:center;color:var(--muted);transition:color .18s ease;}
+.ds-ic svg{width:17px;height:17px;display:block;}
+.ds-item:hover .ds-ic{color:var(--accent);}
 .ds-name{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.ds-time{flex:none;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;}
+.ds-time{flex:none;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;transition:color .18s ease;}
+.ds-item:hover .ds-time{color:var(--text-dim);}
 .ds-item.done .ds-name{text-decoration:line-through;opacity:.55;}
+.ds-item.done .ds-ic{opacity:.5;}
 /* linea dell'ora attuale */
 .ds-now{display:flex;align-items:center;gap:8px;padding:5px 9px;}
 .ds-now-dot{flex:none;width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px rgba(129,104,230,.16);}

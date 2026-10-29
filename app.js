@@ -3870,17 +3870,26 @@ function renderDaySide(){
     body.innerHTML='<div class="dsw-empty"><div class="dsw-empty-t">'+tr('ds_noplan_t')+'</div><div class="dsw-empty-d">'+tr('ds_noplan_d')+'</div><button class="ov-abtn primary dsw-plan-btn" data-dsplan><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.6V12l3 1.8"/></svg><span>'+tr('ds_make_plan')+'</span></button></div>';
     return;
   }
-  const sched={};if(PLAN_DAY.sched)PLAN_DAY.sched.forEach(s=>{sched[s.id]=s.start;});
-  const items=PLAN_DAY.order.map(id=>TASKS.find(t=>t.id==id)).filter(Boolean);
   const toMin=v=>{const m=/^(\d{1,2}):(\d{2})/.exec(String(v||''));return m?(+m[1]*60+ +m[2]):null;};
   const nd=new Date(),nowMin=nd.getHours()*60+nd.getMinutes();
-  const list=items.map(t=>{let time=sched[t.id];if(Array.isArray(time))time=fmtHM(time[0],time[1]);if(time==null||time==='')time=t.time||'';return {t,time,min:toMin(time)};});
-  // linea che segna "ora": va dopo le attività già passate, prima delle prossime
+  // Attività di routine di oggi (icona orologino)
+  const acts=(typeof dwActivities==='function'?dwActivities():[]).map(r=>({kind:'routine',title:r.name,time:r.time||'',min:toMin(r.time)}));
+  // Task del piano (icona task)
+  const sched={};if(PLAN_DAY.sched)PLAN_DAY.sched.forEach(s=>{sched[s.id]=s.start;});
+  const tasks=PLAN_DAY.order.map(id=>TASKS.find(t=>t.id==id)).filter(Boolean).map(t=>{
+    let time=sched[t.id];if(Array.isArray(time))time=fmtHM(time[0],time[1]);if(time==null||time==='')time=t.time||'';
+    return {kind:'task',id:t.id,title:taskTitle(t),time,min:toMin(time),done:!!t.done};});
+  const list=acts.concat(tasks).sort((a,b)=>(a.min==null?1e9:a.min)-(b.min==null?1e9:b.min));
+  const IC_TASK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4.5"/><path d="M8.5 12.4l2.5 2.5 4.6-5.2"/></svg>';
+  const IC_CLOCK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.4"/><path d="M12 7.7V12l3 1.8"/></svg>';
+  // linea che segna "ora": dopo le attività passate, prima delle prossime
   const insertAt=list.filter(x=>x.min!=null&&x.min<=nowMin).length;
   const nowLine='<div class="ds-now"><span class="ds-now-dot"></span><span class="ds-now-time">'+fmtHM(nd.getHours(),nd.getMinutes())+'</span></div>';
   let html='';
   list.forEach((x,i)=>{if(i===insertAt)html+=nowLine;
-    html+='<button type="button" class="ds-item'+(x.t.done?' done':'')+'" data-dsw="'+x.t.id+'"><span class="ds-name">'+bdEsc(taskTitle(x.t))+'</span>'+(x.time?'<span class="ds-time">'+bdEsc(String(x.time))+'</span>':'')+'</button>';});
+    const ic=x.kind==='routine'?IC_CLOCK:IC_TASK;
+    const attr=x.kind==='task'?' data-dsw="'+x.id+'"':'';
+    html+='<button type="button" class="ds-item ds-'+x.kind+(x.done?' done':'')+'"'+attr+'><span class="ds-ic">'+ic+'</span><span class="ds-name">'+bdEsc(x.title)+'</span>'+(x.time?'<span class="ds-time">'+bdEsc(String(x.time))+'</span>':'')+'</button>';});
   if(insertAt>=list.length)html+=nowLine;
   body.innerHTML='<div class="ds-list">'+html+'</div>';
 }
