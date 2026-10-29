@@ -2214,8 +2214,9 @@ function chatList(t){
   return [...groups,...dms];
 }
 function chatMsgs(t,id){t.cm=t.cm||{};t.cm[id]=t.cm[id]||[];return t.cm[id];}
+const TEAM_USERS_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
 function teamLogo(t){if(t.logo)return `<img src="${t.logo}" alt="">`;
-  if(t.color){const ini=(teamName(t)||'?').trim().charAt(0).toUpperCase();return `<span class="team-ini" style="background:${t.color}">${bdEsc(ini)}</span>`;}
+  if(t.color)return `<span class="team-ini" style="background:${t.color}">${TEAM_USERS_SVG}</span>`;
   return `${t.emoji||'👥'}`;}
 function setTeamTitle(){if(curTeam)document.getElementById('teamDetailTitle').textContent=teamName(curTeam);}
 const TAG_COLORS={Marketing:'#b8a6f4',Social:'#6f9bf0',Redazione:'#7ed0b0',Amministrazione:'#f0c46f'};

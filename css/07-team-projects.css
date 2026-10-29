@@ -48,8 +48,9 @@
 #teamDetailTitle .sub:hover{color:var(--text-dim);}
 .team-emoji{overflow:hidden;}
 .team-emoji img{width:100%;height:100%;object-fit:cover;}
-/* Avatar team basato sul colore (iniziale al centro) */
+/* Avatar team basato sul colore (icona due persone al centro) */
 .team-ini{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-family:var(--sans);}
+.team-ini svg{width:56%;height:56%;}
 .db-empty{background:var(--panel);border:1px solid var(--border-soft);border-radius:12px;padding:44px;text-align:center;color:var(--faint);font-size:14px;}
 .ts{max-width:560px;}
 .ts-card{background:var(--panel);border:1px solid var(--border-soft);border-radius:12px;padding:18px;margin-bottom:22px;}
