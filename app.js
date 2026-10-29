@@ -2403,7 +2403,7 @@ function renderTeamMain(){
       const pool=allTT.filter(x=>x.assignee===meIdx);
       body=`<div class="tt-list">${teamTaskDateList(t,pool)}</div>`;
     }else{
-      // Task del team: calendarino settimanale + box persone del giorno + lista del giorno
+      // Task del team: calendarino settimanale + griglia persone (box come prima) con le loro task del giorno sotto
       if(!teamTaskDay)teamTaskDay=realToday();
       const day=teamTaskDay,sameDue=x=>{const d=taskDue(x);return d&&dwSameDay(d,day);};
       const dows=DOWS[LANG]||DOWS.it,base=new Date(day[0],day[1],day[2]),off=(base.getDay()+6)%7,mon=new Date(base);mon.setDate(base.getDate()-off);
@@ -2411,11 +2411,11 @@ function renderTeamMain(){
       const strip=`<div class="dw-strip tt-week"><button class="dw-nav" id="ttPrev">‹</button><div class="dw-days">${wk}</div><button class="dw-nav" id="ttNext">›</button></div>`;
       const cnt=idx=>allTT.filter(x=>x.assignee===idx&&!x.done&&sameDue(x)).length;
       const maxLoad=Math.max(1,...t.members.map((m,i)=>cnt(i)));
-      const boxes=t.members.map((m,idx)=>{const n=cnt(idx);return `<div class="tbm-card" data-mi="${idx}"><div class="tbm-av" style="background:${m.c}">${m.i}</div><div class="tbm-info"><div class="tbm-name">${firstName(m.name)}</div><div class="tbm-bar"><i style="width:${Math.round(n/maxLoad*100)}%;background:${m.c}"></i></div></div><div class="tbm-num">${n}</div></div>`;}).join('');
-      const dayTT=allTT.filter(sameDue),nd=dayTT.filter(x=>!x.done).sort(taskByDue),dn=dayTT.filter(x=>x.done);
-      const rowW=task=>`<div class="tt-row">${taskRow(task,true,true)}${assigneeAv(t,task)}</div>`;
-      const list=(nd.length+dn.length)?(nd.map(rowW).join('')+dn.map(rowW).join('')):`<div class="task-empty">${tr('tpb_none')}</div>`;
-      body=`${strip}<div class="tbm-strip">${boxes}</div><div class="tt-list">${list}</div>`;
+      const col=(m,idx)=>{const n=cnt(idx);
+        const tasks=allTT.filter(x=>x.assignee===idx&&sameDue(x)).sort((a,b)=>(a.done?1:0)-(b.done?1:0));
+        const rows=tasks.length?tasks.map(x=>`<div class="tpb-task${x.done?' done':''}" data-id="${x.id}"><div class="check" data-id="${x.id}">${SVG.check}</div><span class="tpb-t">${bdEsc(taskTitle(x))}</span></div>`).join(''):`<div class="tpb-empty">${tr('tpb_none')}</div>`;
+        return `<div class="tpb-col"><div class="tpb-head"><div class="tpb-av" style="background:${m.c}">${m.i}</div><div class="tpb-hinfo"><div class="tpb-name">${firstName(m.name)}</div><div class="tpb-bar"><i style="width:${Math.round(n/maxLoad*100)}%;background:${m.c}"></i></div></div><div class="tpb-n">${n}</div></div><div class="tpb-tasks">${rows}</div></div>`;};
+      body=`${strip}<div class="tpb-grid">${t.members.map(col).join('')}</div>`;
     }
     main.innerHTML=`<div class="tk-filters tt-filters">${chips}</div>
       ${body}
