@@ -51,7 +51,7 @@
 .tt-list .task-del{opacity:0;width:0;overflow:hidden;transition:.15s;}
 .tt-row:hover .task-del{width:26px;opacity:1;margin-left:4px;}
 .tt-filters{margin:0 0 16px;}
-.tt-week{margin-bottom:14px;}
+.tt-week{margin-bottom:26px;}
 .tt-week .dw-day{background:var(--panel-2);}
 .tt-week .dw-day.sel{background:#8168e6;border-color:#8168e6;}
 .tt-week .dw-day.sel .dw-dow,.tt-week .dw-day.sel .dw-num{color:#fff;}
@@ -68,7 +68,8 @@
 .tpb-tasks{display:flex;flex-direction:column;gap:1px;max-height:178px;overflow-y:auto;}
 .tpb-task{display:flex;align-items:center;gap:8px;padding:6px 7px;border-radius:8px;background:transparent;transition:background .12s;}
 .tpb-task:hover{background:var(--panel-2);}
-.tpb-task .check{width:17px;height:17px;flex:none;}
+.tpb-task .check{width:17px;height:17px;flex:none;cursor:pointer;}
+.tpb-task .check.ro{pointer-events:none;cursor:default;opacity:.85;}
 .tpb-task .check svg{width:11px;height:11px;}
 .tpb-task.done .check{background:#8168e6;border-color:#8168e6;}
 .tpb-t{flex:1;min-width:0;font-size:13px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}

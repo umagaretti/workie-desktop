@@ -2393,9 +2393,12 @@ function renderTeamMain(){
     const teamCat=ensureTeamCategory(t);
     {let ch=false;TASKS.forEach(x=>{if(x.scope==='team:'+t.tid&&x.catId==null&&teamCat){x.catId=teamCat.id;ch=true;}});if(ch)saveTasks();}
     const allTT=TASKS.filter(x=>x.scope==='team:'+t.tid);
-    if(teamTaskView!=='mine'&&teamTaskView!=='team')teamTaskView='team';
-    // Filtro sotto il titolo: Le mie task / Task del team
-    const chips=`<button class="tk-fil${teamTaskView==='mine'?' on':''}" data-ttv="mine">${tr('tt_mine')}</button><button class="tk-fil${teamTaskView==='team'?' on':''}" data-ttv="team">${tr('tt_team')}</button>`;
+    const roles=[...new Set(t.members.flatMap(m=>m.tags||[]))];
+    const roleOf=teamTaskView.indexOf('role:')===0?teamTaskView.slice(5):null;
+    if(teamTaskView!=='mine'&&teamTaskView!=='team'&&!(roleOf&&roles.includes(roleOf)))teamTaskView='team';
+    // Filtro sotto il titolo: Le mie task / Task del team / ruoli
+    let chips=`<button class="tk-fil${teamTaskView==='mine'?' on':''}" data-ttv="mine">${tr('tt_mine')}</button><button class="tk-fil${teamTaskView==='team'?' on':''}" data-ttv="team">${tr('tt_team')}</button>`;
+    chips+=roles.map(r=>`<button class="tk-fil tk-fil-cat${teamTaskView==='role:'+r?' on':''}" data-ttv="role:${bdEsc(r)}"><span class="tk-fdot" style="background:${tagColor(r)}"></span>${bdEsc(r)}</button>`).join('');
     let body='';
     if(teamTaskView==='mine'){
       // Vista classica delle task (solo di questo team, assegnate a me)
@@ -2411,11 +2414,17 @@ function renderTeamMain(){
       const strip=`<div class="dw-strip tt-week"><button class="dw-nav" id="ttPrev">‹</button><div class="dw-days">${wk}</div><button class="dw-nav" id="ttNext">›</button></div>`;
       const cnt=idx=>allTT.filter(x=>x.assignee===idx&&!x.done&&sameDue(x)).length;
       const maxLoad=Math.max(1,...t.members.map((m,i)=>cnt(i)));
-      const col=(m,idx)=>{const n=cnt(idx);
+      const meIdx=t.members.indexOf(meMember(t));
+      const col=(m,idx)=>{const n=cnt(idx),isMe=idx===meIdx;
         const tasks=allTT.filter(x=>x.assignee===idx&&sameDue(x)).sort((a,b)=>(a.done?1:0)-(b.done?1:0));
-        const rows=tasks.length?tasks.map(x=>`<div class="tpb-task${x.done?' done':''}" data-id="${x.id}"><div class="check" data-id="${x.id}">${SVG.check}</div><span class="tpb-t">${bdEsc(taskTitle(x))}</span></div>`).join(''):`<div class="tpb-empty">${tr('tpb_none')}</div>`;
+        const rows=tasks.length?tasks.map(x=>{const tt=bdEsc(taskTitle(x)).replace(/"/g,'&quot;');
+          const chk=isMe?`<div class="check" data-id="${x.id}">${SVG.check}</div>`:`<div class="check ro">${SVG.check}</div>`;
+          return `<div class="tpb-task${x.done?' done':''}" title="${tt}">${chk}<span class="tpb-t">${bdEsc(taskTitle(x))}</span></div>`;}).join(''):`<div class="tpb-empty">${tr('tpb_none')}</div>`;
         return `<div class="tpb-col"><div class="tpb-head"><div class="tpb-av" style="background:${m.c}">${m.i}</div><div class="tpb-hinfo"><div class="tpb-name">${firstName(m.name)}</div><div class="tpb-bar"><i style="width:${Math.round(n/maxLoad*100)}%;background:${m.c}"></i></div></div><div class="tpb-n">${n}</div></div><div class="tpb-tasks">${rows}</div></div>`;};
-      body=`${strip}<div class="tpb-grid">${t.members.map(col).join('')}</div>`;
+      const roleF=teamTaskView.indexOf('role:')===0?teamTaskView.slice(5):null;
+      const memList=t.members.map((m,idx)=>({m,idx})).filter(o=>!roleF||(o.m.tags||[]).includes(roleF));
+      const grid=memList.length?memList.map(o=>col(o.m,o.idx)).join(''):`<div class="task-empty">${tr('tpb_none')}</div>`;
+      body=`${strip}<div class="tpb-grid">${grid}</div>`;
     }
     main.innerHTML=`<div class="tk-filters tt-filters">${chips}</div>
       ${body}
@@ -7680,7 +7689,10 @@ function seedExampleTeams(){
       {i:'U',c:A,name:'Umberto',admin:true,tags:['Direzione']},
       {i:'MR',c:'#6f9bf0',name:'Marco Rossi',admin:false,tags:['Podcast']},
       {i:'GC',c:'#7ed0b0',name:'Giulia Conti',admin:false,tags:['Social']},
-      {i:'SN',c:'#f0a35b',name:'Sara Neri',admin:false,tags:['Redazione']}
+      {i:'SN',c:'#f0a35b',name:'Sara Neri',admin:false,tags:['Redazione']},
+      {i:'LV',c:'#c58af0',name:'Luca Verdi',admin:false,tags:['Video']},
+      {i:'AB',c:'#5ec8d8',name:'Anna Blu',admin:false,tags:['Grafica']},
+      {i:'PN',c:'#ef7a85',name:'Paolo Neri',admin:false,tags:['SEO']}
     ],
     docs:[['📝','Note redazione','#6a4a8a','U'],['📅','Piano editoriale','#4a6a8a','GC']],
     events:[ev(2,'Riunione editoriale','10:00'),ev(6,'Uscita episodio podcast','09:00')],
