@@ -34,6 +34,9 @@ html.is-tauri #daySideBtn svg{width:18px;height:18px;}
 #daySideBtn .dsb-x{display:none;}
 #daySideBtn.on .dsb-clock{display:none;}
 #daySideBtn.on .dsb-x{display:block;}
+/* icone un filo più piccole */
+#daySideBtn .dsb-clock{width:19px;height:19px;}
+#daySideBtn .dsb-x{width:17px;height:17px;}
 .day-drawer .dd-head,.day-drawer .dd-body{width:var(--dd-w);box-sizing:border-box;}
 .day-drawer .dd-head{display:flex;align-items:center;justify-content:space-between;padding:46px 16px 14px;font-weight:600;font-size:15px;color:var(--text);}
 .day-drawer .dd-close{border:none;background:transparent;color:var(--muted);font-size:15px;cursor:pointer;width:28px;height:28px;border-radius:7px;line-height:1;}
@@ -48,11 +51,9 @@ html.is-tauri #daySideBtn svg{width:18px;height:18px;}
 .day-drawer .dw-wi.done .dw-wi-name{text-decoration:line-through;opacity:.55;}
 /* stato vuoto: nessun piano */
 .dsw-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;text-align:center;padding:24px 24px 60px;color:var(--muted);}
-.dsw-empty-ic{font-size:32px;margin-bottom:2px;}
 .dsw-empty-t{font-size:15px;font-weight:600;color:var(--text);}
 .dsw-empty-d{font-size:13px;line-height:1.5;max-width:230px;}
-.dsw-empty-btn{margin-top:10px;border:none;background:var(--accent);color:#fff;border-radius:10px;padding:9px 16px;font-size:13.5px;font-weight:600;font-family:var(--sans);cursor:pointer;transition:filter .15s;}
-.dsw-empty-btn:hover{filter:brightness(1.08);}
+.dsw-plan-btn{margin-top:12px;}
 html.is-tauri .ai-side-btn{top:8px;z-index:400;}
 /* Bottone chat AI a destra disattivato per ora (le chat sono nella sidebar sinistra; lo riuseremo). */
 #aiSideBtn{display:none!important;}

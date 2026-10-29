@@ -3863,14 +3863,16 @@ function dwWheelUpdEl(sc,sign){
 function renderDaySide(){
   const body=document.getElementById('dayDrawerBody');if(!body)return;
   if(!planDayValid()){
-    body.innerHTML='<div class="dsw-empty"><div class="dsw-empty-ic">🗓️</div><div class="dsw-empty-t">'+tr('ds_noplan_t')+'</div><div class="dsw-empty-d">'+tr('ds_noplan_d')+'</div><button class="dsw-empty-btn" data-dsplan>'+tr('ds_make_plan')+'</button></div>';
+    body.innerHTML='<div class="dsw-empty"><div class="dsw-empty-t">'+tr('ds_noplan_t')+'</div><div class="dsw-empty-d">'+tr('ds_noplan_d')+'</div><button class="ov-abtn primary dsw-plan-btn" data-dsplan><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.6V12l3 1.8"/></svg><span>'+tr('ds_make_plan')+'</span></button></div>';
     return;
   }
   const sched={};if(PLAN_DAY.sched)PLAN_DAY.sched.forEach(s=>{sched[s.id]=s.start;});
   const items=PLAN_DAY.order.map(id=>TASKS.find(t=>t.id==id)).filter(Boolean);
   const rows=items.map(t=>{
-    const time=sched[t.id]||t.time||'';
-    return '<div class="dw-wi'+(t.done?' done':'')+'" data-dsw="'+t.id+'"><div class="dw-wi-ic">'+dwWheelEmoji(taskTitle(t))+'</div><div class="dw-wi-body"><div class="dw-wi-name">'+bdEsc(taskTitle(t))+'</div><div class="dw-wi-time">'+bdEsc(time)+'</div></div></div>';
+    let time=sched[t.id];
+    if(Array.isArray(time))time=fmtHM(time[0],time[1]); // computeSchedule dà [h,m]
+    if(time==null||time==='')time=t.time||'';
+    return '<div class="dw-wi'+(t.done?' done':'')+'" data-dsw="'+t.id+'"><div class="dw-wi-ic">'+dwWheelEmoji(taskTitle(t))+'</div><div class="dw-wi-body"><div class="dw-wi-name">'+bdEsc(taskTitle(t))+'</div><div class="dw-wi-time">'+bdEsc(String(time))+'</div></div></div>';
   }).join('');
   body.innerHTML='<div class="dw-wheel dsw-wheel" id="dayWheel"><div class="dw-wheel-scroll" id="dayWheelScroll"><div class="dw-wheel-pad"></div>'+rows+'<div class="dw-wheel-pad"></div></div></div>';
   dayWheelBind();
