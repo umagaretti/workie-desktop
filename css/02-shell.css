@@ -219,7 +219,7 @@ html.theme-chiaro .stb-btn.active,html.theme-custom .stb-btn.active{background:#
 /* lista chat Resolve nella sidebar */
 .sc-list{display:flex;flex-direction:column;gap:2px;}
 /* box chat identici ai nav-item (stesso font/colore/padding) */
-.sc-item{display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;cursor:pointer;transition:background .15s,color .15s;}
+.sc-item{display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;border:1px solid transparent;cursor:pointer;transition:background .15s,color .15s;}
 /* titolo sezione "Chat" (come "Tasks"), con un po' di spazio sopra per abbassare la lista */
 .sc-secttl{font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--faint);padding:2px 9px 4px;margin-top:10px;font-family:var(--sans);}
 /* pallino di stato: viola quando l'AI ha risposto per ultima (da leggere) */
@@ -233,6 +233,11 @@ html.theme-chiaro .sc-item.active,html.theme-custom .sc-item.active{background:#
 .sc-ic{flex:none;width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);}
 .sc-ic svg{width:15px;height:15px;}
 .sc-cbody{min-width:0;display:flex;flex-direction:column;gap:1px;}
+/* icona nelle voci chat: stessa misura/struttura dei nav-item (.ni), così sono identiche.
+   NB: .sc-ic è già usata altrove (avatar 27px), quindi qui classe dedicata .sc-ni */
+.sc-ni{display:flex;align-items:center;flex:none;color:var(--text-dim);}
+.sc-ni svg{width:15px;height:15px;opacity:.85;display:block;}
+.sc-item:hover .sc-ni,.sc-item.active .sc-ni{color:var(--text);}
 .sc-ctitle{flex:1;min-width:0;font-size:13.5px;line-height:1;color:var(--text-dim);font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .sc-item:hover .sc-ctitle{color:var(--text);}
 .sc-item.active .sc-ctitle{color:var(--text);}

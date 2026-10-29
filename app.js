@@ -2848,7 +2848,7 @@ function renderSideChat(){
     const active=(onChat&&taskPageId===id);
     const last=e.msgs[e.msgs.length-1];
     const unread=!active&&!!last&&last.r==='ai';
-    return '<div class="sc-item'+(active?' active':'')+(unread?' unread':'')+'" data-scchat="'+id+'"><span class="sc-ctitle">'+bdEsc(title)+'</span><span class="sc-dot"></span></div>';
+    return '<div class="sc-item'+(active?' active':'')+(unread?' unread':'')+'" data-scchat="'+id+'"><span class="sc-ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7A8.38 8.38 0 0 1 4 11.5 8.5 8.5 0 0 1 12.5 3 8.5 8.5 0 0 1 21 11.5z"/></svg></span><span class="sc-ctitle">'+bdEsc(title)+'</span><span class="sc-dot"></span></div>';
   }).join('')+'</div>';
 }
 {const el=document.getElementById('sideChat');if(el)el.addEventListener('click',e=>{const it=e.target.closest('[data-scchat]');if(it&&typeof openResolveChat==='function')openResolveChat(+it.dataset.scchat);});}
