@@ -30,11 +30,29 @@ html.is-tauri #daySideBtn svg{width:18px;height:18px;}
 .day-drawer{order:10;flex:none;width:0;--dd-w:340px;overflow:hidden;background:var(--panel);border-left:1px solid var(--border);display:flex;flex-direction:column;opacity:0;transition:width .3s cubic-bezier(.22,.61,.36,1),opacity .15s ease;will-change:width,opacity;position:relative;z-index:30;-webkit-app-region:no-drag;}
 .day-drawer.no-anim{transition:none!important;}
 .app.day-drawer-open .day-drawer{width:var(--dd-w);opacity:1;}
+/* il tasto in alto a destra: orologino quando chiuso, X quando aperto (stessa posizione) */
+#daySideBtn .dsb-x{display:none;}
+#daySideBtn.on .dsb-clock{display:none;}
+#daySideBtn.on .dsb-x{display:block;}
 .day-drawer .dd-head,.day-drawer .dd-body{width:var(--dd-w);box-sizing:border-box;}
 .day-drawer .dd-head{display:flex;align-items:center;justify-content:space-between;padding:46px 16px 14px;font-weight:600;font-size:15px;color:var(--text);}
 .day-drawer .dd-close{border:none;background:transparent;color:var(--muted);font-size:15px;cursor:pointer;width:28px;height:28px;border-radius:7px;line-height:1;}
 .day-drawer .dd-close:hover{background:var(--panel-2);color:var(--text);}
-.day-drawer .dd-body{padding:4px 16px;color:var(--muted);font-size:13.5px;line-height:1.5;}
+.day-drawer .dd-body{flex:1;min-height:0;padding:0;color:var(--muted);font-size:13.5px;line-height:1.5;display:flex;flex-direction:column;}
+/* ruota del piano dentro la sidebar: box che crescono scorrendo */
+.dsw-wheel{flex:1;min-height:0;}
+.day-drawer .dw-wi{padding:0 18px;gap:13px;min-height:68px;transform-origin:left center;}
+.day-drawer .dw-wi-ic{width:46px;height:46px;font-size:22px;border-radius:14px;}
+.day-drawer .dw-wi-name{font-size:18px;}
+.day-drawer .dw-wi.sel .dw-wi-name{font-size:22px;}
+.day-drawer .dw-wi.done .dw-wi-name{text-decoration:line-through;opacity:.55;}
+/* stato vuoto: nessun piano */
+.dsw-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;text-align:center;padding:24px 24px 60px;color:var(--muted);}
+.dsw-empty-ic{font-size:32px;margin-bottom:2px;}
+.dsw-empty-t{font-size:15px;font-weight:600;color:var(--text);}
+.dsw-empty-d{font-size:13px;line-height:1.5;max-width:230px;}
+.dsw-empty-btn{margin-top:10px;border:none;background:var(--accent);color:#fff;border-radius:10px;padding:9px 16px;font-size:13.5px;font-weight:600;font-family:var(--sans);cursor:pointer;transition:filter .15s;}
+.dsw-empty-btn:hover{filter:brightness(1.08);}
 html.is-tauri .ai-side-btn{top:8px;z-index:400;}
 /* Bottone chat AI a destra disattivato per ora (le chat sono nella sidebar sinistra; lo riuseremo). */
 #aiSideBtn{display:none!important;}

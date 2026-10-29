@@ -109,12 +109,17 @@ function openDaySide(force){
   if(open){app.classList.remove('ai-drawer-open');const ab=document.getElementById('aiSideBtn');if(ab)ab.classList.remove('on');const ob=document.getElementById('ovAiBtn');if(ob)ob.classList.remove('on');}
   app.classList.toggle('day-drawer-open',open);
   const db=document.getElementById('daySideBtn');if(db)db.classList.toggle('on',open);
+  if(open){try{renderDaySide();}catch(e){}}
 }
 {const oa=document.getElementById('ovAiBtn');if(oa)oa.addEventListener('click',e=>{e.stopPropagation();openAiSide();});
  const aa=document.getElementById('aiSideBtn');if(aa)aa.addEventListener('click',e=>{e.stopPropagation();openAiSide();});
  // Bottone Giornata in alto a destra: apre/chiude un drawer a destra (segnaposto; la funzione verrà rifatta)
  {const da=document.getElementById('daySideBtn');if(da)da.addEventListener('click',e=>{e.stopPropagation();openDaySide();});
-  const dc=document.getElementById('dayDrawerClose');if(dc)dc.addEventListener('click',e=>{e.stopPropagation();openDaySide(false);});}
+  const dc=document.getElementById('dayDrawerClose');if(dc)dc.addEventListener('click',e=>{e.stopPropagation();openDaySide(false);});
+  const dBody=document.getElementById('dayDrawerBody');if(dBody)dBody.addEventListener('click',e=>{
+    if(e.target.closest('[data-dsplan]')){openDaySide(false);if(typeof go==='function')go('planday');return;}
+    const row=e.target.closest('.dw-wi[data-dsw]');if(row){const id=+row.dataset.dsw;openDaySide(false);if(typeof openTaskPage==='function')openTaskPage(id);return;}
+  });}
  const ax=document.getElementById('aidClose');if(ax)ax.addEventListener('click',()=>openAiSide(false));
  const adr=document.getElementById('aiDrawer');if(adr)adr.addEventListener('click',e=>{
    const del=e.target.closest('[data-scdel]');
@@ -457,8 +462,8 @@ Object.assign(STR.ja,{nav_home:`ホーム`,nav_desktop:`Daily`,nav_tasks:`タス
 Object.assign(STR.ko,{nav_home:`홈`,nav_desktop:`Daily`,nav_tasks:`작업`,nav_team:`팀`,nav_projects:`프로젝트`,nav_connections:`연결`,nav_settings:`설정`,nav_social:`소셜`,nav_workflow:`Workflow`,nav_resolve:`Resolve`,nav_soon:`곧 출시`,g_morning:`좋은 아침이에요`,g_afternoon:`안녕하세요`,g_evening:`좋은 저녁이에요`,home_watch:`살펴볼 만한`,dw_upcoming:`예정`,new_task:`+ 새 작업`,new_project:`+ 새 프로젝트`,team_create:`+ 팀 만들기`,team_join:`참여`,back:`뒤로`,al_all_clear:`모두 완료, 마감된 항목이 없어요.`,g_overdue:`기한 초과`,g_today:`오늘`,connect:`연결`,nt_group:`그룹`,grp_all:`전체`,grp_none:`없음`,grp_new:`새 그룹`,grp_manage:`그룹 관리`,grp_link:`프로젝트에 연결`,grp_link_none:`프로젝트 없음`,proj_link_group:`연결된 그룹`,proj_link_none:`그룹 없음`,gm_title:`그룹 관리`,gm_add:`추가`,gm_active:`활성`,set_language:`언어`,set_appearance:`화면`,stm_prefs:`환경설정`,stm_home:`홈`,stm_notif:`알림`,stm_notif_push:`푸시 알림`,stm_notif_push_d:`메시지, 초대, 작업 알림에 대한 알림입니다.`,stm_generale:`일반`,stm_privacy:`개인정보`,stm_billing:`결제`,stm_features:`기능`,stm_profile:`프로필`,set_account:`계정`,stm_home_daily:`홈에 Daily 표시`,stm_home_tasks:`홈에 작업 표시`,stm_g_settings:`설정`,stm_g_desktop:`데스크톱 앱`,stm_g_custom:`사용자 지정`,mcs_title:`만들기`,mcs_task:`새 작업`,mcs_project:`새 프로젝트`,dw_setup:`하루 설정`,dw_setup_title:`하루를 설정하세요`,soc_tab_recent:`최근 채팅`,soc_tab_conn:`연결`,soc_tab_team:`팀`,soc_add:`+ 추가`,soc_sub:`내 네트워크: 채팅, 연결, 팀`,pd_board:`보드`,pd_files:`파일`,members_word:`멤버`,pd_task_ph:`프로젝트에 작업 추가…`,add:`추가`,requests:`요청`,no_requests:`요청 없음`,accept:`수락`,decline:`거절`,invited_you:`님이 초대했습니다:`,grp_save:`저장`,grp_create:`그룹 만들기`,grp_delete:`그룹 삭제`,grp_name:`그룹 이름`,stm_save:`저장`,coming_soon:`곧 출시`,splash_lang:`언어 선택`});
 
 // Etichette impostazioni interfaccia (sfondo animato). tr() fa fallback en→it per le altre lingue.
-Object.assign(STR.it,{set_interface:`Interfaccia`,set_gradient:`Sfondo animato`,set_gradient_d:`La luce viola che si muove dietro l'app.`});
-Object.assign(STR.en,{set_interface:`Interface`,set_gradient:`Animated background`,set_gradient_d:`The purple light drifting behind the app.`});
+Object.assign(STR.it,{set_interface:`Interfaccia`,set_gradient:`Sfondo animato`,set_gradient_d:`La luce viola che si muove dietro l'app.`,ds_noplan_t:`Nessun piano per oggi`,ds_noplan_d:`Crea il piano della giornata e lo vedrai qui, con gli orari.`,ds_make_plan:`Pianifica la giornata`});
+Object.assign(STR.en,{set_interface:`Interface`,set_gradient:`Animated background`,set_gradient_d:`The purple light drifting behind the app.`,ds_noplan_t:`No plan for today`,ds_noplan_d:`Create your day plan and it shows up here, with times.`,ds_make_plan:`Plan my day`});
 
 let LANG=(function(){try{return localStorage.getItem('workie_lang')||'en';}catch(e){return 'en';}})();
 function tr(k){const o=STR[LANG];if(o&&o[k]!=null)return o[k];if(STR.en&&STR.en[k]!=null)return STR.en[k];if(STR.it&&STR.it[k]!=null)return STR.it[k];return k;}
@@ -3351,7 +3356,7 @@ function planMyDay(){
 }
 // Piano della giornata: ordine salvato + box in Overview
 let PLAN_DAY=(()=>{try{return JSON.parse(localStorage.getItem(ukey('workie_plan_day')))||null;}catch(e){return null;}})();
-function savePlanDay(){try{localStorage.setItem(ukey('workie_plan_day'),PLAN_DAY?JSON.stringify(PLAN_DAY):'');}catch(e){}}
+function savePlanDay(){try{localStorage.setItem(ukey('workie_plan_day'),PLAN_DAY?JSON.stringify(PLAN_DAY):'');}catch(e){}try{if(document.querySelector('.app.day-drawer-open')&&typeof renderDaySide==='function')renderDaySide();}catch(e){}}
 function planDayValid(){return !!(PLAN_DAY&&PLAN_DAY.date&&cmpDate(PLAN_DAY.date,realToday())===0&&PLAN_DAY.order&&PLAN_DAY.order.length);}
 // ---- Pianifica la giornata: picker + caricamento + roadmap ----
 const PDAY_SPARK='<svg class="ic-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.6V12l3 1.8"/></svg>';
@@ -3852,6 +3857,33 @@ function dwWheelUpdEl(sc,sign){
     el.style.opacity=op;
     const ad=Math.abs(dy);if(ad<bestD){bestD=ad;best=el;}
   });
+  items.forEach(el=>el.classList.toggle('sel',el===best));
+}
+// ---- Giornata nella sidebar destra: il piano del Plan my day, a ruota scorrevole ----
+function renderDaySide(){
+  const body=document.getElementById('dayDrawerBody');if(!body)return;
+  if(!planDayValid()){
+    body.innerHTML='<div class="dsw-empty"><div class="dsw-empty-ic">🗓️</div><div class="dsw-empty-t">'+tr('ds_noplan_t')+'</div><div class="dsw-empty-d">'+tr('ds_noplan_d')+'</div><button class="dsw-empty-btn" data-dsplan>'+tr('ds_make_plan')+'</button></div>';
+    return;
+  }
+  const sched={};if(PLAN_DAY.sched)PLAN_DAY.sched.forEach(s=>{sched[s.id]=s.start;});
+  const items=PLAN_DAY.order.map(id=>TASKS.find(t=>t.id==id)).filter(Boolean);
+  const rows=items.map(t=>{
+    const time=sched[t.id]||t.time||'';
+    return '<div class="dw-wi'+(t.done?' done':'')+'" data-dsw="'+t.id+'"><div class="dw-wi-ic">'+dwWheelEmoji(taskTitle(t))+'</div><div class="dw-wi-body"><div class="dw-wi-name">'+bdEsc(taskTitle(t))+'</div><div class="dw-wi-time">'+bdEsc(time)+'</div></div></div>';
+  }).join('');
+  body.innerHTML='<div class="dw-wheel dsw-wheel" id="dayWheel"><div class="dw-wheel-scroll" id="dayWheelScroll"><div class="dw-wheel-pad"></div>'+rows+'<div class="dw-wheel-pad"></div></div></div>';
+  dayWheelBind();
+  requestAnimationFrame(()=>{const sc=document.getElementById('dayWheelScroll');dwWheelPadsEl(sc);dwWheelCenterNow(sc);dayWheelUpdate();requestAnimationFrame(dayWheelUpdate);});
+  setTimeout(dayWheelUpdate,340);
+}
+function dayWheelBind(){const sc=document.getElementById('dayWheelScroll');if(!sc||sc.dataset.bound)return;sc.dataset.bound='1';let ticking=false;sc.addEventListener('scroll',()=>{if(ticking)return;ticking=true;requestAnimationFrame(()=>{dayWheelUpdate();ticking=false;});});}
+function dayWheelUpdate(){
+  const sc=document.getElementById('dayWheelScroll');if(!sc)return;const items=sc.querySelectorAll('.dw-wi');if(!items.length)return;
+  const wr=sc.getBoundingClientRect(),cy=wr.top+wr.height/2,half=wr.height/2||1;let best=null,bestD=1e9;
+  items.forEach(el=>{const r=el.getBoundingClientRect(),ic=r.top+r.height/2,dy=ic-cy;let nd=dy/half;if(nd>1.5)nd=1.5;if(nd<-1.5)nd=-1.5;const an=Math.min(1,Math.abs(nd));
+    el.style.transform='scale('+(1-an*0.28).toFixed(3)+')';el.style.opacity=(1-an*0.72).toFixed(2);
+    const ad=Math.abs(dy);if(ad<bestD){bestD=ad;best=el;}});
   items.forEach(el=>el.classList.toggle('sel',el===best));
 }
 // ---- Widget Daily (aggiungibile alla Home) ----

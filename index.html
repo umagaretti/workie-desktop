@@ -45,7 +45,7 @@ try{
 <script src="https://sdk.scdn.co/spotify-player.js" async></script>
 <script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@2/lib/msal-browser.min.js"></script>
 <link rel="stylesheet" href="css/01-base.css">
-<link rel="stylesheet" href="css/02-shell.css?v=17">
+<link rel="stylesheet" href="css/02-shell.css?v=18">
 <link rel="stylesheet" href="css/03-main.css">
 <link rel="stylesheet" href="css/04-task-detail.css?v=15">
 <link rel="stylesheet" href="css/05-home.css?v=10">
@@ -92,11 +92,11 @@ try{
 <!-- Bottone chat AI globale (tutte le pagine) — speculare al toggle sidebar sinistra -->
 <button class="ai-side-btn" id="aiSideBtn" title="Chat AI" aria-label="Apri/chiudi la chat AI"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="4.5"/><rect class="aisb-box aisb-open" x="11.8" y="7.7" width="6.6" height="8.6" rx="1.8" fill="currentColor" stroke="none"/><rect class="aisb-box aisb-closed" x="15.5" y="7.7" width="2.9" height="8.6" rx="1.3" fill="currentColor" stroke="none"/></svg><span class="ai-badge"></span></button>
 <!-- Bottone Giornata globale (tutte le pagine), in alto a destra -->
-<button class="ai-side-btn" id="daySideBtn" title="Giornata" aria-label="Apri la Giornata"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.6V12l3 1.8"/></svg></button>
-<!-- Drawer "Giornata" a destra (segnaposto: la funzione verrà rifatta) -->
+<button class="ai-side-btn" id="daySideBtn" title="Giornata" aria-label="Apri la Giornata"><svg class="dsb-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.6V12l3 1.8"/></svg><svg class="dsb-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
+<!-- Drawer "Giornata" a destra: il piano del Plan my day, a ruota scorrevole -->
 <aside class="day-drawer" id="dayDrawer">
-  <div class="dd-head"><span>Giornata</span><button class="dd-close" id="dayDrawerClose" title="Chiudi" aria-label="Chiudi">✕</button></div>
-  <div class="dd-body">Questa sezione è in arrivo — la rifacciamo insieme.</div>
+  <div class="dd-head"><span>Giornata</span></div>
+  <div class="dd-body" id="dayDrawerBody"></div>
 </aside>
 <!-- Sidebar AI a destra (chat) -->
 <aside class="ai-drawer" id="aiDrawer">
@@ -1591,6 +1591,6 @@ try{
 <script src="themes.js"></script>
 <script src="storage.js"></script>
 <script src="sync.js"></script>
-<script src="app.js?v=17"></script>
+<script src="app.js?v=18"></script>
 </body>
 </html>
