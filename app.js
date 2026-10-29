@@ -3490,14 +3490,20 @@ function renderOvPlan(){
  let ovcTaskSel=ovcDraft.task;
  function ovcSelTask(){return ovcTaskSel!=null?TASKS.find(x=>x.id===ovcTaskSel):null;}
  function ovcTaskLabel(){const t=ovcSelTask();return t?taskTitle(t):tr('ovc_pick');}
- function ovcSyncLabels(){const lbl=ovcTaskLabel();['ovcTaskLbl1','ovcTaskLbl2'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=lbl;});const cb=document.getElementById('ovChatbox');if(cb)cb.classList.toggle('has-task',ovcTaskSel!=null);}
- function ovcAutoGrow(){const ta=document.getElementById('ovcInput');if(!ta)return;ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,160)+'px';}
+ function ovcSyncLabels(){const lbl=ovcTaskLabel();['ovcTaskLbl1','ovcTaskLbl2'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=lbl;});const cb=document.getElementById('ovChatbox');if(cb)cb.classList.toggle('has-task',ovcTaskSel!=null);const sd=document.getElementById('ovcSend');if(sd)sd.setAttribute('data-tip',tr('ovc_pick'));}
+ function ovcAutoGrow(){const ta=document.getElementById('ovcInput');if(!ta)return;ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,160)+'px';ovcLift();}
+ /* Fa SALIRE il saluto "Ready to tackle…" quando il box si espande, così non viene coperto.
+    Alza il saluto esattamente di quanto il box cresce verso l'alto (misura in tempo reale). */
+ function ovcLift(){const cb=document.getElementById('ovChatbox');const gr=document.getElementById('greet');if(!gr)return;
+   if(!cb||!cb.classList.contains('expanded')){gr.style.transform='';return;}
+   const exp=document.getElementById('ovcExpanded');const h=exp?exp.scrollHeight:52;
+   gr.style.transform='translateY(-'+Math.max(0,h-52+16)+'px)';}
  function ovcItemHTML(t){const sb=[];if(t.gid!=null&&typeof GROUPS!=='undefined'){const g=GROUPS.find(x=>x.id===t.gid);if(g)sb.push(g.name);}const d=taskDue(t);if(d){const months=MONTHS[LANG]||MONTHS.it;sb.push(d[2]+' '+(months[d[1]]||''));}
    return '<button type="button" class="ovc-item'+(ovcTaskSel===t.id?' sel':'')+'" data-ovctask="'+t.id+'"><span class="ovc-item-ic">'+RSV_SC_IC.task+'</span><span class="ovc-item-tx"><span class="ovc-item-tt">'+bdEsc(taskTitle(t))+'</span>'+(sb.length?'<span class="ovc-item-sb">'+bdEsc(sb.join(' · '))+'</span>':'')+'</span></button>';}
  function ovcRecentTasks(){return (typeof TASKS!=='undefined'?TASKS:[]).filter(x=>!x.done).slice().sort((a,b)=>(b.id||0)-(a.id||0)).slice(0,5);}
  function ovcMiniOpen(open){const cb=document.getElementById('ovChatbox');if(!cb)return;if(open){const box=document.getElementById('ovcMini');if(box){const list=ovcRecentTasks();box.innerHTML='<div class="ovc-mini-h">'+tr('ovc_recent')+'</div>'+(list.length?list.map(ovcItemHTML).join(''):'<div class="ovc-empty">'+tr('ovc_none')+'</div>');}}cb.classList.toggle('miniopen',open);}
- function ovcListOpen(open){const cb=document.getElementById('ovChatbox');if(!cb)return;if(open)ovcRenderList();cb.classList.toggle('listopen',open);}
- function ovcExpand(open){const cb=document.getElementById('ovChatbox');if(!cb)return;if(open)ovcMiniOpen(false);cb.classList.toggle('expanded',open);const ov=cb.closest('.ov');if(ov)ov.classList.toggle('ovc-focus',open);if(open){const ta=document.getElementById('ovcInput');if(ta){ovcAutoGrow();setTimeout(()=>ta.focus(),120);}}else{ovcListOpen(false);}}
+ function ovcListOpen(open){const cb=document.getElementById('ovChatbox');if(!cb)return;if(open)ovcRenderList();cb.classList.toggle('listopen',open);ovcLift();}
+ function ovcExpand(open){const cb=document.getElementById('ovChatbox');if(!cb)return;if(open)ovcMiniOpen(false);cb.classList.toggle('expanded',open);const ov=cb.closest('.ov');if(ov)ov.classList.toggle('ovc-focus',open);if(open){const ta=document.getElementById('ovcInput');if(ta){ovcAutoGrow();setTimeout(()=>ta.focus(),120);}}else{ovcListOpen(false);}ovcLift();}
  function ovcRenderList(){const box=document.getElementById('ovcList');if(!box)return;const list=(typeof TASKS!=='undefined'?TASKS:[]).filter(x=>!x.done);
    let h='<div class="ovc-list-h">'+tr('ovc_pick_h')+'</div>';
    if(!list.length)h+='<div class="ovc-empty">'+tr('ovc_none')+'</div>';
