@@ -195,6 +195,12 @@
 .prop-final.no{color:#ef9a9a;}
 .prop-edit{display:flex;gap:7px;margin-top:10px;}
 .prop-edit input{flex:1;background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:6px 9px;color:var(--text);font-size:12px;font-family:var(--sans);color-scheme:dark;}
+.prop-edit button{border-radius:8px;padding:6px 11px;font-size:12px;cursor:pointer;font-family:var(--sans);border:1px solid var(--border);background:var(--panel-2);color:var(--text-dim);flex:none;}
+.prop-edit .pa-acc{background:var(--accent-dim);color:#fff;border-color:transparent;}
+.prop-edit .pa-rej:hover{color:#ef9a9a;}
+.prop-final.waiting{color:var(--muted);}
+.prop-note{font-size:12px;color:var(--text-dim);margin-top:9px;}
+.prop-reason{font-size:12.5px;color:var(--text-dim);font-style:italic;margin-top:5px;}
 .m-av.invite{background:var(--panel-3);color:var(--muted);font-weight:400;}
 /* Task per persona (striscia stilizzata del carico) */
 .tbm-strip{display:flex;gap:10px;flex-wrap:wrap;margin:4px 0 18px;}

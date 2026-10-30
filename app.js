@@ -375,7 +375,8 @@ Object.assign(STR.it,{ov_my_tasks:`Le mie task`,chat_new_group:`+ Nuovo gruppo`,
 Object.assign(STR.en,{ov_my_tasks:`My tasks`,chat_new_group:`+ New group`,group_name:`Group name`,assign_to:`Assign to`,assignee_me:`Myself`,proposal_sent:`Proposal sent via chat`,you_proposed:`You proposed a task`,proposed_task:`Proposed a task`,prop_modify:`Modify`,prop_accepted:`Proposal accepted`,prop_rejected:`Proposal rejected`,prop_modified:`Deadline modified · awaiting confirmation`,new_deadline:`New deadline`,confirm:`Confirm`,task_title_ph:`Task title`});
 Object.assign(STR.fr,{ov_my_tasks:`Mes tâches`,chat_new_group:`+ Nouveau groupe`,group_name:`Nom du groupe`,assign_to:`Assigner à`,assignee_me:`Moi-même`,proposal_sent:`Proposition envoyée par chat`,you_proposed:`Vous avez proposé une tâche`,proposed_task:`A proposé une tâche`,prop_modify:`Modifier`,prop_accepted:`Proposition acceptée`,prop_rejected:`Proposition refusée`,prop_modified:`Échéance modifiée · en attente de confirmation`,new_deadline:`Nouvelle échéance`,confirm:`Confirmer`,task_title_ph:`Titre de la tâche`});
 Object.assign(STR.es,{ov_my_tasks:`Mis tareas`,chat_new_group:`+ Nuevo grupo`,group_name:`Nombre del grupo`,assign_to:`Asignar a`,assignee_me:`Yo mismo`,proposal_sent:`Propuesta enviada por chat`,you_proposed:`Has propuesto una tarea`,proposed_task:`Te ha propuesto una tarea`,prop_modify:`Modificar`,prop_accepted:`Propuesta aceptada`,prop_rejected:`Propuesta rechazada`,prop_modified:`Fecha modificada · esperando confirmación`,new_deadline:`Nueva fecha`,confirm:`Confirmar`,task_title_ph:`Título de la tarea`});
-Object.assign(STR.it,{ql_feed:`Attività`,feed_empty:`Ancora nessuna attività nel team.`,feed_completed:`ha completato`,feed_assigned:`ha assegnato`,feed_to:`a`,feed_created:`ha creato`,feed_invited:`ha invitato`,assign_title:`Assegna a`,assign_none:`Nessuno`,t_now:`ora`,t_min:` min fa`,t_hr:` h fa`,t_day:` g fa`});
+Object.assign(STR.it,{ql_feed:`Attività`,feed_empty:`Ancora nessuna attività nel team.`,feed_completed:`ha completato`,feed_assigned:`ha assegnato`,feed_to:`a`,feed_created:`ha creato`,feed_invited:`ha invitato`,assign_title:`Assegna a`,assign_none:`Nessuno`,t_now:`ora`,t_min:` min fa`,t_hr:` h fa`,t_day:` g fa`,prop_waiting:`In attesa di risposta`,prop_reason_ph:`Motivo del rifiuto (opzionale)`,prop_sent:`Proposta inviata a`,feed_proposed:`ha proposto`,feed_accepted:`ha accettato`});
+Object.assign(STR.en,{prop_waiting:`Awaiting response`,prop_reason_ph:`Reason for declining (optional)`,prop_sent:`Proposal sent to`,feed_proposed:`proposed`,feed_accepted:`accepted`});
 Object.assign(STR.en,{ql_feed:`Activity`,feed_empty:`No team activity yet.`,feed_completed:`completed`,feed_assigned:`assigned`,feed_to:`to`,feed_created:`created`,feed_invited:`invited`,assign_title:`Assign to`,assign_none:`Nobody`,t_now:`now`,t_min:`m ago`,t_hr:`h ago`,t_day:`d ago`});
 Object.assign(STR.fr,{ql_feed:`Activité`,feed_empty:`Pas encore d'activité dans l'équipe.`,feed_completed:`a terminé`,feed_assigned:`a assigné`,feed_to:`à`,feed_created:`a créé`,feed_invited:`a invité`,assign_title:`Assigner à`,assign_none:`Personne`,t_now:`maintenant`,t_min:` min`,t_hr:` h`,t_day:` j`});
 Object.assign(STR.es,{ql_feed:`Actividad`,feed_empty:`Aún no hay actividad en el equipo.`,feed_completed:`completó`,feed_assigned:`asignó`,feed_to:`a`,feed_created:`creó`,feed_invited:`invitó`,assign_title:`Asignar a`,assign_none:`Nadie`,t_now:`ahora`,t_min:` min`,t_hr:` h`,t_day:` d`});
@@ -2274,12 +2275,19 @@ function renderMsg(mm,i){
   return `<div class="msg${mm.self?' me':''}">${mm.self?'':`<div class="av">${SVG.av}</div>`}<div class="msg-text">${mm.text}</div></div>`;
 }
 function renderProposal(mm,i){
-  let b=`<div class="prop-h">${mm.mine?tr('you_proposed'):tr('proposed_task')}</div><div class="prop-title">${mm.title}</div><div class="prop-dl">${tr('nt_deadline')}: ${mm.deadline||'—'}</div>`;
+  // "Il mio turno": decido io. Nuova proposta in arrivo, oppure contro-proposta tornata a chi aveva proposto.
+  const myTurn=(!mm.mine&&mm.status==='pending')||(mm.mine&&mm.status==='counter');
+  let b=`<div class="prop-h">${mm.mine?tr('you_proposed'):tr('proposed_task')}</div><div class="prop-title">${bdEsc(mm.title)}</div><div class="prop-dl">${tr('nt_deadline')}: ${mm.deadline||'—'}</div>`;
   if(mm.status==='accepted')b+=`<div class="prop-final ok">${SVG.check} ${tr('prop_accepted')}</div>`;
-  else if(mm.status==='rejected')b+=`<div class="prop-final no">${tr('prop_rejected')}</div>`;
+  else if(mm.status==='rejected'){b+=`<div class="prop-final no">${tr('prop_rejected')}</div>`;if(mm.reason)b+=`<div class="prop-reason">“${bdEsc(mm.reason)}”</div>`;}
   else if(mm._editing)b+=`<div class="prop-edit"><input type="date" id="propDate" value="${mm.deadline||''}"><button class="pa-acc" data-prop="${i}" data-pa="confirm">${tr('confirm')}</button></div>`;
-  else if(mm.status==='counter')b+=`<div class="prop-final" style="color:var(--text-dim)">${tr('prop_modified')}</div><div class="prop-actions"><button class="pa-acc" data-prop="${i}" data-pa="acc">${tr('accept')}</button><button class="pa-rej" data-prop="${i}" data-pa="rej">${tr('decline')}</button></div>`;
-  else b+=`<div class="prop-actions"><button class="pa-acc" data-prop="${i}" data-pa="acc">${tr('accept')}</button><button data-prop="${i}" data-pa="mod">${tr('prop_modify')}</button><button class="pa-rej" data-prop="${i}" data-pa="rej">${tr('decline')}</button></div>`;
+  else if(mm._rejecting)b+=`<div class="prop-edit"><input type="text" id="propReason" placeholder="${tr('prop_reason_ph')}"><button class="pa-rej" data-prop="${i}" data-pa="rejc">${tr('decline')}</button></div>`;
+  else if(myTurn){
+    if(mm.status==='counter')b+=`<div class="prop-note">${tr('prop_modified')}</div>`;
+    b+=`<div class="prop-actions"><button class="pa-acc" data-prop="${i}" data-pa="acc">${tr('accept')}</button><button data-prop="${i}" data-pa="mod">${tr('prop_modify')}</button><button class="pa-rej" data-prop="${i}" data-pa="rej">${tr('decline')}</button></div>`;
+  }else{
+    b+=`<div class="prop-final waiting">${tr('prop_waiting')}</div>`;
+  }
   return `<div class="msg"><div class="av">${SVG.av}</div><div class="prop">${b}</div></div>`;
 }
 // Sezioni mostrate nel menu (per ora quelle comuni a tutti i team).
@@ -2293,6 +2301,7 @@ function renderTeamQuickLinks(){
 function teamSectionLabel(){const q=TEAM_QL.find(x=>x.k===teamSection);if(q)return tr(q.ik);
   if(teamSection==='space')return tr('shared_space');
   if(teamSection==='event')return tr('ql_events');
+  if(teamSection==='chatconv')return tr('ql_chat');
   return tr('view_overview');}
 function teamUpdateSecCrumb(){const el=document.getElementById('teamCrumbSec');if(el)el.textContent=teamSectionLabel();}
 function renderTeamNotif(){const el=document.getElementById('teamNotif');if(!el||!curTeam)return;
@@ -2675,14 +2684,26 @@ document.getElementById('eventCreate').addEventListener('click',()=>{
 function sendChatMsg(){const inp=document.getElementById('tchatInput');if(!inp)return;const v=inp.value.trim();if(!v)return;chatMsgs(curTeam,curChatId).push({self:true,text:v});inp.value='';renderTeamMain();}
 function handleProposal(idx,act){
   const mm=chatMsgs(curTeam,curChatId)[idx];if(!mm)return;
-  if(act==='mod'){mm._editing=true;renderTeamMain();return;}
-  if(act==='confirm'){const d=document.getElementById('propDate').value;if(d){mm.deadline=d;if(mm.draft){const p=d.split('-').map(Number);mm.draft.date=[p[0],p[1]-1,p[2]];delete mm.draft.month;}}mm._editing=false;mm.status='counter';renderTeamMain();return;}
-  if(act==='rej'){mm.status='rejected';renderTeamMain();return;}
+  if(act==='mod'){mm._editing=true;mm._rejecting=false;renderTeamMain();setTimeout(()=>{const d=document.getElementById('propDate');if(d)d.focus();},0);return;}
+  if(act==='confirm'){const d=document.getElementById('propDate').value;if(d){mm.deadline=d;if(mm.draft){const p=d.split('-').map(Number);mm.draft.date=[p[0],p[1]-1,p[2]];delete mm.draft.month;}}mm._editing=false;mm.status='counter';saveTeams();renderTeamMain();return;}
+  if(act==='rej'){mm._rejecting=true;mm._editing=false;renderTeamMain();setTimeout(()=>{const r=document.getElementById('propReason');if(r)r.focus();},0);return;}
+  if(act==='rejc'){const r=document.getElementById('propReason');mm.reason=r?r.value.trim():'';mm._rejecting=false;mm.status='rejected';saveTeams();renderTeamMain();return;}
   if(act==='acc'){mm.status='accepted';
-    if(mm.draft){TASKS.push(mm.draft);}
+    if(mm.draft){if(mm.draft.id==null)mm.draft.id=++TID;TASKS.push(mm.draft);}
     else{const p=(mm.deadline||'').split('-').map(Number);const date=(p.length===3&&p[0])?[p[0],p[1]-1,p[2]]:realToday();TASKS.push({id:++TID,title:mm.title,scope:'team:'+curTeam.tid,date,done:false});}
+    saveTasks();saveTeams();
+    logFeed(curTeam,firstName(USER.name)+' '+tr('feed_accepted')+' "'+mm.title+'"');
     renderTeamMain();
   }
+}
+// Data ISO "YYYY-MM-DD" da [y,m0,d]
+function isoFromDate(dt){if(!dt||dt.length<3)return '';return dt[0]+'-'+String(dt[1]+1).padStart(2,'0')+'-'+String(dt[2]).padStart(2,'0');}
+// Assegnare una task a un'altra persona = proposta da approvare (nella sua chat), non task diretta
+function proposeTaskToMember(t,idx,task){
+  const id='dm:'+idx;
+  chatMsgs(t,id).push({proposal:true,mine:true,title:task.title,deadline:isoFromDate(task.date),draft:task,status:'pending',ts:nowTs()});
+  saveTeams();
+  logFeed(t,firstName(USER.name)+' '+tr('feed_proposed')+' "'+task.title+'" '+tr('feed_to')+' '+firstName(t.members[idx].name));
 }
 // ----- New group modal -----
 let grpSel=new Set();
@@ -6178,8 +6199,17 @@ document.getElementById('ntCreate').addEventListener('click',()=>{
   if(ntTeamCtx){
     task.scope='team:'+ntTeamCtx.tid;
     const meI=ntTeamCtx.members.indexOf(meMember(ntTeamCtx));
-    task.assignee=(ntAssignee==='me')?meI:+ntAssignee.slice(1);
+    const asgI=(ntAssignee==='me')?meI:+ntAssignee.slice(1);
+    task.assignee=asgI;
     if(typeof ensureTeamCategory==='function'){const c=ensureTeamCategory(ntTeamCtx);if(c&&task.catId==null)task.catId=c.id;}
+    if(asgI!==meI){
+      // Task per un'altra persona: parte come proposta da approvare nella sua chat (non entra nella board finché non accetta)
+      proposeTaskToMember(ntTeamCtx,asgI,task);
+      tkOv.classList.remove('open');
+      if(typeof showToast==='function')showToast(tr('prop_sent')+' '+firstName(ntTeamCtx.members[asgI].name));
+      if(typeof renderTeamMain==='function')renderTeamMain();
+      return;
+    }
     TASKS.push(task);tasksTodayInc();saveTasks();
     logFeed(ntTeamCtx,firstName(USER.name)+' '+tr('feed_created')+' "'+task.title+'"');
     tkOv.classList.remove('open');if(typeof renderTeamMain==='function')renderTeamMain();
@@ -7733,8 +7763,11 @@ function seedExampleTeams(){
   const fDate=off=>{const dt=fut(off);return [dt.getFullYear(),dt.getMonth(),dt.getDate()];};
   const ev=(off,title,when)=>{const dt=fut(off);return {d:dt.getDate(),mo:dt.getMonth(),title,when};};
   const addTask=(tid,title,assignee,off,done)=>{TASKS.push({id:++TID,title,scope:'team:'+tid,assignee,date:fDate(off),done:!!done});};
+  const propDate=off=>fDate(off);
+  const propIso=off=>{const d=fDate(off);return d[0]+'-'+String(d[1]+1).padStart(2,'0')+'-'+String(d[2]).padStart(2,'0');};
   // --- Team 1: Economy Group ---
-  const t1={tid:TEAM_SEQ++,name:'Economy Group',color:'#6f9bf0',act:0,owner:true,desc:'Redazione, podcast e social',invites:[],spaces:[],
+  const t1tid=TEAM_SEQ++;
+  const t1={tid:t1tid,name:'Economy Group',color:'#6f9bf0',act:0,owner:true,desc:'Redazione, podcast e social',invites:[],spaces:[],
     members:[
       {i:'U',c:A,name:'Umberto',admin:true,tags:['Direzione']},
       {i:'MR',c:'#6f9bf0',name:'Marco Rossi',admin:false,tags:['Podcast']},
@@ -7748,7 +7781,10 @@ function seedExampleTeams(){
     events:[ev(2,'Riunione editoriale','10:00'),ev(6,'Uscita episodio podcast','09:00')],
     groups:[{id:1,name:'Social',members:[0,2]}],
     feed:[{text:'Giulia ha creato il piano editoriale',ts:Date.now()-5400000},{text:'Marco ha completato la scaletta dell\'episodio 3',ts:Date.now()-1800000}],
-    cm:{'dm:1':[{self:false,text:'Ciao! A che punto siamo con l\'episodio 4?'},{self:true,text:'Scaletta pronta per domani 👍'}],
+    cm:{'dm:1':[{self:false,text:'Ciao! A che punto siamo con l\'episodio 4?'},{self:true,text:'Scaletta pronta per domani 👍'},
+          {proposal:true,mine:false,title:'Scrivere le note dell\'episodio 4',deadline:propIso(1),status:'pending',draft:{title:'Scrivere le note dell\'episodio 4',scope:'team:'+t1tid,assignee:0,date:propDate(1),done:false},ts:Date.now()-900000}],
+        'dm:2':[{self:false,text:'Mi mandi le grafiche entro oggi?'},{self:true,text:'Ti ho proposto una task, dai un\'occhiata'},
+          {proposal:true,mine:true,title:'Preparare le storie per il lancio',deadline:propIso(3),status:'counter',draft:{title:'Preparare le storie per il lancio',scope:'team:'+t1tid,assignee:2,date:propDate(3),done:false},ts:Date.now()-600000}],
         'grp:1':[{self:false,text:'Ho programmato i post per questa settimana'},{self:true,text:'Perfetto, grazie Giulia!'}]}
   };
   // 5-7 task a persona, tutte per oggi (per vedere lo scroll nelle colonne)
