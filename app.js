@@ -2200,7 +2200,7 @@ function assigneeAv(t,task){
   const m=t.members[task.assignee];return `<div class="tt-av" style="background:${m.c}" data-assign="${task.id}" title="${bdEsc(m.name)}">${m.i}</div>`;
 }
 function relTime(ts){const d=Math.floor((nowTs()-ts)/1000);if(d<60)return tr('t_now');if(d<3600)return Math.floor(d/60)+tr('t_min');if(d<86400)return Math.floor(d/3600)+tr('t_hr');return Math.floor(d/86400)+tr('t_day');}
-let curTeam=null,teamSection='overview',delConfirm=false,curSpaceName=null,curEventIdx=-1,curChatId=null,GROUP_SEQ=1,chatOpen={groups:true,members:true},teamTaskView='team',teamTaskDay=null,teamCalCur=null;
+let curTeam=null,teamSection='overview',delConfirm=false,curSpaceName=null,curEventIdx=-1,curChatId=null,GROUP_SEQ=1,chatOpen={groups:true,members:true},teamTaskView='team',teamTaskDay=null,teamCalCur=null,teamCalTypes={task:true};
 function chatRowHTML(t,c){
   const last=chatMsgs(t,c.id).slice(-1)[0];
   const prev=last?(last.proposal?(last.mine?tr('you_proposed'):tr('proposed_task')):last.text):'';
@@ -2307,15 +2307,23 @@ function teamCalendarHTML(t){
   const months=MONTHS[LANG]||MONTHS.it,dows=DOWS[LANG]||DOWS.it,now=new Date();
   const y=teamCalCur.getFullYear(),m=teamCalCur.getMonth();
   const first=new Date(y,m,1).getDay(),start=(first+6)%7,days=new Date(y,m+1,0).getDate(),prev=new Date(y,m,0).getDate();
-  const tasksOn=(dd)=>TASKS.filter(x=>x.scope==='team:'+t.tid&&taskOnDay(x,y,m,dd));
+  const tasksOn=(dd)=>teamCalTypes.task?TASKS.filter(x=>x.scope==='team:'+t.tid&&taskOnDay(x,y,m,dd)):[];
+  // Chip accorpati per persona: un chip per membro con le task quel giorno (iniziali + conteggio)
+  const dayChips=(dd)=>{const list=tasksOn(dd);if(!list.length)return '';
+    const by={};list.forEach(x=>{(by[x.assignee]=by[x.assignee]||[]).push(x);});
+    return Object.keys(by).sort((a,b)=>a-b).map(ai=>{const mem=t.members[ai],c=mem?mem.c:'#8a8f98',ini=mem?mem.i:'?',arr=by[ai];
+      const open=arr.filter(x=>!x.done).length,allDone=open===0;
+      const tip=bdEsc((mem?firstName(mem.name)+': ':'')+arr.map(taskTitle).join(', ')).replace(/"/g,'&quot;');
+      return `<div class="tcal-ch${allDone?' dn':''}" style="background:${c}" data-tip="${tip}"><span class="tcal-ch-i">${ini}</span><span class="tcal-ch-n">${arr.length}</span></div>`;}).join('');};
   let cells='';
   for(let i=0;i<start;i++)cells+=`<div class="mcal-cell out"><div class="mcal-daynum">${prev-start+i+1}</div></div>`;
   for(let d=1;d<=days;d++){const isT=now.getFullYear()===y&&now.getMonth()===m&&now.getDate()===d;
-    const chips=tasksOn(d).map(x=>{const mem=t.members[x.assignee],c=mem?mem.c:'#8a8f98',tt=bdEsc(taskTitle(x)).replace(/"/g,'&quot;');return `<div class="chip${x.done?' dn':''}" style="background:${c}" data-tip="${tt}">${bdEsc(taskTitle(x))}</div>`;}).join('');
-    cells+=`<div class="mcal-cell${isT?' today':''}" data-tcd="${y}-${m}-${d}"><div class="mcal-daynum">${d}</div>${chips}</div>`;}
+    cells+=`<div class="mcal-cell${isT?' today':''}" data-tcd="${y}-${m}-${d}"><div class="mcal-daynum">${d}</div><div class="tcal-chips">${dayChips(d)}</div></div>`;}
   const rem=(7-(start+days)%7)%7;for(let i=1;i<=rem;i++)cells+=`<div class="mcal-cell out"><div class="mcal-daynum">${i}</div></div>`;
   const head=`<div class="tcal-head"><div class="tcal-title">${months[m]} ${y}</div><div class="tcal-nav"><button type="button" class="dw-nav" id="tcalPrev">‹</button><button type="button" class="dw-nav tcal-today" id="tcalToday">${tr('al_today_word')}</button><button type="button" class="dw-nav" id="tcalNext">›</button></div></div>`;
-  return `${head}<div class="tcal bigcal plain"><div class="mcal-head">${dows.map(d=>`<div>${d}</div>`).join('')}</div><div class="mcal-grid">${cells}</div></div>`;
+  // Filtro: cosa mostrare sul calendario (ora solo Task; eventi ecc. in arrivo)
+  const fil=`<div class="tcal-fil"><button type="button" class="tcf-chip${teamCalTypes.task?' on':''}" data-tcf="task"><span class="tcf-dot" style="background:#8168e6"></span>${tr('nav_tasks')}</button><button type="button" class="tcf-chip soon" disabled>${tr('ql_events')} · ${tr('coming_soon')}</button></div>`;
+  return `${head}${fil}<div class="tcal bigcal plain"><div class="mcal-head">${dows.map(d=>`<div>${d}</div>`).join('')}</div><div class="mcal-grid">${cells}</div></div>`;
 }
 // Lista task "classica" (vista Oggi: In ritardo / Oggi / In arrivo con pie) per il team
 function teamTaskDateList(t,pool){
@@ -2535,6 +2543,7 @@ document.getElementById('teamDetailMain').addEventListener('click',e=>{
   if(e.target.closest('#tcalPrev')){if(!teamCalCur)teamCalCur=new Date();teamCalCur=new Date(teamCalCur.getFullYear(),teamCalCur.getMonth()-1,1);renderTeamMain();return;}
   if(e.target.closest('#tcalNext')){if(!teamCalCur)teamCalCur=new Date();teamCalCur=new Date(teamCalCur.getFullYear(),teamCalCur.getMonth()+1,1);renderTeamMain();return;}
   if(e.target.closest('#tcalToday')){teamCalCur=new Date();renderTeamMain();return;}
+  {const cf=e.target.closest('[data-tcf]');if(cf){const k=cf.dataset.tcf;teamCalTypes[k]=!teamCalTypes[k];renderTeamMain();return;}}
   {const cd=e.target.closest('[data-tcd]');if(cd){const p=cd.dataset.tcd.split('-').map(Number);openNewTask(curTeam);const de=document.getElementById('ntDate');if(de)de.value=p[0]+'-'+String(p[1]+1).padStart(2,'0')+'-'+String(p[2]).padStart(2,'0');return;}}
   if(e.target.closest('#ttPrev')){const b=teamTaskDay||realToday();const d=new Date(b[0],b[1],b[2]);d.setDate(d.getDate()-7);teamTaskDay=[d.getFullYear(),d.getMonth(),d.getDate()];renderTeamMain();return;}
   if(e.target.closest('#ttNext')){const b=teamTaskDay||realToday();const d=new Date(b[0],b[1],b[2]);d.setDate(d.getDate()+7);teamTaskDay=[d.getFullYear(),d.getMonth(),d.getDate()];renderTeamMain();return;}
