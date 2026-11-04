@@ -64,6 +64,8 @@ async function teamsCloudPull(){
     const rows=await sbTeamsList();
     if(!Array.isArray(rows)){ return; }
     let changed=false, invChanged=false;
+    // loggato: via gli inviti-demo finti hardcoded (restano solo gli inviti reali)
+    if(typeof INVITES_IN!=='undefined'){ for(let i=INVITES_IN.length-1;i>=0;i--){ if(INVITES_IN[i]&&!INVITES_IN[i].cloud){ INVITES_IN.splice(i,1); invChanged=true; } } }
     invChanged=tcClearCloudInvites()||invChanged;   // ricostruiamo gli inviti cloud da zero
     for(const row of rows){
       const members=await sbTeamMembers(row.id);
