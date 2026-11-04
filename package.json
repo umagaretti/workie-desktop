@@ -8,8 +8,9 @@
   "scripts": {
     "start": "electron .",
     "dev": "electron .",
-    "dist": "electron-builder --mac dmg",
-    "release": "electron-builder --mac dmg --publish always"
+    "dist": "electron-builder --mac",
+    "dist:win": "electron-builder --win",
+    "release": "electron-builder --mac --publish always"
   },
   "build": {
     "appId": "app.workie.desktop",
@@ -47,9 +48,37 @@
       "category": "public.app-category.productivity",
       "icon": "build/icon.icns",
       "identity": null,
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "notarize": true,
+      "extendInfo": {
+        "NSMicrophoneUsageDescription": "Workie usa il microfono per dettare le task."
+      },
       "target": [
-        "dmg"
+        {
+          "target": "dmg",
+          "arch": "universal"
+        },
+        {
+          "target": "zip",
+          "arch": "universal"
+        }
       ]
+    },
+    "dmg": {
+      "sign": false
+    },
+    "win": {
+      "icon": "icon-512.png",
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     }
   },
   "devDependencies": {

@@ -47,6 +47,11 @@ function initAutoUpdate() {
   })
 
   autoUpdater.checkForUpdatesAndNotify().catch((e) => console.error('[auto-update]', e))
+
+  // Ricontrollo periodico (ogni 6 ore) per chi tiene l'app aperta a lungo.
+  setInterval(() => {
+    autoUpdater.checkForUpdates().catch((e) => console.error('[auto-update] periodic', e))
+  }, 6 * 60 * 60 * 1000)
 }
 
 /** @type {BrowserWindow | null} */
