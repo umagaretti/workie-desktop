@@ -43,7 +43,18 @@ async function teamsCloudPushNew(t){
   }catch(e){ /* mirror best-effort: il locale funziona comunque */ }
 }
 
-// Scarica i team del server e li fonde nel locale (dedup per sid). Chiamata al boot autenticato.
+function tcFirst(name){ return (typeof firstName==='function')?firstName(name):String(name||'').split(' ')[0]; }
+
+// Rimuove dalla campanella (INVITES_IN) tutti gli inviti cloud, o solo quello con un dato sid.
+function tcClearCloudInvites(sid){
+  if(typeof INVITES_IN==='undefined') return false;
+  let ch=false;
+  for(let i=INVITES_IN.length-1;i>=0;i--){ const x=INVITES_IN[i]; if(x&&x.cloud&&(!sid||x.sid===sid)){ INVITES_IN.splice(i,1); ch=true; } }
+  return ch;
+}
+
+// Scarica i team del server: i team dove sono ATTIVO entrano nel locale; quelli dove sono
+// solo INVITATO vanno nella campanella come inviti reali (dedup per sid). Boot autenticato.
 let _tcPulling=false;
 async function teamsCloudPull(){
   if(_tcPulling) return; _tcPulling=true;
@@ -51,14 +62,28 @@ async function teamsCloudPull(){
     const uid=await tcLoggedUid(); if(!uid){ return; }
     if(typeof TEAMS==='undefined'){ return; }
     const rows=await sbTeamsList();
-    if(!Array.isArray(rows)||!rows.length){ return; }
-    let changed=false;
+    if(!Array.isArray(rows)){ return; }
+    let changed=false, invChanged=false;
+    invChanged=tcClearCloudInvites()||invChanged;   // ricostruiamo gli inviti cloud da zero
     for(const row of rows){
-      let local=TEAMS.find(t=>t.sid===row.id);
       const members=await sbTeamMembers(row.id);
-      const mapped=members.map(tcMemberFromServer);
+      const mine=members.find(m=>m.uid===uid);
+      const myStatus=mine?mine.status:(row.owner_id===uid?'active':'active');
+      if(myStatus==='invited'){
+        // invito in attesa → campanella, NON è ancora un team mio
+        const owner=members.find(m=>m.uid===row.owner_id);
+        if(typeof INVITES_IN!=='undefined' && !INVITES_IN.some(x=>x.sid===row.id)){
+          INVITES_IN.push({id:'c:'+row.id, sid:row.id, cloud:true, team:row.name||'Team', emoji:'🧩', from:(owner?tcFirst(owner.name):'Qualcuno')});
+          invChanged=true;
+        }
+        const li=TEAMS.findIndex(t=>t.sid===row.id);   // se c'era come attivo, toglilo
+        if(li>=0){ TEAMS.splice(li,1); changed=true; }
+        continue;
+      }
+      // membro attivo (o owner): upsert del team nel locale
+      const mapped=members.filter(m=>m.status!=='left').map(tcMemberFromServer);
+      let local=TEAMS.find(t=>t.sid===row.id);
       if(local){
-        // aggiorna nome/colore/membri dal server (il server è la verità per un team condiviso)
         local.name=row.name||local.name;
         if(row.color) local.color=row.color;
         if(mapped.length) local.members=mapped;
@@ -80,6 +105,37 @@ async function teamsCloudPull(){
       if(typeof renderTeams==='function') renderTeams();
       if(typeof syncTaskTeams==='function') syncTaskTeams();
     }
+    if(invChanged && typeof renderBell==='function') renderBell();
   }catch(e){ /* best-effort */ }
   finally{ _tcPulling=false; }
+}
+
+// Invita un amico (connessione reale) in un team: assicura che il team sia sul server, poi crea l'invito.
+async function teamsCloudInviteFriend(t,friendUid){
+  const uid=await tcLoggedUid(); if(!uid) return{error:'no-auth'};
+  if(!t||!friendUid) return{error:'bad-args'};
+  if(!t.sid){ await teamsCloudPushNew(t); }
+  if(!t.sid) return{error:'no-sid'};
+  if((t.members||[]).some(m=>m.uid===friendUid)) return{error:'already'};
+  return await sbTeamInvite(t.sid, friendUid, false, []);
+}
+
+// Accetto un invito reale: divento membro attivo e il team scende come attivo (re-pull).
+async function teamsCloudAcceptInvite(sid){
+  if(!sid) return{error:'no-sid'};
+  const r=await sbTeamRespondInvite(sid,true);
+  if(r&&r.error) return r;
+  tcClearCloudInvites(sid);
+  await teamsCloudPull();
+  return{ok:true};
+}
+
+// Rifiuto un invito reale: la mia riga membro va a 'left'.
+async function teamsCloudDeclineInvite(sid){
+  if(!sid) return{error:'no-sid'};
+  const r=await sbTeamRespondInvite(sid,false);
+  if(r&&r.error) return r;
+  tcClearCloudInvites(sid);
+  if(typeof renderBell==='function') renderBell();
+  return{ok:true};
 }

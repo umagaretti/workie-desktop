@@ -50,7 +50,7 @@ try{
 <link rel="stylesheet" href="css/04-task-detail.css?v=15">
 <link rel="stylesheet" href="css/05-home.css?v=10">
 <link rel="stylesheet" href="css/06-tasks.css?v=92">
-<link rel="stylesheet" href="css/07-team-projects.css?v=96">
+<link rel="stylesheet" href="css/07-team-projects.css?v=97">
 <link rel="stylesheet" href="css/08-modals-connections.css">
 <link rel="stylesheet" href="css/09-tasks-rework.css?v=74">
 <link rel="stylesheet" href="css/10-desktop-os.css">
@@ -1499,7 +1499,9 @@ try{
 <!-- ===== INVITE MODAL ===== -->
 <div class="overlay" id="inviteOverlay">
   <div class="modal" style="width:min(400px,90vw)">
-    <div class="modal-h"><div class="modal-title" data-i18n="invite_email">+ Invita via email</div><div class="modal-x" id="inviteModalX">__X__</div></div>
+    <div class="modal-h"><div class="modal-title" data-i18n="invite_title">Invita nel team</div><div class="modal-x" id="inviteModalX">__X__</div></div>
+    <div id="inviteFriends" class="inv-friends"></div>
+    <div class="inv-or" data-i18n="invite_or_email">oppure invita via email</div>
     <input id="inviteEmail" class="modal-search" type="email" placeholder="Email del membro" data-i18n-ph="invite_ph" style="margin-bottom:16px">
     <button class="primary-btn" id="inviteSend" data-i18n="invite_send">Invita</button>
   </div>
@@ -1678,7 +1680,7 @@ try{
 <script src="themes.js"></script>
 <script src="storage.js"></script>
 <script src="sync.js"></script>
-<script src="app.js?v=97"></script>
-<script src="teams-sync.js?v=1"></script>
+<script src="app.js?v=98"></script>
+<script src="teams-sync.js?v=2"></script>
 </body>
 </html>

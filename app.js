@@ -279,8 +279,8 @@ Object.assign(STR.it,{ql_database:`Database`,ts_info:`Informazioni del team`,ts_
 Object.assign(STR.en,{ql_database:`Database`,ts_info:`Team info`,ts_change_logo:`Change image`,ts_save:`Save changes`,ts_readonly:`Only the owner can edit`,ts_leave:`Leave team`,ts_advanced:`Advanced settings`,ts_danger:`Danger zone`,ts_delete:`Delete team`,ts_delete_confirm:`Confirm deletion`,ts_visibility:`Visibility`,ts_private:`Private`,ts_public:`Public`,ts_invite_who:`Who can invite`,ts_everyone:`Everyone`,ts_admins:`Admins only`,db_soon:`Team database — coming soon.`,toast_left:`You left the team`,toast_deleted:`Team deleted`,toast_saved:`Changes saved`});
 Object.assign(STR.fr,{ql_database:`Base de données`,ts_info:`Infos de l'équipe`,ts_change_logo:`Changer l'image`,ts_save:`Enregistrer`,ts_readonly:`Seul le propriétaire peut modifier`,ts_leave:`Quitter l'équipe`,ts_advanced:`Paramètres avancés`,ts_danger:`Zone dangereuse`,ts_delete:`Supprimer l'équipe`,ts_delete_confirm:`Confirmer la suppression`,ts_visibility:`Visibilité`,ts_private:`Privé`,ts_public:`Public`,ts_invite_who:`Qui peut inviter`,ts_everyone:`Tout le monde`,ts_admins:`Admins seulement`,db_soon:`Base de données de l'équipe — bientôt.`,toast_left:`Vous avez quitté l'équipe`,toast_deleted:`Équipe supprimée`,toast_saved:`Modifications enregistrées`});
 Object.assign(STR.es,{ql_database:`Base de datos`,ts_info:`Información del equipo`,ts_change_logo:`Cambiar imagen`,ts_save:`Guardar cambios`,ts_readonly:`Solo el propietario puede editar`,ts_leave:`Salir del equipo`,ts_advanced:`Ajustes avanzados`,ts_danger:`Zona peligrosa`,ts_delete:`Eliminar equipo`,ts_delete_confirm:`Confirmar eliminación`,ts_visibility:`Visibilidad`,ts_private:`Privado`,ts_public:`Público`,ts_invite_who:`Quién puede invitar`,ts_everyone:`Todos`,ts_admins:`Solo admins`,db_soon:`Base de datos del equipo — próximamente.`,toast_left:`Has salido del equipo`,toast_deleted:`Equipo eliminado`,toast_saved:`Cambios guardados`});
-Object.assign(STR.it,{space_general:`Generale`,invite_email:`+ Invita via email`,invite_ph:`Email del membro`,invite_send:`Invita`,pending:`In attesa`,m_roles:`Ruoli`,m_permissions:`Permessi`,m_admin_t:`Amministratore`,m_admin_d:`Può gestire membri, ruoli e impostazioni del team.`,m_remove:`Rimuovi dal team`,m_remove_confirm:`Rimuovere %s dal team?`,m_removed:`Membro rimosso`,add_tag_ph:`Nuovo ruolo...`,save:`Salva`,requests:`Richieste`,no_requests:`Nessuna richiesta`,invited_you:`ti ha invitato a`,accept:`Accetta`,decline:`Rifiuta`,spaces_h:`Spazi condivisi`,create_space:`+ Crea spazio`,space_name:`Nome dello spazio`,create:`Crea`,toast_invited:`Invito inviato`,toast_joined_team:`Ti sei unito al team`,empty_space:`Spazio vuoto`});
-Object.assign(STR.en,{space_general:`General`,invite_email:`+ Invite by email`,invite_ph:`Member email`,invite_send:`Invite`,pending:`Pending`,m_roles:`Roles`,m_permissions:`Permissions`,m_admin_t:`Administrator`,m_admin_d:`Can manage members, roles and team settings.`,m_remove:`Remove from team`,m_remove_confirm:`Remove %s from the team?`,m_removed:`Member removed`,add_tag_ph:`New role...`,save:`Save`,requests:`Requests`,no_requests:`No requests`,invited_you:`invited you to`,accept:`Accept`,decline:`Decline`,spaces_h:`Shared spaces`,create_space:`+ Create space`,space_name:`Space name`,create:`Create`,toast_invited:`Invite sent`,toast_joined_team:`You joined the team`,empty_space:`Empty space`});
+Object.assign(STR.it,{space_general:`Generale`,invite_email:`+ Invita via email`,invite_ph:`Email del membro`,invite_send:`Invita`,pending:`In attesa`,m_roles:`Ruoli`,m_permissions:`Permessi`,m_admin_t:`Amministratore`,m_admin_d:`Può gestire membri, ruoli e impostazioni del team.`,m_remove:`Rimuovi dal team`,m_remove_confirm:`Rimuovere %s dal team?`,m_removed:`Membro rimosso`,add_tag_ph:`Nuovo ruolo...`,save:`Salva`,requests:`Richieste`,no_requests:`Nessuna richiesta`,invited_you:`ti ha invitato a`,accept:`Accetta`,decline:`Rifiuta`,spaces_h:`Spazi condivisi`,create_space:`+ Crea spazio`,space_name:`Nome dello spazio`,create:`Crea`,toast_invited:`Invito inviato`,toast_joined_team:`Ti sei unito al team`,empty_space:`Spazio vuoto`,invite_title:`Invita nel team`,invite_friends_h:`I tuoi contatti`,invite_none:`Nessun contatto ancora. Collegati con qualcuno dalla sezione Contatti.`,invite_or_email:`oppure invita via email`,invite_sent_to:`Invito inviato a`,invite_already:`Già nel team o invitato`});
+Object.assign(STR.en,{space_general:`General`,invite_email:`+ Invite by email`,invite_ph:`Member email`,invite_send:`Invite`,pending:`Pending`,m_roles:`Roles`,m_permissions:`Permissions`,m_admin_t:`Administrator`,m_admin_d:`Can manage members, roles and team settings.`,m_remove:`Remove from team`,m_remove_confirm:`Remove %s from the team?`,m_removed:`Member removed`,add_tag_ph:`New role...`,save:`Save`,requests:`Requests`,no_requests:`No requests`,invited_you:`invited you to`,accept:`Accept`,decline:`Decline`,spaces_h:`Shared spaces`,create_space:`+ Create space`,space_name:`Space name`,create:`Create`,toast_invited:`Invite sent`,toast_joined_team:`You joined the team`,empty_space:`Empty space`,invite_title:`Invite to team`,invite_friends_h:`Your contacts`,invite_none:`No contacts yet. Connect with someone first.`,invite_or_email:`or invite by email`,invite_sent_to:`Invite sent to`,invite_already:`Already in the team or invited`});
 Object.assign(STR.fr,{space_general:`Général`,invite_email:`+ Inviter par email`,invite_ph:`Email du membre`,invite_send:`Inviter`,pending:`En attente`,m_roles:`Rôles`,add_tag_ph:`Nouveau rôle...`,save:`Enregistrer`,requests:`Demandes`,no_requests:`Aucune demande`,invited_you:`vous a invité à`,accept:`Accepter`,decline:`Refuser`,spaces_h:`Espaces partagés`,create_space:`+ Créer un espace`,space_name:`Nom de l'espace`,create:`Créer`,toast_invited:`Invitation envoyée`,toast_joined_team:`Vous avez rejoint l'équipe`,empty_space:`Espace vide`});
 Object.assign(STR.it,{space_empty:`Personalizza questo spazio aggiungendo widget.`,ql_events:`Eventi`,add_event:`+ Aggiungi evento`,ev_new:`Nuovo evento`,ev_info:`Info`,ev_objectives:`Obiettivi`,ev_related:`Task relativi`,ev_obj_ph:`Aggiungi obiettivo...`,ev_task_ph:`Aggiungi task...`,ev_when:`Ora / luogo`,ev_create:`Crea evento`,ev_desc_ph:`Descrizione dell'evento...`,no_objectives:`Nessun obiettivo`,no_events:`Nessun evento`});
 Object.assign(STR.en,{space_empty:`Customize this space by adding widgets.`,ql_events:`Events`,add_event:`+ Add event`,ev_new:`New event`,ev_info:`Info`,ev_objectives:`Objectives`,ev_related:`Related tasks`,ev_obj_ph:`Add objective...`,ev_task_ph:`Add task...`,ev_when:`Time / place`,ev_create:`Create event`,ev_desc_ph:`Event description...`,no_objectives:`No objectives`,no_events:`No events`});
@@ -2562,7 +2562,7 @@ document.getElementById('teamDetailMain').addEventListener('click',e=>{
   if(e.target.closest('#tchatSend')){sendChatMsg();return;}
   const pa=e.target.closest('[data-pa]');if(pa){handleProposal(+pa.dataset.prop,pa.dataset.pa);return;}
   const mr=e.target.closest('.member-row.clickable[data-mi]');if(mr){openMemberModal(+mr.dataset.mi);return;}
-  if(e.target.closest('#inviteMemberBtn')){document.getElementById('inviteEmail').value='';inviteOv.classList.add('open');return;}
+  if(e.target.closest('#inviteMemberBtn')){document.getElementById('inviteEmail').value='';inviteSentUids=new Set();if(typeof renderInviteFriends==='function')renderInviteFriends();if(typeof sb!=='undefined'&&sb&&typeof socRefresh==='function')socRefresh(false).then(()=>{if(inviteOv.classList.contains('open'))renderInviteFriends();});inviteOv.classList.add('open');return;}
   if(e.target.closest('#createSpaceBtn')){openSpaceModal();return;}
   if(e.target.closest('#tsLogoBtn')){document.getElementById('tsLogoInput').click();return;}
   if(e.target.closest('#tsSave')){const n=document.getElementById('tsName').value.trim();if(n){curTeam.name=n;delete curTeam.nameKey;}curTeam.desc=document.getElementById('tsDesc').value.trim();saveTeams();if(typeof ensureTeamCategory==='function')ensureTeamCategory(curTeam);renderTeams();setTeamTitle();showToast(tr('toast_saved'));return;}
@@ -2642,6 +2642,38 @@ document.getElementById('inviteSend').addEventListener('click',()=>{
   curTeam.invites=curTeam.invites||[];curTeam.invites.push(em);
   logFeed(curTeam,firstName(USER.name)+' '+tr('feed_invited')+' '+em);
   inviteOv.classList.remove('open');renderTeamMain();showToast(tr('toast_invited'));
+});
+// Lista contatti reali dentro il modale invito (connessioni accettate). Click = invito vero sul server.
+let inviteSentUids=new Set();
+function renderInviteFriends(){
+  const el=document.getElementById('inviteFriends'); if(!el) return;
+  const friends=(typeof SOCIAL_CONN!=='undefined'&&Array.isArray(SOCIAL_CONN))?SOCIAL_CONN.filter(x=>x.status==='accepted'):[];
+  const already=new Set(((curTeam&&curTeam.members)||[]).map(m=>m.uid).filter(Boolean));
+  if(!friends.length){ el.innerHTML=`<div class="inv-none">${tr('invite_none')}</div>`; return; }
+  const palette=['#6f9bf0','#7ed0b0','#e0a3f0','#f0c46f','#ef9a9a','#8d7bd0'];
+  el.innerHTML=`<div class="inv-h">${tr('invite_friends_h')}</div>`+friends.map((f,i)=>{
+    const done=inviteSentUids.has(f.uid)||already.has(f.uid);
+    const label=done?('✓ '+tr('pending')):tr('invite_send');
+    return `<div class="inv-row${done?' done':''}" data-invf="${f.uid}">`+
+      `<div class="inv-av" style="background:${palette[i%palette.length]}">${bdEsc(((f.name||'?')[0]||'?').toUpperCase())}</div>`+
+      `<div class="inv-meta"><div class="inv-nm">${bdEsc(f.name||'Utente')}</div><div class="inv-hd">${bdEsc(f.handle||'')}</div></div>`+
+      `<div class="inv-act">${label}</div></div>`;
+  }).join('');
+}
+document.getElementById('inviteFriends').addEventListener('click',async e=>{
+  const row=e.target.closest('[data-invf]'); if(!row||row.classList.contains('done')) return;
+  const uid=row.dataset.invf; const act=row.querySelector('.inv-act');
+  row.classList.add('done'); if(act) act.textContent='…';
+  const f=(typeof SOCIAL_CONN!=='undefined'?SOCIAL_CONN.find(x=>x.uid===uid):null);
+  const r=(typeof teamsCloudInviteFriend==='function')?await teamsCloudInviteFriend(curTeam,uid):{error:'offline'};
+  if(r&&r.error){
+    if(r.error==='already'){ inviteSentUids.add(uid); if(act) act.textContent='✓ '+tr('pending'); showToast(tr('invite_already')); return; }
+    row.classList.remove('done'); if(act) act.textContent=tr('invite_send');
+    showToast(r.error==='no-auth'?'Accedi per invitare amici':('⚠︎ '+r.error)); return;
+  }
+  inviteSentUids.add(uid); if(act) act.textContent='✓ '+tr('pending');
+  if(curTeam) logFeed(curTeam,firstName(USER.name)+' '+tr('feed_invited')+' '+((f&&firstName(f.name))||''));
+  showToast(tr('invite_sent_to')+' '+((f&&firstName(f.name))||''));
 });
 // ----- Create space modal -----
 let spaceSel=new Set();
@@ -2757,9 +2789,26 @@ document.getElementById('reqBell').addEventListener('click',e=>{e.stopPropagatio
 document.getElementById('reqPop').addEventListener('click',e=>{
   e.stopPropagation();
   const acc=e.target.closest('[data-acc]');
-  if(acc){const id=+acc.dataset.acc;const r=INVITES_IN.find(x=>x.id===id);if(r){TEAMS.push({tid:TEAM_SEQ++,name:r.team,emoji:r.emoji,act:0,owner:false,desc:'',invites:[],spaces:[],members:[{i:'A',c:'#8a5a4a',name:'Admin',admin:true,tags:[]},{i:'U',c:ACCENT,name:'Umberto',admin:false,tags:[]}],docs:[],events:[]});}INVITES_IN=INVITES_IN.filter(x=>x.id!==id);reqOpen=INVITES_IN.length>0;renderBell();renderTeams();syncTaskTeams();showToast(tr('toast_joined_team'));return;}
+  if(acc){
+    const idv=acc.dataset.acc;const r=INVITES_IN.find(x=>String(x.id)===idv);if(!r)return;
+    if(r.cloud){ // invito REALE sul server
+      acc.textContent='…';
+      teamsCloudAcceptInvite(r.sid).then(res=>{
+        if(res&&res.error){showToast('⚠︎ '+res.error);renderBell();return;}
+        reqOpen=false;renderBell();renderTeams();if(typeof syncTaskTeams==='function')syncTaskTeams();showToast(tr('toast_joined_team'));
+      });
+      return;
+    }
+    // invito demo locale (retrocompat)
+    TEAMS.push({tid:TEAM_SEQ++,name:r.team,emoji:r.emoji,act:0,owner:false,desc:'',invites:[],spaces:[],members:[{i:'A',c:'#8a5a4a',name:'Admin',admin:true,tags:[]},{i:'U',c:ACCENT,name:'Umberto',admin:false,tags:[]}],docs:[],events:[]});
+    INVITES_IN=INVITES_IN.filter(x=>String(x.id)!==idv);reqOpen=INVITES_IN.length>0;renderBell();renderTeams();syncTaskTeams();showToast(tr('toast_joined_team'));return;
+  }
   const dec=e.target.closest('[data-dec]');
-  if(dec){INVITES_IN=INVITES_IN.filter(x=>x.id!==+dec.dataset.dec);renderBell();}
+  if(dec){
+    const idv=dec.dataset.dec;const r=INVITES_IN.find(x=>String(x.id)===idv);
+    if(r&&r.cloud){ teamsCloudDeclineInvite(r.sid).then(()=>{reqOpen=INVITES_IN.length>0;renderBell();}); return; }
+    INVITES_IN=INVITES_IN.filter(x=>String(x.id)!==idv);renderBell();
+  }
 });
 document.addEventListener('click',()=>{if(reqOpen){reqOpen=false;renderBell();}});
 renderTeams();

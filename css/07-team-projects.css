@@ -456,3 +456,19 @@
 .bd-zb svg{width:15px;height:15px;}
 .bd-zval{min-width:48px;text-align:center;font-size:12.5px;color:var(--muted);cursor:pointer;user-select:none;}
 .bd-zval:hover{color:#fff;}
+
+/* ===== Modale invito: lista contatti reali (Slice 2 team multiutente) ===== */
+.inv-friends{display:flex;flex-direction:column;gap:6px;max-height:260px;overflow:auto;margin-bottom:12px;}
+.inv-friends .inv-h{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:2px 2px 4px;}
+.inv-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border);border-radius:12px;background:var(--panel-2,var(--panel));cursor:pointer;transition:border-color .15s,background .15s;}
+.inv-row:hover{border-color:var(--accent);background:var(--inset,var(--panel));}
+.inv-row.done{opacity:.6;cursor:default;}
+.inv-row.done:hover{border-color:var(--border);background:var(--panel-2,var(--panel));}
+.inv-av{width:30px;height:30px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;}
+.inv-meta{flex:1;min-width:0;}
+.inv-nm{font-size:13.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.inv-hd{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.inv-act{font-size:12px;font-weight:600;color:var(--accent);flex:none;}
+.inv-row.done .inv-act{color:var(--muted);}
+.inv-none{font-size:13px;color:var(--muted);text-align:center;padding:18px 10px;line-height:1.5;}
+.inv-or{font-size:11.5px;color:var(--muted);text-align:center;margin:2px 0 10px;position:relative;}
