@@ -32,12 +32,14 @@
       "css/**/*",
       "svg.js",
       "api.js",
+      "teams-api.js",
       "i18n.js",
       "dates.js",
       "themes.js",
       "storage.js",
       "sync.js",
       "app.js",
+      "teams-sync.js",
       "*.svg",
       "*.png",
       "manifest.webmanifest",
@@ -47,12 +49,13 @@
     "mac": {
       "category": "public.app-category.productivity",
       "icon": "build/icon.icns",
-      "identity": null,
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist",
-      "notarize": true,
+      "notarize": {
+        "teamId": "5VQ5Q6USQH"
+      },
       "extendInfo": {
         "NSMicrophoneUsageDescription": "Workie usa il microfono per dettare le task."
       },

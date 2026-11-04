@@ -2161,6 +2161,7 @@ renderProfCards();renderSegGrid();
       if(!USER.name||USER.name==='Umberto')USER.name=(session.user.email||'').split('@')[0]||'Utente';
       saveUser();renderUser();authGate.classList.add('hidden');if(typeof applyThemeVars==='function')applyThemeVars();
       syncPull().then(applied=>{if(applied)location.reload();}).catch(()=>{});
+      if(typeof teamsCloudPull==='function')teamsCloudPull();
     } else if(localStorage.getItem('workie_session')){
       // sessione non più valida sul server → torna al login
       localStorage.removeItem('workie_session');authGate.classList.remove('hidden');authShow('splash');if(typeof startSplash==='function')startSplash();if(typeof renderSuCarousel==='function')renderSuCarousel();if(typeof applyThemeVars==='function')applyThemeVars();
@@ -2783,6 +2784,7 @@ document.getElementById('doCreate').addEventListener('click',()=>{
     docs:[['📝','tile_notes','#6a4a8a','U']],events:[]});
   document.getElementById('newTeamName').value='';saveTeams();
   if(typeof ensureTeamCategory==='function')ensureTeamCategory(TEAMS[TEAMS.length-1]);
+  if(typeof teamsCloudPushNew==='function')teamsCloudPushNew(TEAMS[TEAMS.length-1]);
   tOv.classList.remove('open');renderTeams();syncTaskTeams();openTeam(TEAMS.length-1);
 });
 

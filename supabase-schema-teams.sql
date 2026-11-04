@@ -19,7 +19,12 @@
 -- Helper SECURITY DEFINER: evitano la ricorsione tra le policy RLS
 -- (una policy che interroga un'altra tabella con RLS andrebbe in loop; questi
 --  helper girano coi diritti del creatore e saltano l'RLS, quindi niente loop).
+-- NB: queste funzioni citano team_members, creata piu' sotto. Postgres valida il
+-- corpo delle funzioni sql alla creazione: disattiviamo il check (le tabelle
+-- esistono comunque quando le funzioni vengono CHIAMATE, dalle policy RLS).
 -- ---------------------------------------------------------------------------
+set check_function_bodies = off;
+
 create or replace function public.is_team_member(tid uuid)
 returns boolean language sql security definer stable set search_path = public as $$
   select exists (
