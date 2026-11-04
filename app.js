@@ -2499,6 +2499,11 @@ function openTeam(i){
   const t=TEAMS[i];curTeam=t;teamSection='overview';delConfirm=false;
   syncRoleSpaces(t);setTeamTitle();renderTeamQuickLinks();renderTeamMain();
   go('teamdetail');
+  // Team cloud: collaborazione live (realtime) + pull iniziale di task/proposte
+  if(t&&t.sid){
+    if(typeof teamsCloudSubscribe==='function')teamsCloudSubscribe(t);
+    if(typeof teamsCloudPullTasks==='function')Promise.all([teamsCloudPullTasks(t),teamsCloudPullProposals(t)]).then(()=>{if(curTeam===t)renderTeamMain();}).catch(()=>{});
+  }else if(typeof teamsCloudUnsub==='function')teamsCloudUnsub();
 }
 document.getElementById('teamQuickLinks').addEventListener('click',e=>{const q=e.target.closest('[data-ql]');if(!q)return;teamSection=q.dataset.ql;delConfirm=false;renderTeamQuickLinks();renderTeamMain();const m=document.getElementById('teamQuickLinks');if(m)m.classList.remove('open');});
 // Menu sezioni (hamburger) + campanella notifiche nell'header del dettaglio
@@ -2545,7 +2550,7 @@ document.getElementById('teamDetailMain').addEventListener('click',e=>{
   const objrm=e.target.closest('[data-objrm]');if(objrm){curTeam.events[curEventIdx].obj.splice(+objrm.dataset.objrm,1);renderTeamMain();return;}
   const evt=e.target.closest('[data-evtask]');if(evt){const tk=curTeam.events[curEventIdx].tasks[+evt.dataset.evtask];tk.done=!tk.done;renderTeamMain();return;}
   const cs=e.target.closest('.chat-sec-h[data-csec]');if(cs){chatOpen[cs.dataset.csec]=!chatOpen[cs.dataset.csec];renderTeamMain();return;}
-  const cr=e.target.closest('.member-row.clickable[data-chat]');if(cr){curChatId=cr.dataset.chat;teamSection='chatconv';renderTeamMain();return;}
+  const cr=e.target.closest('.member-row.clickable[data-chat]');if(cr){curChatId=cr.dataset.chat;teamSection='chatconv';renderTeamMain();if(curTeam&&curTeam.sid&&typeof teamsCloudPullChat==='function')teamsCloudPullChat(curTeam,curChatId).then(ch=>{if(ch&&teamSection==='chatconv')renderTeamMain();});return;}
   if(e.target.closest('#crumbChat')){teamSection='chat';renderTeamMain();return;}
   if(e.target.closest('#newGroupBtn')){openGroupModal();return;}
   {const ttv=e.target.closest('[data-ttv]');if(ttv){teamTaskView=ttv.dataset.ttv;renderTeamMain();return;}}
@@ -2572,7 +2577,7 @@ document.getElementById('teamDetailMain').addEventListener('click',e=>{
   const seg=e.target.closest('.ts-seg .s');if(seg){seg.parentElement.querySelectorAll('.s').forEach(x=>x.classList.toggle('active',x===seg));return;}
   const lb=e.target.closest('.lvl-btn');if(lb){const t=TASKS.find(x=>x.id==lb.dataset.id);if(t&&t.level){t.level.cur=Math.max(0,Math.min(t.level.tgt,t.level.cur+(lb.dataset.act==='inc'?1:-1)));t.done=t.level.cur>=t.level.tgt;saveTasks();renderTeamMain();}return;}
   const asg=e.target.closest('[data-assign]');if(asg){openAssign(+asg.dataset.assign);return;}
-  const ck=e.target.closest('.check');if(ck){const t=TASKS.find(x=>x.id==ck.dataset.id);if(t){t.done=!t.done;saveTasks();if(t.done)logFeed(curTeam,firstName(USER.name)+' '+tr('feed_completed')+' "'+taskTitle(t)+'"');renderTeamMain();}}
+  const ck=e.target.closest('.check');if(ck){const t=TASKS.find(x=>x.id==ck.dataset.id);if(t){t.done=!t.done;saveTasks();if(typeof teamsCloudToggleTask==='function')teamsCloudToggleTask(t,t.done);if(t.done)logFeed(curTeam,firstName(USER.name)+' '+tr('feed_completed')+' "'+taskTitle(t)+'"');renderTeamMain();}}
 });
 // ---- Assegna task a un membro ----
 let assignTaskId=null;
@@ -2714,16 +2719,18 @@ document.getElementById('eventCreate').addEventListener('click',()=>{
   eventOv.classList.remove('open');renderTeamMain();
 });
 // ----- Chat send + proposal -----
-function sendChatMsg(){const inp=document.getElementById('tchatInput');if(!inp)return;const v=inp.value.trim();if(!v)return;chatMsgs(curTeam,curChatId).push({self:true,text:v});inp.value='';renderTeamMain();}
+function sendChatMsg(){const inp=document.getElementById('tchatInput');if(!inp)return;const v=inp.value.trim();if(!v)return;const list=chatMsgs(curTeam,curChatId);const msg={self:true,text:v};list.push(msg);if(typeof teamsCloudSendChat==='function')teamsCloudSendChat(curTeam,curChatId,v).then(sm=>{if(sm)msg.smid=sm.id;});inp.value='';renderTeamMain();}
 function handleProposal(idx,act){
   const mm=chatMsgs(curTeam,curChatId)[idx];if(!mm)return;
   if(act==='mod'){mm._editing=true;mm._rejecting=false;renderTeamMain();setTimeout(()=>{const d=document.getElementById('propDate');if(d)d.focus();},0);return;}
-  if(act==='confirm'){const d=document.getElementById('propDate').value;if(d){mm.deadline=d;if(mm.draft){const p=d.split('-').map(Number);mm.draft.date=[p[0],p[1]-1,p[2]];delete mm.draft.month;}}mm._editing=false;mm.status='counter';saveTeams();renderTeamMain();return;}
+  if(act==='confirm'){const d=document.getElementById('propDate').value;if(d){mm.deadline=d;if(mm.draft){const p=d.split('-').map(Number);mm.draft.date=[p[0],p[1]-1,p[2]];delete mm.draft.month;}}mm._editing=false;mm.status='counter';if(typeof teamsCloudRespondProposal==='function')teamsCloudRespondProposal(mm,'counter',{title:mm.title,due:mm.deadline,draft:mm.draft});saveTeams();renderTeamMain();return;}
   if(act==='rej'){mm._rejecting=true;mm._editing=false;renderTeamMain();setTimeout(()=>{const r=document.getElementById('propReason');if(r)r.focus();},0);return;}
-  if(act==='rejc'){const r=document.getElementById('propReason');mm.reason=r?r.value.trim():'';mm._rejecting=false;mm.status='rejected';saveTeams();renderTeamMain();return;}
+  if(act==='rejc'){const r=document.getElementById('propReason');mm.reason=r?r.value.trim():'';mm._rejecting=false;mm.status='rejected';if(typeof teamsCloudRespondProposal==='function')teamsCloudRespondProposal(mm,'reject',{reason:mm.reason});saveTeams();renderTeamMain();return;}
   if(act==='acc'){mm.status='accepted';
     if(mm.draft){if(mm.draft.id==null)mm.draft.id=++TID;TASKS.push(mm.draft);}
     else{const p=(mm.deadline||'').split('-').map(Number);const date=(p.length===3&&p[0])?[p[0],p[1]-1,p[2]]:realToday();TASKS.push({id:++TID,title:mm.title,scope:'team:'+curTeam.tid,date,done:false});}
+    const _acc=TASKS[TASKS.length-1];
+    if(typeof teamsCloudRespondProposal==='function')teamsCloudRespondProposal(mm,'accept',{}).then(res=>{if(res&&res.task&&_acc){_acc.stid=res.task.id;if(typeof saveTasks==='function')saveTasks();}});
     saveTasks();saveTeams();
     logFeed(curTeam,firstName(USER.name)+' '+tr('feed_accepted')+' "'+mm.title+'"');
     renderTeamMain();
@@ -2735,6 +2742,7 @@ function isoFromDate(dt){if(!dt||dt.length<3)return '';return dt[0]+'-'+String(d
 function proposeTaskToMember(t,idx,task){
   const id='dm:'+idx;
   chatMsgs(t,id).push({proposal:true,mine:true,title:task.title,deadline:isoFromDate(task.date),draft:task,status:'pending',ts:nowTs()});
+  if(typeof teamsCloudCreateProposal==='function')teamsCloudCreateProposal(t,idx,chatMsgs(t,id).slice(-1)[0]);
   saveTeams();
   logFeed(t,firstName(USER.name)+' '+tr('feed_proposed')+' "'+task.title+'" '+tr('feed_to')+' '+firstName(t.members[idx].name));
 }
@@ -2770,10 +2778,12 @@ document.getElementById('ttCreate').addEventListener('click',()=>{
   if(ttAssignee==='me'){
     const date=dv?(function(){const p=dv.split('-').map(Number);return [p[0],p[1]-1,p[2]];})():realToday();
     TASKS.push({id:++TID,title,scope:'team:'+curTeam.tid,date,done:false});
+    if(typeof teamsCloudCreateTask==='function')teamsCloudCreateTask(curTeam,TASKS[TASKS.length-1]);
     teamTaskOv.classList.remove('open');renderTeamMain();
   }else{
     const mi=+ttAssignee.slice(1);
     chatMsgs(curTeam,'dm:'+mi).push({proposal:true,mine:true,title,deadline:dv||'',status:'pending'});
+    if(typeof teamsCloudCreateProposal==='function')teamsCloudCreateProposal(curTeam,mi,chatMsgs(curTeam,'dm:'+mi).slice(-1)[0]);
     teamTaskOv.classList.remove('open');renderTeamMain();showToast(tr('proposal_sent'));
   }
 });

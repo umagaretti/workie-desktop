@@ -99,6 +99,9 @@ async function teamsCloudPull(){
         });
         changed=true;
       }
+      // task e proposte condivise del team (merge, best-effort)
+      const lt=TEAMS.find(t=>t.sid===row.id);
+      if(lt){ if(await teamsCloudPullTasks(lt)) changed=true; await teamsCloudPullProposals(lt); }
     }
     if(changed){
       if(typeof saveTeams==='function') saveTeams();
@@ -138,4 +141,116 @@ async function teamsCloudDeclineInvite(sid){
   tcClearCloudInvites(sid);
   if(typeof renderBell==='function') renderBell();
   return{ok:true};
+}
+
+// ============================================================================
+// SLICE 3/4 — task, proposte, chat e realtime sul server (per i team cloud)
+// Tutto guardato su t.sid: i team solo-locali (demo/offline) restano intatti.
+// ============================================================================
+function tcTeamBySid(sid){ if(typeof TEAMS==='undefined') return null; return TEAMS.find(t=>t.sid===sid)||null; }
+function tcMemberUid(t,idx){ const m=t&&t.members&&t.members[idx]; return m?m.uid:null; }
+function tcMemberIdxByUid(t,uid){ if(!t||!t.members||!uid) return -1; return t.members.findIndex(m=>m.uid===uid); }
+function tcDateToIso(dt){ return (typeof isoFromDate==='function')?isoFromDate(dt):''; }
+function tcIsoToDate(iso){ if(!iso) return (typeof realToday==='function')?realToday():null; const p=String(iso).split('-').map(Number); return (p.length===3&&p[0])?[p[0],p[1]-1,p[2]]:((typeof realToday==='function')?realToday():null); }
+
+// ---- TASK di team ----
+async function teamsCloudCreateTask(t,task){
+  try{
+    if(!t||!t.sid||!task||task.stid) return;
+    const uid=await tcLoggedUid(); if(!uid) return;
+    const asg=(typeof task.assignee==='number')?tcMemberUid(t,task.assignee):uid;
+    const r=await sbTeamTaskCreate(t.sid,{title:task.title,assignee_id:asg||uid,due:tcDateToIso(task.date),done:!!task.done,meta:{}});
+    if(r&&r.task){ task.stid=r.task.id; if(typeof saveTasks==='function') saveTasks(); }
+  }catch(e){}
+}
+async function teamsCloudToggleTask(task,done){ try{ if(task&&task.stid) await sbTeamTaskToggle(task.stid,done); }catch(e){} }
+
+async function teamsCloudPullTasks(t){
+  try{
+    if(!t||!t.sid||typeof TASKS==='undefined') return false;
+    const rows=await sbTeamTasks(t.sid); if(!Array.isArray(rows)) return false;
+    let ch=false;
+    for(const row of rows){
+      const ai=row.assignee_id?tcMemberIdxByUid(t,row.assignee_id):-1;
+      let lt=TASKS.find(x=>x.stid===row.id);
+      if(lt){ lt.title=row.title; lt.done=!!row.done; if(ai>=0) lt.assignee=ai; if(row.due) lt.date=tcIsoToDate(row.due); ch=true; }
+      else{ const task={id:(typeof TID!=='undefined'?++TID:Date.now()),stid:row.id,title:row.title,scope:'team:'+t.tid,date:tcIsoToDate(row.due),done:!!row.done}; if(ai>=0) task.assignee=ai; TASKS.push(task); ch=true; }
+    }
+    if(ch && typeof saveTasks==='function') saveTasks();
+    return ch;
+  }catch(e){ return false; }
+}
+
+// ---- PROPOSTE (accetta/modifica/rifiuta) ----
+async function teamsCloudCreateProposal(t,memberIdx,mm){
+  try{
+    if(!t||!t.sid||!mm||mm.propSid) return;
+    const toUid=tcMemberUid(t,memberIdx); if(!toUid) return;
+    const draft=mm.draft||{title:mm.title,deadline:mm.deadline};
+    const r=await sbTeamProposalCreate(t.sid,toUid,{title:mm.title,due:mm.deadline||null,draft:draft});
+    if(r&&r.proposal){ mm.propSid=r.proposal.id; if(typeof saveTeams==='function') saveTeams(); }
+  }catch(e){}
+}
+async function teamsCloudRespondProposal(mm,action,extra){ try{ if(!mm||!mm.propSid) return null; return await sbTeamProposalRespond(mm.propSid,action,extra||{}); }catch(e){ return null; } }
+
+async function teamsCloudPullProposals(t){
+  try{
+    if(!t||!t.sid) return false;
+    const uid=await tcLoggedUid(); if(!uid) return false;
+    const rows=await sbTeamProposals(t.sid); if(!Array.isArray(rows)) return false;
+    let ch=false;
+    for(const p of rows){
+      const mine=p.from_id===uid; const otherUid=mine?p.to_id:p.from_id;
+      const oi=tcMemberIdxByUid(t,otherUid); if(oi<0) continue;
+      const chan='dm:'+oi; const list=(typeof chatMsgs==='function')?chatMsgs(t,chan):null; if(!list) continue;
+      let mm=list.find(x=>x.propSid===p.id);
+      if(!mm){ list.push({proposal:true,mine:mine,title:p.title||(p.draft&&p.draft.title)||'Task',deadline:p.due||'',draft:p.draft||null,status:p.status,reason:p.reason||'',propSid:p.id,ts:(typeof nowTs==='function'?nowTs():Date.now())}); ch=true; }
+      else if(mm.status!==p.status||mm.reason!==(p.reason||'')){ mm.status=p.status; mm.reason=p.reason||''; if(p.due) mm.deadline=p.due; ch=true; }
+    }
+    if(ch && typeof saveTeams==='function') saveTeams();
+    return ch;
+  }catch(e){ return false; }
+}
+
+// ---- CHAT di team ----
+async function tcServerChannel(t,localChan){
+  const myUid=await tcLoggedUid();
+  if(!localChan||localChan===('team:'+t.tid)||localChan===String(t.tid)) return 'team';
+  if(localChan.indexOf('dm:')===0){ const uid=tcMemberUid(t,+localChan.slice(3)); return (uid&&myUid)?dmChannel(myUid,uid):null; }
+  if(localChan.indexOf('grp:')===0) return 'group:'+localChan.slice(4);
+  return 'team';
+}
+async function teamsCloudSendChat(t,localChan,text){ try{ if(!t||!t.sid) return null; const ch=await tcServerChannel(t,localChan); if(!ch) return null; const r=await sbTeamSend(t.sid,ch,text); return (r&&r.msg)?r.msg:null; }catch(e){ return null; } }
+async function teamsCloudPullChat(t,localChan){
+  try{
+    if(!t||!t.sid) return false; const ch=await tcServerChannel(t,localChan); if(!ch) return false;
+    const uid=await tcLoggedUid(); const rows=await sbTeamMessages(t.sid,ch); if(!Array.isArray(rows)) return false;
+    const list=(typeof chatMsgs==='function')?chatMsgs(t,localChan):null; if(!list) return false;
+    let ch2=false;
+    for(const m of rows){ if(list.some(x=>x.smid===m.id)) continue; list.push({smid:m.id,self:m.from_id===uid,text:m.text||'',ts:m.created_at?new Date(m.created_at).getTime():(typeof nowTs==='function'?nowTs():Date.now())}); ch2=true; }
+    if(ch2 && typeof saveTeams==='function') saveTeams();
+    return ch2;
+  }catch(e){ return false; }
+}
+
+// ---- REALTIME (collaborazione istantanea sul team aperto) ----
+let _tcSub=null,_tcSubSid=null,_tcRtTimer=null;
+function teamsCloudUnsub(){ try{ if(_tcSub&&_tcSub.unsubscribe) _tcSub.unsubscribe(); }catch(e){} _tcSub=null; _tcSubSid=null; }
+function teamsCloudSubscribe(t){
+  try{
+    if(!t||!t.sid) return;
+    if(_tcSubSid===t.sid) return;
+    teamsCloudUnsub(); _tcSubSid=t.sid;
+    _tcSub=sbTeamSubscribe(t.sid,function(){ tcOnRealtime(t); });
+  }catch(e){}
+}
+function tcOnRealtime(t){
+  clearTimeout(_tcRtTimer);
+  _tcRtTimer=setTimeout(async function(){
+    try{
+      await teamsCloudPullTasks(t); await teamsCloudPullProposals(t);
+      if(typeof curChatId!=='undefined'&&curChatId) await teamsCloudPullChat(t,curChatId);
+      if(typeof curTeam!=='undefined'&&curTeam&&curTeam.sid===t.sid&&typeof renderTeamMain==='function') renderTeamMain();
+    }catch(e){}
+  },350);
 }
