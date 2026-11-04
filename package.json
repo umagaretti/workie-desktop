@@ -53,9 +53,7 @@
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist",
-      "notarize": {
-        "teamId": "5VQ5Q6USQH"
-      },
+      "notarize": true,
       "extendInfo": {
         "NSMicrophoneUsageDescription": "Workie usa il microfono per dettare le task."
       },
