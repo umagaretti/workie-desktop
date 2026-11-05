@@ -1,6 +1,6 @@
 {
   "name": "workie-desktop",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "private": true,
   "description": "Workie — desktop app (Electron shell around the Workie web app)",
   "author": "Umberto",
@@ -81,7 +81,15 @@
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true
-    }
+    },
+    "protocols": [
+      {
+        "name": "Workie",
+        "schemes": [
+          "workie"
+        ]
+      }
+    ]
   },
   "devDependencies": {
     "electron": "^45.1.0",

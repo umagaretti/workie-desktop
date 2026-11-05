@@ -1960,8 +1960,51 @@ function enterApp(acc){
 function validEmail(s){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);}
 let obReg=null,obData={name:'',username:'',profession:'',segment:''};
 let obOAuth=false,obUid=null,obEmail='',obPhoto='';
+// Messaggi del login Google su desktop (browser di sistema + ritorno nell'app)
+(function(){const M={
+  it:['Continua l\'accesso nel browser: poi Workie si riapre da solo.','Accesso non riuscito, riprova.'],
+  en:['Finish signing in in your browser — Workie will reopen on its own.','Sign-in failed, please try again.'],
+  fr:['Terminez la connexion dans le navigateur : Workie se rouvrira tout seul.','Échec de la connexion, réessayez.'],
+  es:['Termina el acceso en el navegador: Workie se volverá a abrir solo.','No se pudo iniciar sesión, inténtalo de nuevo.'],
+  de:['Schließe die Anmeldung im Browser ab – Workie öffnet sich danach von selbst.','Anmeldung fehlgeschlagen, bitte erneut versuchen.'],
+  pt:['Conclua o acesso no navegador: o Workie volta a abrir sozinho.','Não foi possível entrar, tente novamente.'],
+  nl:['Rond het inloggen af in je browser – Workie opent daarna vanzelf.','Inloggen mislukt, probeer het opnieuw.'],
+  pl:['Dokończ logowanie w przeglądarce – Workie otworzy się samo.','Logowanie nie powiodło się, spróbuj ponownie.'],
+  ru:['Завершите вход в браузере — Workie откроется сам.','Не удалось войти, попробуйте ещё раз.'],
+  uk:['Завершіть вхід у браузері — Workie відкриється сам.','Не вдалося увійти, спробуйте ще раз.'],
+  ro:['Finalizează autentificarea în browser – Workie se redeschide singur.','Autentificarea a eșuat, încearcă din nou.'],
+  zh:['请在浏览器中完成登录，之后 Workie 会自动重新打开。','登录失败，请重试。'],
+  ja:['ブラウザでログインを完了してください。Workie は自動で再び開きます。','ログインできませんでした。もう一度お試しください。'],
+  ko:['브라우저에서 로그인을 완료하세요. Workie가 자동으로 다시 열려요.','로그인에 실패했어요. 다시 시도해 주세요.']};
+  Object.keys(M).forEach(l=>{if(STR[l])Object.assign(STR[l],{auth_browser_continue:M[l][0],auth_failed:M[l][1]});});})();
+// Ritorno dal browser (solo app desktop): workie://auth-callback#access_token=…&refresh_token=…
+// oppure ?code=… → apro la sessione Supabase e ricarico come utente vero.
+if(window.workieDesktop&&window.workieDesktop.onAuthCallback){window.workieDesktop.onAuthCallback(async function(url){
+  if(!sb)return;
+  try{
+    const u=new URL(url);const h=new URLSearchParams((u.hash||'').replace(/^#/,''));const q=u.searchParams;
+    const errMsg=h.get('error_description')||q.get('error_description');
+    if(errMsg){if(typeof showToast==='function')showToast(errMsg);return;}
+    let session=null;
+    if(h.get('access_token')&&h.get('refresh_token')){const r=await sb.auth.setSession({access_token:h.get('access_token'),refresh_token:h.get('refresh_token')});if(r.error)throw r.error;session=r.data&&r.data.session;}
+    else if(q.get('code')){const r=await sb.auth.exchangeCodeForSession(q.get('code'));if(r.error)throw r.error;session=r.data&&r.data.session;}
+    if(session&&session.user){localStorage.setItem('workie_session',session.user.id);location.reload();}
+    else if(typeof showToast==='function')showToast(tr('auth_failed'));
+  }catch(e){console.warn('[auth] callback',e);if(typeof showToast==='function')showToast(tr('auth_failed'));}
+});}
 async function googleSignIn(){
   if(!sb){if(typeof showToast==='function')showToast('Server non disponibile');return;}
+  // App desktop: l'accesso Google si fa nel browser di sistema, che poi riapre Workie con
+  // workie://auth-callback (deep link). Se la finestra facesse il redirect da sola, Supabase
+  // non accetterebbe l'indirizzo file:// e la manderebbe sul sito web (vecchio).
+  const desk=window.workieDesktop;
+  if(desk&&desk.authRedirect&&desk.openExternal){
+    try{const{data,error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:desk.authRedirect,skipBrowserRedirect:true,queryParams:{prompt:'select_account'}}});
+      if(error){if(typeof showToast==='function')showToast(error.message.replace(/provider is not enabled/i,'Login Google non ancora attivo su Supabase'));return;}
+      if(data&&data.url){desk.openExternal(data.url);if(typeof showToast==='function')showToast(tr('auth_browser_continue'));}
+    }catch(e){if(typeof showToast==='function')showToast(String(e&&e.message||e));}
+    return;
+  }
   const redirectTo=location.origin+location.pathname;
   try{const{error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo,queryParams:{prompt:'select_account'}}});
     if(error){if(typeof showToast==='function')showToast(error.message.replace(/provider is not enabled/i,'Login Google non ancora attivo su Supabase'));}
@@ -7907,7 +7950,7 @@ function seedExampleTeams(){
   try{saveTasks();}catch(e){}
   try{localStorage.setItem(ukey('workie_teams_seeded'),'1');}catch(e){}
 }
-seedExampleTeams();
+if(typeof DEV_LOCAL!=='undefined'&&DEV_LOCAL)seedExampleTeams(); // team demo solo in sviluppo, mai agli utenti veri
 syncTeamCategories();
 applyLang();
 applyTheme();

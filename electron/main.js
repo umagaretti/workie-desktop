@@ -18,6 +18,39 @@ const QUICK_TASK_ACCEL = 'CommandOrControl+J'
 app.setName('Workie')
 
 /**
+ * Login Google su desktop (deep link).
+ * L'accesso si fa nel browser di sistema; alla fine Supabase rimanda a
+ * workie://auth-callback#access_token=… e macOS riapre Workie con quell'indirizzo,
+ * che inoltriamo alla pagina (preload → onAuthCallback). Senza questo, il redirect
+ * avveniva DENTRO la finestra e la portava sul sito web vecchio.
+ * Lo schema è dichiarato anche in package.json → build.protocols (Info.plist).
+ */
+const AUTH_SCHEME = 'workie'
+if (process.defaultApp && process.argv.length >= 2) {
+  app.setAsDefaultProtocolClient(AUTH_SCHEME, process.execPath, [path.resolve(process.argv[1])])
+} else {
+  app.setAsDefaultProtocolClient(AUTH_SCHEME)
+}
+let pendingAuthUrl = null
+function handleAuthUrl(url) {
+  if (typeof url !== 'string' || !url.startsWith(AUTH_SCHEME + '://')) return
+  if (!app.isReady()) { pendingAuthUrl = url; return } // app aperta proprio dal link: la gestisco a finestra pronta
+  ensureMainLoaded(() => {
+    mainWindow.webContents.send('workie:auth-callback', url)
+    showApp()
+  })
+}
+app.on('open-url', (e, url) => { e.preventDefault(); handleAuthUrl(url) })
+
+/** Apre un indirizzo fuori dall'app (browser o app esterna), mai schemi locali/pericolosi. */
+function openExternalSafe(url) {
+  let protocol
+  try { protocol = new URL(url).protocol } catch (e) { return }
+  if (['file:', 'javascript:', 'data:', 'vbscript:', 'smb:', 'afp:', 'nfs:', 'ftp:'].includes(protocol)) return
+  shell.openExternal(url).catch(() => {})
+}
+
+/**
  * Auto-update (electron-updater → GitHub Releases).
  * NOTE: on macOS this only applies updates when the app is SIGNED (Apple
  * requirement). Unsigned/dev builds just log and do nothing. Runs only in the
@@ -177,6 +210,10 @@ ipcMain.on('workie:create-many', (_e, drafts) => {
   ensureMainLoaded(() => mainWindow?.webContents.send('workie:create-many', drafts))
 })
 ipcMain.on('workie:quick-close', () => { if (popover) popover.hide() })
+// Login Google: la pagina chiede di aprire l'indirizzo di accesso nel browser (solo https).
+ipcMain.on('workie:open-external', (_e, url) => {
+  if (typeof url === 'string' && /^https:\/\//i.test(url)) shell.openExternal(url).catch(() => {})
+})
 // Il pannellino misura la sua altezza reale e chiede di adattare la finestra.
 ipcMain.on('workie:quick-resize', (_e, h) => {
   if (!popover) return
@@ -215,6 +252,15 @@ function createWindow() {
     return { action: 'deny' }
   })
 
+  // La finestra di Workie mostra SOLO l'app locale: se qualcosa prova a portarla su un
+  // sito esterno (redirect di login, pagamento, link a un'app), lo apro fuori e la
+  // finestra resta su Workie. Così non può più finire sul sito web vecchio.
+  mainWindow.webContents.on('will-navigate', (e, url) => {
+    if (url.startsWith('file://')) return
+    e.preventDefault()
+    openExternalSafe(url)
+  })
+
   // Chiudere la finestra (pallino rosso) la NASCONDE: l'app resta nella barra in
   // alto e si riapre all'istante da icona o scorciatoia. Con Cmd+Q esce davvero.
   mainWindow.on('close', (e) => {
@@ -231,6 +277,8 @@ function createWindow() {
 
 app.whenReady().then(() => {
   createWindow()
+  // App avviata direttamente dal link di ritorno del login: lo consegno ora.
+  if (pendingAuthUrl) { const u = pendingAuthUrl; pendingAuthUrl = null; handleAuthUrl(u) }
   createTray()
   createPopover()
 
