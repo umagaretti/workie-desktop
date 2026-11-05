@@ -19,7 +19,8 @@
       {
         "provider": "github",
         "owner": "umagaretti",
-        "repo": "workie-desktop"
+        "repo": "workie-desktop",
+        "releaseType": "release"
       }
     ],
     "directories": {
