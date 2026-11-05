@@ -20,8 +20,8 @@
    Nascondo i puntini finti e sposto il toggle sidebar accanto ai comandi nativi. */
 html.is-tauri .wc-lights{display:none!important;}
 /* Bottoni allineati alla riga dei pallini macOS (trafficLightPosition y:22) e sopra la striscia-drag. */
-html.is-tauri .app-chrome{left:80px;top:7px;z-index:400;}
-html.is-tauri .side-nav-arrows{top:9px;z-index:400;}
+html.is-tauri .app-chrome{left:80px;top:9px;z-index:400;}
+html.is-tauri .side-nav-arrows{top:11px;z-index:400;}
 /* icona Giornata in alto a destra: stessa taglia delle iconcine di sinistra */
 html.is-tauri #daySideBtn svg{width:18px;height:18px;}
 /* Drawer "Giornata" a destra (segnaposto) */

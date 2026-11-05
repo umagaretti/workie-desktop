@@ -7907,7 +7907,7 @@ function seedExampleTeams(){
   try{saveTasks();}catch(e){}
   try{localStorage.setItem(ukey('workie_teams_seeded'),'1');}catch(e){}
 }
-seedExampleTeams();
+if(typeof DEV_LOCAL!=='undefined'&&DEV_LOCAL)seedExampleTeams();
 syncTeamCategories();
 applyLang();
 applyTheme();

@@ -1,6 +1,6 @@
 {
   "name": "workie-desktop",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Workie — desktop app (Electron shell around the Workie web app)",
   "author": "Umberto",
