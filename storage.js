@@ -8,7 +8,7 @@
  */
 // ----- Dati per-account (isolati per email; account/session/lang restano globali) -----
 // DEV: in locale (localhost) usa una sessione "dev-local" così l'app gira senza login. Online resta normale.
-const DEV_LOCAL=(function(){try{if(window.__TAURI__)return false;if(navigator&&navigator.userAgent&&navigator.userAgent.indexOf('Electron')>=0)return false;/* app desktop (Tauri/Electron): login vero, non modalità dev */return location.hostname==='localhost'||location.hostname==='127.0.0.1'||location.hostname==='';}catch(e){return false;}})();
+const DEV_LOCAL=(function(){try{if(window.__TAURI__)return false;/* nell'app desktop Tauri usa il login vero, non la modalità dev */return location.hostname==='localhost'||location.hostname==='127.0.0.1'||location.hostname==='';}catch(e){return false;}})();
 let CUR_ACC=(function(){try{let s=localStorage.getItem('workie_session');if(!s&&DEV_LOCAL){s='dev-local';localStorage.setItem('workie_session',s);}return s||null;}catch(e){return null;}})();
 function ukey(base){return CUR_ACC?base+'::'+CUR_ACC.toLowerCase():base+'::_guest';}
 // migrazione una-tantum: i vecchi dati globali vanno all'account corrente, poi si rimuovono (così i nuovi account partono puliti)
